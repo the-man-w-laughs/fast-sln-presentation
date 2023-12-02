@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Presentation.Models
 {
     public class SlnProjectInfo
@@ -11,5 +6,8 @@ namespace Presentation.Models
         public string Name { get; set; }
         public string ProjectGuid { get; set; }
         public string Path { get; set; }
+
+        public override string ToString() =>
+            $"TypeGuid: {TypeGuid}\nName: {Name}\nProjectGuid: {ProjectGuid}\nPath: {Path}";
     }
 }

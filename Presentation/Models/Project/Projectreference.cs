@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace Presentation.Models.Project
 {
     public class ProjectReference
     {
-        public string ProjectName { get; set; }
+        public string ProjectPath { get; set; }
+
+        public override string ToString()
+        {
+            return $"Project Path: {ProjectPath}";
+        }
     }
 }

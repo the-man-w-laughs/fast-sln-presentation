@@ -1,9 +1,10 @@
 using System.Xml.Linq;
+using Presentation.Contracts;
 using Presentation.Models.Project;
 
 namespace Presentation.Services;
 
-public class CsprojParser
+public class CsprojParser : ICsprojParser
 {
     public ProjectInfo GetProjectInfo(string csproj)
     {
@@ -50,7 +51,7 @@ public class CsprojParser
                 projectInfo.ProjectReferences.Add(
                     new ProjectReference
                     {
-                        ProjectName = projectReference.Attribute("Include")?.Value
+                        ProjectPath = projectReference.Attribute("Include")?.Value
                     }
                 );
             }
