@@ -1,8 +1,6 @@
 using Octokit;
 using Presentation.Contracts;
 using Presentation.Models;
-using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Text;
 using ProductHeaderValue = Octokit.ProductHeaderValue;
 
@@ -35,7 +33,7 @@ namespace Business.Octokit
             {
                 if (item.Type == TreeType.Blob)
                 {
-                    var path = item.Path.ToLower();
+                    var path = item.Path;
                     var sha = item.Sha;
                     tasks.Add(
                         GetContent(owner, repoName, sha)

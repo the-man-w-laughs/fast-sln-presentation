@@ -1,9 +1,10 @@
 using Presentation.Models;
+using Presentation.Models.SnlInfo;
 
 namespace Presentation.Contracts
 {
     public interface ISlnParser
     {
-        IEnumerable<SlnProjectInfo> GetSlnProjectInfos(string sln);
+        SlnInfo GetSlnProjectInfos(string sln);
     }
 }

@@ -1,6 +1,6 @@
 namespace Presentation.Models.Project;
 
-public class ProjectInfo
+public class CsprojInfo
 {
     public string ProjectName { get; set; }
     public string TargetFramework { get; set; }

@@ -4,6 +4,6 @@ namespace Presentation.Contracts
 {
     public interface ICsprojParser
     {
-        ProjectInfo GetProjectInfo(string csproj);
+        CsprojInfo GetProjectInfo(string csproj);
     }
 }

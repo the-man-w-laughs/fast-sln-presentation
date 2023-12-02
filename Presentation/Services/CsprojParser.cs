@@ -6,13 +6,13 @@ namespace Presentation.Services;
 
 public class CsprojParser : ICsprojParser
 {
-    public ProjectInfo GetProjectInfo(string csproj)
+    public CsprojInfo GetProjectInfo(string csproj)
     {
         // Load the .csproj string as XML
         XDocument csprojXml = XDocument.Parse(csproj);
 
         // Initialize ProjectInfo
-        ProjectInfo projectInfo = new ProjectInfo();
+        CsprojInfo projectInfo = new CsprojInfo();
 
         // Access project properties
         XElement propertyGroup = csprojXml.Root?.Elements("PropertyGroup").FirstOrDefault();
