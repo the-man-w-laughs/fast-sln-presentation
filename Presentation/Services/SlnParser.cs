@@ -13,7 +13,7 @@ namespace Presentation.Services
         )]
         private static partial Regex ProjectInfoRegex();
 
-        public SlnInfo GetSlnProjectInfos(string sln)
+        public SlnInfo GetSlnInfo(string sln)
         {
             var projectRegex = ProjectInfoRegex();
 

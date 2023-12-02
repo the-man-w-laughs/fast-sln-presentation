@@ -3,6 +3,7 @@ using Presentation.Contracts;
 using Presentation.Models;
 using Presentation.Models.SnlTree;
 using Presentation.Exceptions;
+using System.Diagnostics;
 
 namespace Presentation.Services
 {
@@ -29,23 +30,23 @@ namespace Presentation.Services
                 var slnTree = new SlnTree()
                 {
                     SlnName = Path.GetFileNameWithoutExtension(solutionFile.Path),
-                    SlnPath = Path.GetDirectoryName(solutionFile.Path)!,
+                    SlnPath = solutionFile.Path,
                     Projects = new List<CsprojNode>()
                 };
 
                 // Parse information from the solution file content
-                var slnInfo = _slnParser.GetSlnProjectInfos(solutionFile.Content);
+                var slnInfo = _slnParser.GetSlnInfo(solutionFile.Content);
 
                 foreach (var slnProjectInfo in slnInfo.SlnProjectInfos)
                 {
                     // Get absolute paths and project file
-                    var slnDirectoryPath = Path.GetDirectoryName(solutionFile.Path)!;
+                    var slnDirectoryPath = $"/{Path.GetDirectoryName(solutionFile.Path)}";
                     var projectPath = NormalizePath(slnProjectInfo.Path);
-                    string absoluteProjectPath = Path.Combine(slnDirectoryPath, projectPath);
+                    var absoluteProjectPath = Path.GetFullPath(projectPath, slnDirectoryPath);
 
                     // Find the content file corresponding to the project
                     var projectFile = contentFiles.FirstOrDefault(
-                        file => file.Path.Equals(absoluteProjectPath)
+                        file => file.Path.Equals(absoluteProjectPath.Substring(1))
                     );
 
                     if (projectFile == null)
@@ -58,17 +59,29 @@ namespace Presentation.Services
                     // Get source files within the project directory
                     var projectSourceFiles = contentFiles.Where(
                         file =>
-                            file.Path.StartsWith(absoluteProjectDirectoryPath)
+                            file.Path.StartsWith(absoluteProjectDirectoryPath.Substring(1))
                             && file.Path.EndsWith(".cs")
+                    );
+
+                    // parse csproj file
+                    var csprojInfo = _csprojParser.GetProjectInfo(projectFile.Content);
+
+                    // update project references paths to absolute paths
+                    csprojInfo.ProjectReferences.ForEach(
+                        reference =>
+                            reference.ProjectPath = Path.GetFullPath(
+                                    NormalizePath(reference.ProjectPath),
+                                    absoluteProjectDirectoryPath
+                                )
+                                .Substring(1)
                     );
 
                     // Create a CsprojNode with project information
                     var csprojNode = new CsprojNode
                     {
-                        ProjectName = Path.GetFileNameWithoutExtension(
-                            absoluteProjectDirectoryPath
-                        ),
-                        ProjectPath = absoluteProjectDirectoryPath,
+                        ProjectName = Path.GetFileNameWithoutExtension(absoluteProjectPath),
+                        ProjectPath = absoluteProjectPath.Substring(1),
+                        CsprojInfo = csprojInfo,
                         SourceFiles = new List<ContentFile>(projectSourceFiles)
                     };
 
@@ -79,7 +92,6 @@ namespace Presentation.Services
                 // Add the SlnTree to the list of SlnTrees
                 slnTrees.Add(slnTree);
             }
-
             return slnTrees;
         }
 

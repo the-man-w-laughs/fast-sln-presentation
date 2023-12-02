@@ -9,23 +9,26 @@ public class CsprojParser : ICsprojParser
     public CsprojInfo GetProjectInfo(string csproj)
     {
         // Load the .csproj string as XML
-        XDocument csprojXml = XDocument.Parse(csproj);
+
+        if (csproj.Length > 0 && csproj[0] == '\uFEFF')
+        {
+            csproj = csproj.Substring(1);
+        }
+
+        var csprojXml = XDocument.Parse(csproj);
 
         // Initialize ProjectInfo
-        CsprojInfo projectInfo = new CsprojInfo();
+        var projectInfo = new CsprojInfo();
 
         // Access project properties
-        XElement propertyGroup = csprojXml.Root?.Elements("PropertyGroup").FirstOrDefault();
+        var propertyGroup = csprojXml.Root?.Elements("PropertyGroup").FirstOrDefault();
         if (propertyGroup != null)
         {
-            projectInfo.ProjectName = propertyGroup.Element("AssemblyName")?.Value;
             projectInfo.TargetFramework = propertyGroup.Element("TargetFramework")?.Value;
         }
 
         // Access package references
-        IEnumerable<XElement> packageReferences = csprojXml.Root
-            ?.Elements("ItemGroup")
-            .Elements("PackageReference");
+        var packageReferences = csprojXml.Root?.Elements("ItemGroup").Elements("PackageReference");
         if (packageReferences != null)
         {
             foreach (var packageReference in packageReferences)
@@ -41,9 +44,7 @@ public class CsprojParser : ICsprojParser
         }
 
         // Access project references
-        IEnumerable<XElement> projectReferences = csprojXml.Root
-            ?.Elements("ItemGroup")
-            .Elements("ProjectReference");
+        var projectReferences = csprojXml.Root?.Elements("ItemGroup").Elements("ProjectReference");
         if (projectReferences != null)
         {
             foreach (var projectReference in projectReferences)

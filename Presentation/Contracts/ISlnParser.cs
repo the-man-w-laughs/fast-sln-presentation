@@ -5,6 +5,6 @@ namespace Presentation.Contracts
 {
     public interface ISlnParser
     {
-        SlnInfo GetSlnProjectInfos(string sln);
+        SlnInfo GetSlnInfo(string sln);
     }
 }
