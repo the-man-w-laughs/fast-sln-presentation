@@ -1,25 +1,64 @@
-﻿using System.Configuration;
-using System.Diagnostics;
-using Business.Octokit;
-using Presentation.Services;
+﻿using Microsoft.CodeAnalysis.CSharp;
 
 class SolutionParser
 {
-    static async Task Main()
+    // static async Task Main()
+    // {
+    //     var solutionParser = new SlnParser();
+    //     var projectParser = new CsprojParser();
+
+    //     var pat = ConfigurationManager.AppSettings.Get("pat");
+    //     var githubService = new GithubService(pat);
+
+    //     var stopwatch = Stopwatch.StartNew();
+    //     var allFiles = await githubService.GetAllFiles("the-man-w-laughs", "Obj-Renderer");
+    //     Console.WriteLine(stopwatch.ElapsedMilliseconds);
+    //     Console.WriteLine(allFiles.Count);
+
+    //     var contentFileService = new ContentFileService(solutionParser, projectParser);
+
+    //     var slnTrees = contentFileService.GetSnlTrees(allFiles);
+    // }
+
+    // static async Task Main()
+    // {
+    //     var codeAnalysisService = new CodeAnalysisService();
+    //     string code =
+    //         @"
+    //         using System;
+
+    //         class Program
+    //         {
+    //             static void Main()
+    //             {
+    //                 Console.WriteLine(""Hello, World!"");
+    //             }
+    //         }
+    //     ";
+    //     var block = codeAnalysisService.AnalyzeCode(code);
+    // }
+
+
+    static void Main()
     {
-        var solutionParser = new SlnParser();
-        var projectParser = new CsprojParser();
+        var code =
+            @" 
+            public interface IMyInterface { void Method1(); }
 
-        var pat = ConfigurationManager.AppSettings.Get("pat");
-        var githubService = new GithubService(pat);
+            public class MyBaseClass { }
 
-        var stopwatch = Stopwatch.StartNew();
-        var allFiles = await githubService.GetAllFiles("the-man-w-laughs", "Obj-Renderer");
-        Console.WriteLine(stopwatch.ElapsedMilliseconds);
-        Console.WriteLine(allFiles.Count);
+            public class MyClass : MyBaseClass, IMyInterface
+            {
+                public void Method1() { }
+            }
+        ";
 
-        var contentFileService = new ContentFileService(solutionParser, projectParser);
+        var syntaxTree = CSharpSyntaxTree.ParseText(code);
+        var root = syntaxTree.GetRoot();
 
-        var slnTrees = contentFileService.GetSnlTrees(allFiles);
+        // var walker = new ClassDiagramGenerator();
+        // walker.Visit(root);
+
+        // walker.PrintClassDiagram();
     }
 }

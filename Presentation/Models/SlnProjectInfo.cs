@@ -1,6 +1,6 @@
 namespace Presentation.Models
 {
-    public class SlnProjectInfo
+    public struct SlnProjectInfo
     {
         public string TypeGuid { get; set; }
         public string Name { get; set; }

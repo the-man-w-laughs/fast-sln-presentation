@@ -1,6 +1,6 @@
 namespace Presentation.Models.Project
 {
-    public class PackageReference
+    public struct PackageReference
     {
         public string Name { get; set; }
         public string Version { get; set; }

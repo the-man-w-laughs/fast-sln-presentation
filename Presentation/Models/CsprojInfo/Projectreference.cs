@@ -1,6 +1,6 @@
 namespace Presentation.Models.Project
 {
-    public class ProjectReference
+    public struct ProjectReference
     {
         public string ProjectPath { get; set; }
 

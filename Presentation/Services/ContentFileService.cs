@@ -3,7 +3,6 @@ using Presentation.Contracts;
 using Presentation.Models;
 using Presentation.Models.SnlTree;
 using Presentation.Exceptions;
-using System.Diagnostics;
 
 namespace Presentation.Services
 {
@@ -49,7 +48,7 @@ namespace Presentation.Services
                         file => file.Path.Equals(absoluteProjectPath.Substring(1))
                     );
 
-                    if (projectFile == null)
+                    if (projectFile.Equals(default(ContentFile)))
                     {
                         throw new NotFoundException($"Project not found:\n{slnProjectInfo}");
                     }

@@ -1,6 +1,6 @@
 namespace Presentation.Models.SnlInfo
 {
-    public class SlnInfo
+    public struct SlnInfo
     {
         public required List<SlnProjectInfo> SlnProjectInfos;
     }

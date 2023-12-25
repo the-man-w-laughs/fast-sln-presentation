@@ -1,6 +1,6 @@
 namespace Presentation.Models;
 
-public class ContentFile
+public struct ContentFile
 {
     public ContentFile(string path, string content)
     {

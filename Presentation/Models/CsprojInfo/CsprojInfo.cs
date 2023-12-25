@@ -1,10 +1,17 @@
 namespace Presentation.Models.Project;
 
-public class CsprojInfo
+public struct CsprojInfo
 {
-    public string TargetFramework { get; set; }
-    public List<PackageReference> PackageReferences { get; set; } = new List<PackageReference>();
-    public List<ProjectReference> ProjectReferences { get; set; } = new List<ProjectReference>();
+    public CsprojInfo(string? targetFramework)
+    {
+        TargetFramework = targetFramework;
+        PackageReferences = new List<PackageReference>();
+        ProjectReferences = new List<ProjectReference>();
+    }
+
+    public string? TargetFramework { get; set; }
+    public List<PackageReference> PackageReferences { get; set; }
+    public List<ProjectReference> ProjectReferences { get; set; }
 
     public override string ToString()
     {

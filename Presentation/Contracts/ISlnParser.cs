@@ -1,4 +1,3 @@
-using Presentation.Models;
 using Presentation.Models.SnlInfo;
 
 namespace Presentation.Contracts
