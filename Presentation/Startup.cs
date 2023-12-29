@@ -1,6 +1,12 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using System.Diagnostics;
+using System.Xml;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Presentation.Models;
+using Presentation.Services;
+using Presentation.SyntaxWalkers;
 
-class SolutionParser
+class PresentationMain
 {
     // static async Task Main()
     // {
@@ -20,45 +26,36 @@ class SolutionParser
     //     var slnTrees = contentFileService.GetSnlTrees(allFiles);
     // }
 
-    // static async Task Main()
-    // {
-    //     var codeAnalysisService = new CodeAnalysisService();
-    //     string code =
-    //         @"
-    //         using System;
 
-    //         class Program
-    //         {
-    //             static void Main()
-    //             {
-    //                 Console.WriteLine(""Hello, World!"");
-    //             }
-    //         }
-    //     ";
-    //     var block = codeAnalysisService.AnalyzeCode(code);
-    // }
-
-
-    static void Main()
+    static async Task Main()
     {
-        var code =
-            @" 
-            public interface IMyInterface { void Method1(); }
+        // var solutionParser = new SlnParser();
+        // var projectParser = new CsprojParser();
 
-            public class MyBaseClass { }
+        // var pat = ConfigurationManager.AppSettings.Get("pat");
+        // var githubService = new GithubService(pat);
 
-            public class MyClass : MyBaseClass, IMyInterface
-            {
-                public void Method1() { }
-            }
-        ";
+        // var stopwatch = Stopwatch.StartNew();
+        // var allFiles = await githubService.GetAllFiles("the-man-w-laughs", "Obj-Renderer");
+        // Console.WriteLine(stopwatch.ElapsedMilliseconds);
+        // Console.WriteLine(allFiles.Count);
+        // var allContent = allFiles.Select(file => file.Content).ToList();
 
-        var syntaxTree = CSharpSyntaxTree.ParseText(code);
-        var root = syntaxTree.GetRoot();
 
-        // var walker = new ClassDiagramGenerator();
-        // walker.Visit(root);
+        string directory = "/home/nazar/projects/dotnetResearch/Research";
+        string filePath = $"{directory}/Program.cs";
+        string content = File.ReadAllText(filePath);
 
-        // walker.PrintClassDiagram();
+        var allFiles = new List<ContentFile>() { new ContentFile("penis.cs", content) };
+        var codeAnalysisService = new CodeAnalysisService();
+        var resultXml = codeAnalysisService.AnalyzeCodeFiles(allFiles);
+
+        string resultPath = $"{directory}/result.xml";
+        resultXml.Save(resultPath);
     }
+}
+
+namespace vagina
+{
+    public class Penis { }
 }

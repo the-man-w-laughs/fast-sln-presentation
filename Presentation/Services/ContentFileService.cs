@@ -95,7 +95,7 @@ namespace Presentation.Services
         }
 
         // Utility method to normalize paths (convert backslashes and multiple slashes to single forward slashes)
-        static string NormalizePath(string path)
+        private string NormalizePath(string path)
         {
             return Regex.Replace(path, @"[\\/]+", "/");
         }
