@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Xml;
 
 namespace Presentation.Extensions
@@ -6,57 +7,62 @@ namespace Presentation.Extensions
     {
         public static void SetName(this XmlElement xmlElement, string name)
         {
-            xmlElement.SetAttribute("Name", name);
+            SetAttribute(xmlElement, "Name", name);
         }
 
         public static void SetType(this XmlElement xmlElement, string type)
         {
-            xmlElement.SetAttribute("Type", type);
+            SetAttribute(xmlElement, "Type", type);
         }
 
         public static void SetModifiers(this XmlElement xmlElement, string modifiers)
         {
-            xmlElement.SetAttribute("Modifiers", modifiers);
+            SetAttribute(xmlElement, "Modifiers", modifiers);
         }
 
         public static void SetIsNullable(this XmlElement xmlElement, bool isNullable)
         {
-            xmlElement.SetAttribute("IsNullable", isNullable.ToString());
+            SetAttribute(xmlElement, "IsNullable", isNullable.ToString());
         }
 
         public static void SetIsPredefinedType(this XmlElement xmlElement, bool isPredefinedType)
         {
-            xmlElement.SetAttribute("IsPredefinedType", isPredefinedType.ToString());
+            SetAttribute(xmlElement, "IsPredefinedType", isPredefinedType.ToString());
+        }
+
+        public static void SetIsReferenceType(this XmlElement xmlElement, bool isReferenceType)
+        {
+            SetAttribute(xmlElement, "IsReferenceType", isReferenceType.ToString());
         }
 
         public static void SetHasGetter(this XmlElement xmlElement, bool hasGetter)
         {
-            xmlElement.SetAttribute("HasGetter", hasGetter.ToString());
+            SetAttribute(xmlElement, "HasGetter", hasGetter.ToString());
         }
 
         public static void SetHasSetter(this XmlElement xmlElement, bool HasSetter)
         {
-            xmlElement.SetAttribute("HasSetter", HasSetter.ToString());
+            SetAttribute(xmlElement, "HasSetter", HasSetter.ToString());
         }
 
         public static void SetGetterModifiers(this XmlElement xmlElement, string getterModifiers)
         {
-            xmlElement.SetAttribute("GetterModifiers", getterModifiers.ToString());
+            SetAttribute(xmlElement, "GetterModifiers", getterModifiers.ToString());
         }
 
         public static void SetSetterModifiers(this XmlElement xmlElement, string setterModifiers)
         {
-            xmlElement.SetAttribute("SetterModifiers", setterModifiers.ToString());
+            SetAttribute(xmlElement, "SetterModifiers", setterModifiers.ToString());
         }
 
         public static void SetValue(this XmlElement xmlElement, string value)
         {
-            xmlElement.SetAttribute("Value", value);
+            SetAttribute(xmlElement, "Value", value);
         }
 
         public static void SetNamespace(this XmlElement xmlElement, string @namespace)
         {
-            xmlElement.SetAttribute("Namespace", @namespace);
+            SetAttribute(xmlElement, "Namespace", @namespace);
         }
 
         public static void SetGenericParameters(
@@ -64,7 +70,7 @@ namespace Presentation.Extensions
             string genericParameters
         )
         {
-            xmlElement.SetAttribute("GenericParameters", genericParameters);
+            SetAttribute(xmlElement, "GenericParameters", genericParameters);
         }
 
         public static XmlElement AppendClass(this XmlElement parentElement)
@@ -105,6 +111,16 @@ namespace Presentation.Extensions
             parentElement.AppendChild(setterElement);
 
             return setterElement;
+        }
+
+        public static void SetAttribute(XmlElement xmlElement, string name, string? value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
+            xmlElement.SetAttribute(name, value);
         }
     }
 }

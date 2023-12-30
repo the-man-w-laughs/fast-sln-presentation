@@ -65,11 +65,7 @@ namespace Presentation.SyntaxWalkers
             classElement.SetName(className);
             classElement.SetNamespace(namespaceName);
             classElement.SetModifiers(modifiersStr);
-
-            if (genericParamsStr != string.Empty)
-            {
-                classElement.SetGenericParameters(genericParamsStr);
-            }
+            classElement.SetGenericParameters(genericParamsStr);
 
             _nestingDepth++;
             _currentTypeElement = classElement;
@@ -112,33 +108,27 @@ namespace Presentation.SyntaxWalkers
             var isNullable = fieldTypeSyntax is NullableTypeSyntax;
             var isPredefinedType = fieldTypeSyntax is PredefinedTypeSyntax;
 
-            if (isNullable || isPredefinedType)
+            var fieldModifiers = string.Join(
+                " ",
+                node.Modifiers.Select(modifier => modifier.ToString())
+            );
+
+            // Iterate over each variable in the field declaration
+            foreach (var variable in node.Declaration.Variables)
             {
-                var fieldModifiers = string.Join(
-                    ", ",
-                    node.Modifiers.Select(modifier => modifier.ToString())
-                );
+                var fieldName = variable.Identifier.Text;
+                var fieldType = _semanticModel.GetTypeInfo(fieldTypeSyntax).Type!;
+                var initializationValue = variable.Initializer?.Value.ToString() ?? string.Empty;
 
-                // Iterate over each variable in the field declaration
-                foreach (var variable in node.Declaration.Variables)
-                {
-                    var fieldName = variable.Identifier.Text;
-                    var fieldType = _semanticModel.GetTypeInfo(fieldTypeSyntax).Type!;
-                    var initializationValue =
-                        variable.Initializer?.Value.ToString() ?? string.Empty;
+                var fieldElement = _currentTypeElement!.AppendField();
+                fieldElement.SetName(fieldName);
+                fieldElement.SetType(fieldType.ToDisplayString());
 
-                    var fieldElement = _currentTypeElement!.AppendField();
-                    fieldElement.SetName(fieldName);
-                    fieldElement.SetType(fieldType.ToDisplayString());
-                    fieldElement.SetModifiers(fieldModifiers);
-                    fieldElement.SetIsNullable(isNullable);
-                    fieldElement.SetIsPredefinedType(isPredefinedType);
-
-                    if (initializationValue != string.Empty)
-                    {
-                        fieldElement.SetValue(initializationValue);
-                    }
-                }
+                fieldElement.SetIsNullable(isNullable);
+                fieldElement.SetIsPredefinedType(isPredefinedType);
+                fieldElement.SetIsReferenceType(fieldType.IsReferenceType);
+                fieldElement.SetValue(initializationValue);
+                fieldElement.SetModifiers(fieldModifiers);
             }
 
             base.VisitFieldDeclaration(node);
@@ -150,71 +140,51 @@ namespace Presentation.SyntaxWalkers
             var isNullable = propertyTypeSyntax is NullableTypeSyntax;
             var isPredefinedType = propertyTypeSyntax is PredefinedTypeSyntax;
 
-            if (isNullable || isPredefinedType)
-            {
-                var propertyModifiers = string.Join(
-                    ", ",
-                    node.Modifiers.Select(modifier => modifier.ToString())
+            var propertyModifiers = string.Join(
+                " ",
+                node.Modifiers.Select(modifier => modifier.ToString())
+            );
+            var propertyName = node.Identifier.Text;
+            var propertyType = _semanticModel.GetTypeInfo(node.Type).Type!;
+            var accessorList = node.AccessorList;
+
+            var propertyElement = _currentTypeElement!.AppendProperty();
+            propertyElement.SetName(propertyName);
+            propertyElement.SetType(propertyType.ToDisplayString());
+            propertyElement.SetIsNullable(node.Type is NullableTypeSyntax);
+            propertyElement.SetIsPredefinedType(node.Type is PredefinedTypeSyntax);
+            propertyElement.SetIsReferenceType(propertyType.IsReferenceType);
+            propertyElement.SetModifiers(propertyModifiers);
+
+            var hasGetter =
+                node.ExpressionBody != null
+                || (
+                    accessorList?.Accessors.Any(a => a.IsKind(SyntaxKind.GetAccessorDeclaration))
+                    ?? false
                 );
-                var propertyName = node.Identifier.Text;
-                var propertyType = _semanticModel.GetTypeInfo(node.Type).Type!;
-                var accessorList = node.AccessorList;
+            var hasSetter =
+                accessorList?.Accessors.Any(a => a.IsKind(SyntaxKind.SetAccessorDeclaration))
+                ?? false;
 
-                var hasGetter =
-                    node.ExpressionBody != null
-                    || (
-                        accessorList?.Accessors.Any(
-                            a => a.IsKind(SyntaxKind.GetAccessorDeclaration)
-                        ) ?? false
-                    );
-                var hasSetter =
-                    accessorList?.Accessors.Any(a => a.IsKind(SyntaxKind.SetAccessorDeclaration))
-                    ?? false;
+            if (hasGetter)
+            {
+                var getterModifiers =
+                    accessorList?.Accessors
+                        .FirstOrDefault(a => a.IsKind(SyntaxKind.GetAccessorDeclaration))
+                        ?.Modifiers.ToString() ?? string.Empty;
+                propertyElement.AppendGetter().SetModifiers(getterModifiers);
+            }
 
-                var propertyElement = _currentTypeElement!.AppendProperty();
-                propertyElement.SetName(propertyName);
-                propertyElement.SetType(propertyType.ToDisplayString());
-                propertyElement.SetModifiers(propertyModifiers);
-                propertyElement.SetIsNullable(node.Type is NullableTypeSyntax);
-                propertyElement.SetIsPredefinedType(node.Type is PredefinedTypeSyntax);
-
-                if (hasGetter)
-                {
-                    var getterModifiers =
-                        accessorList?.Accessors
-                            .FirstOrDefault(a => a.IsKind(SyntaxKind.GetAccessorDeclaration))
-                            ?.Modifiers.ToString() ?? string.Empty;
-                    propertyElement.AppendGetter().SetModifiers(getterModifiers);
-                }
-
-                if (hasSetter)
-                {
-                    var setterModifiers =
-                        accessorList?.Accessors
-                            .FirstOrDefault(a => a.IsKind(SyntaxKind.SetAccessorDeclaration))
-                            ?.Modifiers.ToString() ?? string.Empty;
-                    propertyElement.AppendSetter().SetModifiers(setterModifiers);
-                }
+            if (hasSetter)
+            {
+                var setterModifiers =
+                    accessorList?.Accessors
+                        .FirstOrDefault(a => a.IsKind(SyntaxKind.SetAccessorDeclaration))
+                        ?.Modifiers.ToString() ?? string.Empty;
+                propertyElement.AppendSetter().SetModifiers(setterModifiers);
             }
 
             base.VisitPropertyDeclaration(node);
-        }
-
-        public override void VisitObjectCreationExpression(ObjectCreationExpressionSyntax node)
-        {
-            var variableDeclaration = node.Parent as VariableDeclarationSyntax;
-            var fieldDeclaration = node.Parent as FieldDeclarationSyntax;
-
-            if (variableDeclaration != null)
-            {
-                Console.WriteLine($"Composition found: {variableDeclaration.Type}");
-            }
-            else if (fieldDeclaration != null)
-            {
-                Console.WriteLine($"Composition found: {fieldDeclaration.Declaration.Type}");
-            }
-
-            base.VisitObjectCreationExpression(node);
         }
 
         public override void VisitEventDeclaration(EventDeclarationSyntax node)
