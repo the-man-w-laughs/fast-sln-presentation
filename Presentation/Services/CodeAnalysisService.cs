@@ -38,7 +38,7 @@ public class CodeAnalysisService
             fileElement.SetAttribute("name", file.Path);
             rootElement.AppendChild(fileElement);
 
-            var sourceCodeWalker = new SourceCodeWalker(semanticModel, root, fileElement);
+            var sourceCodeWalker = new SourceCodeToXmlWalker(semanticModel, root, fileElement);
             sourceCodeWalker.Parse();
 
             stopwatchTree.Stop();

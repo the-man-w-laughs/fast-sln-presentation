@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using System.Xml;
 
 namespace Presentation.Extensions
@@ -20,29 +19,34 @@ namespace Presentation.Extensions
             SetAttribute(xmlElement, "Modifiers", modifiers);
         }
 
+        public static void SetUnderlyingType(this XmlElement xmlElement, string modifiers)
+        {
+            SetAttribute(xmlElement, "UnderlyingType", modifiers);
+        }
+
         public static void SetIsNullable(this XmlElement xmlElement, bool isNullable)
         {
-            SetAttribute(xmlElement, "IsNullable", isNullable.ToString());
+            SetAttribute(xmlElement, "IsNullable", isNullable.ToString().ToLower());
         }
 
         public static void SetIsPredefinedType(this XmlElement xmlElement, bool isPredefinedType)
         {
-            SetAttribute(xmlElement, "IsPredefinedType", isPredefinedType.ToString());
+            SetAttribute(xmlElement, "IsPredefinedType", isPredefinedType.ToString().ToLower());
         }
 
         public static void SetIsReferenceType(this XmlElement xmlElement, bool isReferenceType)
         {
-            SetAttribute(xmlElement, "IsReferenceType", isReferenceType.ToString());
+            SetAttribute(xmlElement, "IsReferenceType", isReferenceType.ToString().ToLower());
         }
 
         public static void SetHasGetter(this XmlElement xmlElement, bool hasGetter)
         {
-            SetAttribute(xmlElement, "HasGetter", hasGetter.ToString());
+            SetAttribute(xmlElement, "HasGetter", hasGetter.ToString().ToLower());
         }
 
         public static void SetHasSetter(this XmlElement xmlElement, bool HasSetter)
         {
-            SetAttribute(xmlElement, "HasSetter", HasSetter.ToString());
+            SetAttribute(xmlElement, "HasSetter", HasSetter.ToString().ToLower());
         }
 
         public static void SetGetterModifiers(this XmlElement xmlElement, string getterModifiers)
@@ -65,6 +69,11 @@ namespace Presentation.Extensions
             SetAttribute(xmlElement, "Namespace", @namespace);
         }
 
+        public static void SetReturnType(this XmlElement xmlElement, string returnType)
+        {
+            SetAttribute(xmlElement, "ReturnType", returnType);
+        }
+
         public static void SetGenericParameters(
             this XmlElement xmlElement,
             string genericParameters
@@ -73,44 +82,87 @@ namespace Presentation.Extensions
             SetAttribute(xmlElement, "GenericParameters", genericParameters);
         }
 
+        public static void SetParentClass(this XmlElement xmlElement, string parrentClass)
+        {
+            SetAttribute(xmlElement, "ParrentClass", parrentClass);
+        }
+
+        public static XmlElement AppendElement(this XmlElement parentElement, string elementName)
+        {
+            var newElement = parentElement.OwnerDocument.CreateElement(elementName);
+            parentElement.AppendChild(newElement);
+
+            return newElement;
+        }
+
         public static XmlElement AppendClass(this XmlElement parentElement)
         {
-            var classElement = parentElement.OwnerDocument.CreateElement("Class");
-            parentElement.AppendChild(classElement);
+            return parentElement.AppendElement("Class");
+        }
 
-            return classElement;
+        public static XmlElement AppendBaseTypes(this XmlElement parentElement)
+        {
+            return parentElement.AppendElement("BaseTypes");
         }
 
         public static XmlElement AppendField(this XmlElement parentElement)
         {
-            var fieldElement = parentElement.OwnerDocument.CreateElement("Field");
-            parentElement.AppendChild(fieldElement);
-
-            return fieldElement;
+            return parentElement.AppendElement("Field");
         }
 
         public static XmlElement AppendProperty(this XmlElement parentElement)
         {
-            var fieldElement = parentElement.OwnerDocument.CreateElement("Property");
-            parentElement.AppendChild(fieldElement);
-
-            return fieldElement;
+            return parentElement.AppendElement("Property");
         }
 
         public static XmlElement AppendGetter(this XmlElement parentElement)
         {
-            var getterElement = parentElement.OwnerDocument.CreateElement("Getter");
-            parentElement.AppendChild(getterElement);
-
-            return getterElement;
+            return parentElement.AppendElement("Getter");
         }
 
         public static XmlElement AppendSetter(this XmlElement parentElement)
         {
-            var setterElement = parentElement.OwnerDocument.CreateElement("Setter");
-            parentElement.AppendChild(setterElement);
+            return parentElement.AppendElement("Setter");
+        }
 
-            return setterElement;
+        public static XmlElement AppendEvent(this XmlElement parentElement)
+        {
+            return parentElement.AppendElement("Event");
+        }
+
+        public static XmlElement AppendMethod(this XmlElement parentElement)
+        {
+            return parentElement.AppendElement("Method");
+        }
+
+        public static XmlElement AppendParameter(this XmlElement parentElement)
+        {
+            return parentElement.AppendElement("Param");
+        }
+
+        public static XmlElement AppendInterface(this XmlElement parentElement)
+        {
+            return parentElement.AppendElement("Interface");
+        }
+
+        public static XmlElement AppendStruct(this XmlElement parentElement)
+        {
+            return parentElement.AppendElement("Struct");
+        }
+
+        public static XmlElement AppendEnum(this XmlElement parentElement)
+        {
+            return parentElement.AppendElement("Enum");
+        }
+
+        public static XmlElement AppendRecord(this XmlElement parentElement)
+        {
+            return parentElement.AppendElement("Record");
+        }
+
+        public static XmlElement AppendMember(this XmlElement parentElement)
+        {
+            return parentElement.AppendElement("Member");
         }
 
         public static void SetAttribute(XmlElement xmlElement, string name, string? value)

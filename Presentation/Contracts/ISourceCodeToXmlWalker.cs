@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Presentation.Contracts
 {
-    public interface ISourceCodeWalker
+    public interface ISourceCodeToXmlWalker
     {
         public void Parse();
     }
