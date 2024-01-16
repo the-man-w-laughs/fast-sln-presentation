@@ -4,8 +4,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Presentation.Contracts;
 using Presentation.Extensions;
-using Presentation.Models;
-using Presentation.Models.CodeRepresentation;
 
 namespace Presentation.SyntaxWalkers
 {
@@ -285,7 +283,7 @@ namespace Presentation.SyntaxWalkers
 
                 var targetTypeName = baseType.ToDisplayString();
 
-                var typeElement = baseTypesElement!.OwnerDocument.CreateElement("Type");
+                var typeElement = baseTypesElement.AppendType();
                 typeElement.SetName(targetTypeName);
 
                 baseTypesElement.AppendChild(typeElement);
