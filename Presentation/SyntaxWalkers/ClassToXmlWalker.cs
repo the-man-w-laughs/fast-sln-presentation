@@ -7,7 +7,7 @@ using Presentation.Extensions;
 
 namespace Presentation.SyntaxWalkers
 {
-    public class SourceCodeToXmlWalker : CSharpSyntaxWalker, ISourceCodeToXmlWalker
+    public class ClassToXmlWalker : CSharpSyntaxWalker, ISourceCodeToXmlWalker
     {
         // resulting field
         private XmlElement _xmlElement;
@@ -22,11 +22,7 @@ namespace Presentation.SyntaxWalkers
 
         private XmlElement? _currentTypeElement;
 
-        public SourceCodeToXmlWalker(
-            SemanticModel semanticModel,
-            SyntaxNode root,
-            XmlElement xmlElement
-        )
+        public ClassToXmlWalker(SemanticModel semanticModel, SyntaxNode root, XmlElement xmlElement)
         {
             _semanticModel = semanticModel;
             _root = root;

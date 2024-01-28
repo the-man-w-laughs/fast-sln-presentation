@@ -2,14 +2,19 @@ using System.Diagnostics;
 using System.Xml;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Presentation.Creators;
 using Presentation.Models;
-using Presentation.SyntaxWalkers;
 
 namespace Presentation.Services;
 
 public class CodeAnalysisService
 {
-    public CodeAnalysisService() { }
+    private readonly ISourceCodeToXmlWalkerCreator _sourceCodeToXmlWalkerCreator;
+
+    public CodeAnalysisService(ISourceCodeToXmlWalkerCreator sourceCodeToXmlWalkerCreator)
+    {
+        _sourceCodeToXmlWalkerCreator = sourceCodeToXmlWalkerCreator;
+    }
 
     public XmlDocument AnalyzeCodeFiles(List<ContentFile> allFiles)
     {
@@ -38,7 +43,12 @@ public class CodeAnalysisService
             fileElement.SetAttribute("name", file.Path);
             rootElement.AppendChild(fileElement);
 
-            var sourceCodeWalker = new SourceCodeToXmlWalker(semanticModel, root, fileElement);
+            var sourceCodeWalker = _sourceCodeToXmlWalkerCreator.Create(
+                semanticModel,
+                root,
+                fileElement
+            );
+
             sourceCodeWalker.Parse();
 
             stopwatchTree.Stop();

@@ -19,9 +19,17 @@ namespace Presentation.Consts
         public const string Member = "Member";
         public const string If = "If";
         public const string For = "For";
-        public const string Foreach = "Foreach";
+        public const string ForEach = "Foreach";
         public const string While = "While";
         public const string Switch = "Switch";
         public const string Case = "Case";
+        public const string Variable = "Variable";
+        public const string Incrementor = "Incrementor";
+        public const string Condition = "Condition";
+        public const string Initialization = "Inialization";
+        public const string IfBlock = "IfBlock";
+        public const string ElseBlock = "ElseBlock";
+        public const string LocalDeclaration = "LocalDeclaration";
+        public const string Assignment = "Assignment";
     }
 }

@@ -4,6 +4,7 @@ using System.Xml;
 using Business.Octokit;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Presentation.Creators;
 using Presentation.Models;
 using Presentation.Services;
 using Presentation.SyntaxWalkers;
@@ -47,7 +48,7 @@ class PresentationMain
         string filePath = $"{directory}/Program.cs";
         string content = File.ReadAllText(filePath);
         var allFiles = new List<ContentFile>() { new ContentFile("penis.cs", content) };
-        var codeAnalysisService = new CodeAnalysisService();
+        var codeAnalysisService = new CodeAnalysisService(new MethodToXmlWalkerCreator());
         var resultXml = codeAnalysisService.AnalyzeCodeFiles(allFiles);
 
         string resultPath = $"{directory}/result.xml";
