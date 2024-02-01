@@ -83,7 +83,7 @@ namespace Presentation.SyntaxWalkers
             }
             var previousElement = _currentElement;
             _currentElement = forElement;
-            base.VisitForStatement(node);
+            base.Visit(node.Statement);
             _currentElement = previousElement;
         }
 
@@ -100,7 +100,7 @@ namespace Presentation.SyntaxWalkers
 
             var previousElement = _currentElement;
             _currentElement = forEachElement;
-            base.VisitForEachStatement(node);
+            base.Visit(node.Statement);
             _currentElement = previousElement;
         }
 
@@ -113,7 +113,7 @@ namespace Presentation.SyntaxWalkers
 
             var previousElement = _currentElement;
             _currentElement = whileElement;
-            base.VisitWhileStatement(node);
+            base.Visit(node.Statement);
             _currentElement = previousElement;
         }
 
