@@ -18,5 +18,6 @@ namespace Presentation.Consts
         public const string ReturnType = "ReturnType";
         public const string GenericParameters = "GenericParameters";
         public const string ParentClass = "ParentClass";
+        public const string Operator = "Operator";
     }
 }

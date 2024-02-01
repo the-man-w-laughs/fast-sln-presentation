@@ -36,7 +36,7 @@ namespace Presentation.SyntaxWalkers
 
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
-            XmlElement methodElement = _xmlElement.AppendMethod();
+            var methodElement = _xmlElement.AppendMethod();
             methodElement.SetName(node.Identifier.ValueText);
 
             _currentElement = methodElement;
@@ -46,8 +46,8 @@ namespace Presentation.SyntaxWalkers
 
         public override void VisitForStatement(ForStatementSyntax node)
         {
-            XmlElement forElement = _currentElement.AppendFor();
-            XmlElement initElement = forElement.AppendInitialization();
+            var forElement = _currentElement.AppendFor();
+            var initElement = forElement.AppendInitialization();
 
             var declarationNode = node.Declaration;
 
@@ -55,14 +55,14 @@ namespace Presentation.SyntaxWalkers
             {
                 var variableType = declarationNode.Type.ToString();
 
-                foreach (VariableDeclaratorSyntax declarator in declarationNode.Variables)
+                foreach (var declarator in declarationNode.Variables)
                 {
                     initElement.AppendVariable().SetName($"{variableType} {declarator}");
                 }
             }
             else if (node.Initializers.Count > 0)
             {
-                foreach (ExpressionSyntax initializer in node.Initializers)
+                foreach (var initializer in node.Initializers)
                 {
                     initElement.AppendVariable().SetValue(initializer.ToString());
                 }
@@ -70,27 +70,27 @@ namespace Presentation.SyntaxWalkers
 
             if (node.Condition != null)
             {
-                XmlElement conditionElement = initElement.AppendCondition();
+                var conditionElement = initElement.AppendCondition();
                 conditionElement.SetValue(node.Condition.ToString());
             }
 
             if (node.Incrementors.Count > 0)
             {
-                foreach (ExpressionSyntax incrementor in node.Incrementors)
+                foreach (var incrementor in node.Incrementors)
                 {
                     initElement.AppendIncrementor().SetValue(incrementor.ToString());
                 }
             }
-
+            var previousElement = _currentElement;
             _currentElement = forElement;
-
             base.VisitForStatement(node);
+            _currentElement = previousElement;
         }
 
         public override void VisitForEachStatement(ForEachStatementSyntax node)
         {
-            XmlElement forEachElement = _currentElement!.AppendForEach();
-            XmlElement initElement = forEachElement.AppendInitialization();
+            var forEachElement = _currentElement!.AppendForEach();
+            var initElement = forEachElement.AppendInitialization();
 
             var variableType = node.Type.ToString();
 
@@ -98,78 +98,102 @@ namespace Presentation.SyntaxWalkers
                 .AppendVariable()
                 .SetValue($"{variableType} {node.Identifier} in {node.Expression}");
 
+            var previousElement = _currentElement;
             _currentElement = forEachElement;
-
             base.VisitForEachStatement(node);
+            _currentElement = previousElement;
         }
 
         public override void VisitWhileStatement(WhileStatementSyntax node)
         {
-            XmlElement whileElement = _currentElement!.AppendWhile();
-            XmlElement initElement = whileElement.AppendInitialization();
+            var whileElement = _currentElement!.AppendWhile();
+            var initElement = whileElement.AppendInitialization();
 
             initElement.AppendCondition().SetValue(node.Condition.ToString());
 
+            var previousElement = _currentElement;
             _currentElement = whileElement;
-
             base.VisitWhileStatement(node);
+            _currentElement = previousElement;
         }
 
         public override void VisitIfStatement(IfStatementSyntax node)
         {
-            XmlElement ifElement = _currentElement!.AppendIf();
-            XmlElement condition = ifElement.AppendInitialization().AppendCondition();
+            var ifElement = _currentElement!.AppendIf();
+            var condition = ifElement.AppendInitialization().AppendCondition();
 
             condition.SetValue(node.Condition.ToString());
 
             // Handle the "if" block
-            XmlElement ifBlock = ifElement.AppendIfBlock();
+            var ifBlock = ifElement.AppendIfBlock();
+            var previousElement = _currentElement;
             _currentElement = ifBlock;
             base.Visit(node.Statement);
 
             // Handle the "else" block if present
             if (node.Else != null)
             {
-                XmlElement elseBlock = ifElement.AppendElseBlock();
+                var elseBlock = ifElement.AppendElseBlock();
                 _currentElement = elseBlock;
                 base.Visit(node.Else.Statement);
             }
 
-            _currentElement = ifElement;
+            _currentElement = previousElement;
         }
 
-        public override void VisitSwitchExpression(SwitchExpressionSyntax node)
+        public override void VisitSwitchStatement(SwitchStatementSyntax node)
         {
-            XmlElement switchElement = _currentElement!.AppendSwitch();
-            switchElement
-                .AppendInitialization()
-                .AppendVariable()
-                .SetValue(node.GoverningExpression.ToString());
+            var switchElement = _currentElement!.AppendSwitch();
 
-            foreach (SwitchExpressionArmSyntax arm in node.Arms)
+            if (node.Expression != null)
             {
-                XmlElement armElement = switchElement.AppendCase();
-
-                // Handle patterns if present
-                if (arm.Pattern != null)
-                {
-                    armElement.SetValue(arm.Pattern.ToString());
-                }
-
-                _currentElement = armElement;
-                base.Visit(arm);
+                switchElement
+                    .AppendInitialization()
+                    .AppendVariable()
+                    .SetValue(node.Expression.ToString());
             }
 
-            _currentElement = switchElement;
+            var previousElement = _currentElement;
 
-            base.VisitSwitchExpression(node);
+            foreach (var section in node.Sections)
+            {
+                foreach (var label in section.Labels)
+                {
+                    switch (label)
+                    {
+                        case CaseSwitchLabelSyntax caseLabel:
+                            var caseElement = switchElement.AppendCase();
+                            caseElement.SetValue(caseLabel.Value.ToString());
+                            _currentElement = caseElement;
+                            base.VisitCaseSwitchLabel(caseLabel);
+                            break;
+
+                        case CasePatternSwitchLabelSyntax patternLabel:
+                            var patternElement = switchElement.AppendCase();
+                            patternElement.SetValue(patternLabel.Pattern.ToString());
+                            _currentElement = patternElement;
+                            base.VisitCasePatternSwitchLabel(patternLabel);
+                            break;
+
+                        case DefaultSwitchLabelSyntax defaultLabel:
+                            var defaultElement = switchElement.AppendCase();
+                            _currentElement = defaultElement;
+                            base.VisitDefaultSwitchLabel(defaultLabel);
+                            break;
+                    }
+                }
+
+                base.Visit(section);
+            }
+
+            _currentElement = previousElement;
         }
 
         public override void VisitLocalDeclarationStatement(LocalDeclarationStatementSyntax node)
         {
-            foreach (VariableDeclaratorSyntax declarator in node.Declaration.Variables)
+            foreach (var declarator in node.Declaration.Variables)
             {
-                XmlElement localDeclarationElement = _currentElement!.AppendLocalDeclaration();
+                var localDeclarationElement = _currentElement!.AppendLocalDeclaration();
 
                 var variableType = node.Declaration.Type.ToString();
                 localDeclarationElement
@@ -187,20 +211,37 @@ namespace Presentation.SyntaxWalkers
 
         public override void VisitAssignmentExpression(AssignmentExpressionSyntax node)
         {
-            if (
-                node.IsKind(SyntaxKind.SimpleAssignmentExpression)
-                && node.Left is IdentifierNameSyntax identifier
-            )
+            if (node.Left is IdentifierNameSyntax identifier)
             {
-                XmlElement assignmentElement = _currentElement!.AppendAssignment();
+                var assignmentElement = _currentElement!.AppendAssignment();
 
                 var variableName = identifier.Identifier.ToString();
                 var assignedValue = node.Right.ToString();
+                var operatorString = node.OperatorToken.Text;
 
-                assignmentElement.SetName(variableName).SetValue(assignedValue);
+                assignmentElement
+                    .SetName(variableName)
+                    .SetValue(assignedValue)
+                    .SetOperator(operatorString);
             }
 
             base.VisitAssignmentExpression(node);
+        }
+
+        public override void VisitPrefixUnaryExpression(PrefixUnaryExpressionSyntax node)
+        {
+            var operand = node.Operand.ToString();
+            var operatorString = node.OperatorToken.Text;
+            _currentElement.AppendPrefixExpression().SetOperator(operatorString).SetName(operand);
+            base.VisitPrefixUnaryExpression(node);
+        }
+
+        public override void VisitPostfixUnaryExpression(PostfixUnaryExpressionSyntax node)
+        {
+            var operand = node.Operand.ToString();
+            var operatorString = node.OperatorToken.Text;
+            _currentElement.AppendPostfixExpression().SetOperator(operatorString).SetName(operand);
+            base.VisitPostfixUnaryExpression(node);
         }
     }
 }

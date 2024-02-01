@@ -128,6 +128,11 @@ namespace Presentation.Extensions
             return SetAttribute(xmlElement, XmlAttributeNames.ParentClass, parentClass);
         }
 
+        public static XmlElement SetOperator(this XmlElement xmlElement, string parentClass)
+        {
+            return SetAttribute(xmlElement, XmlAttributeNames.Operator, parentClass);
+        }
+
         public static XmlElement AppendElement(this XmlElement parentElement, string elementName)
         {
             var newElement = parentElement.OwnerDocument.CreateElement(elementName);
@@ -284,6 +289,16 @@ namespace Presentation.Extensions
         public static XmlElement AppendAssignment(this XmlElement parentElement)
         {
             return parentElement.AppendElement(XmlElementNames.Assignment);
+        }
+
+        public static XmlElement AppendPrefixExpression(this XmlElement parentElement)
+        {
+            return parentElement.AppendElement(XmlElementNames.PrefixExpression);
+        }
+
+        public static XmlElement AppendPostfixExpression(this XmlElement parentElement)
+        {
+            return parentElement.AppendElement(XmlElementNames.PostfixExpression);
         }
 
         public static XmlElement SetAttribute(XmlElement xmlElement, string name, string? value)

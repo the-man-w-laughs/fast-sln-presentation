@@ -31,5 +31,7 @@ namespace Presentation.Consts
         public const string ElseBlock = "ElseBlock";
         public const string LocalDeclaration = "LocalDeclaration";
         public const string Assignment = "Assignment";
+        public const string PrefixExpression = "PrefixExpression";
+        public const string PostfixExpression = "PostfixExpression";
     }
 }
