@@ -1,23 +1,57 @@
-﻿using Presentation.Services;
+﻿using System.Configuration;
+using System.Diagnostics;
+using System.Xml;
+using Business.Octokit;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Presentation.Creators;
+using Presentation.Models;
+using Presentation.Services;
+using Presentation.SyntaxWalkers;
 
-class SolutionParser
+class PresentationMain
 {
-    static void Main()
+    // static async Task Main()
+    // {
+    //     var solutionParser = new SlnParser();
+    //     var projectParser = new CsprojParser();
+
+    //     var pat = ConfigurationManager.AppSettings.Get("pat");
+    //     var githubService = new GithubService(pat);
+
+    //     var stopwatch = Stopwatch.StartNew();
+    //     var allFiles = await githubService.GetAllFiles("the-man-w-laughs", "Obj-Renderer");
+    //     Console.WriteLine(stopwatch.ElapsedMilliseconds);
+    //     Console.WriteLine(allFiles.Count);
+
+    //     var contentFileService = new ContentFileService(solutionParser, projectParser);
+
+    //     var slnTrees = contentFileService.GetSnlTrees(allFiles);
+    // }
+
+
+    static async Task Main()
     {
-        var solutionFilePath = "/home/nazar/projects/diploma/Diploma-Research/DiplomaResearch.sln";
-        var solutionFileContent = File.ReadAllText(solutionFilePath);
+        // var solutionParser = new SlnParser();
+        // var projectParser = new CsprojParser();
 
-        var solutionParser = new SlnParser();
+        // var pat = ConfigurationManager.AppSettings.Get("pat");
+        // var githubService = new GithubService(pat);
 
-        var projects = solutionParser.GetSlnProjectInfos(solutionFileContent);
+        // var stopwatch = Stopwatch.StartNew();
+        // var allFiles = await githubService.GetAllFiles("the-man-w-laughs", "Obj-Renderer");
+        // Console.WriteLine(stopwatch.ElapsedMilliseconds);
+        // Console.WriteLine(allFiles.Count);
+        // var allContent = allFiles.Select(file => file.Content).ToList();
 
-        foreach (var project in projects)
-        {
-            Console.WriteLine($"Project Name: {project.Name}");
-            Console.WriteLine($"Project Type: {project.TypeGuid}");
-            Console.WriteLine($"Project Guid: {project.ProjectGuid}");
-            Console.WriteLine($"Project Path: {project.Path}");
-            Console.WriteLine();
-        }
+        string directory = "/home/nazar/projects/dotnetResearch/Research";
+        string filePath = $"{directory}/Program.cs";
+        string content = File.ReadAllText(filePath);
+        var allFiles = new List<ContentFile>() { new ContentFile("penis.cs", content) };
+        var codeAnalysisService = new CodeAnalysisService(new MethodToXmlWalkerCreator());
+        var resultXml = codeAnalysisService.AnalyzeCodeFiles(allFiles);
+
+        string resultPath = $"{directory}/result.xml";
+        resultXml.Save(resultPath);
     }
 }
