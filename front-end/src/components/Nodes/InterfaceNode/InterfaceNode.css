@@ -1,0 +1,19 @@
+.react-flow__node-interfaceNode {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.react-flow__node-interfaceNode .title {
+    font-weight: bold;
+}
+
+.react-flow__node-interfaceNode .methods {
+    margin-left: 20px;
+}
+
+.react-flow__node-interfaceNode .methods li {
+    list-style-type: circle;
+}

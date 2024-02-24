@@ -1,0 +1,21 @@
+.record-node {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.record-node .title {
+    font-weight: bold;
+}
+
+.record-node .fields,
+.record-node .methods {
+    margin-left: 20px;
+}
+
+.record-node .fields li,
+.record-node .methods li {
+    list-style-type: circle;
+}

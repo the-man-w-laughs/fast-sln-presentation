@@ -1,0 +1,21 @@
+.react-flow__node-classNode {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.react-flow__node-classNode .title {
+    font-weight: bold;
+}
+
+.react-flow__node-classNode .fields,
+.react-flow__node-classNode .methods {
+    margin-left: 20px;
+}
+
+.react-flow__node-classNode .fields li,
+.react-flow__node-classNode .methods li {
+    list-style-type: circle;
+}

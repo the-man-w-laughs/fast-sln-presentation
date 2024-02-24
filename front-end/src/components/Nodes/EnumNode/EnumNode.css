@@ -1,0 +1,19 @@
+.enum-node {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.enum-node .title {
+    font-weight: bold;
+}
+
+.enum-node .values {
+    margin-left: 20px;
+}
+
+.enum-node .values li {
+    list-style-type: circle;
+}

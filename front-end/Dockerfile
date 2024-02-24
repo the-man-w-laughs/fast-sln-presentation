@@ -8,7 +8,7 @@ WORKDIR /front-end
 COPY package*.json ./
 
 # Install app dependencies
-RUN npm install --production --silent
+RUN npm install -g npm@latest
 
 # Copy the rest of the application code to the working directory
 COPY . .
