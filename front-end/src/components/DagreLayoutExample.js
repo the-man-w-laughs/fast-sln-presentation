@@ -81,7 +81,7 @@ const LayoutExample = () => {
   );
 };
 
-const Layout = () => {
+const DagreLayoutExample = () => {
   return (
     <ReactFlowProvider>
       <LayoutExample />
@@ -89,4 +89,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default DagreLayoutExample;
