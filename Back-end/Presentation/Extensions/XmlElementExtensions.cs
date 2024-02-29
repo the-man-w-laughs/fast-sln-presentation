@@ -211,6 +211,11 @@ namespace Presentation.Extensions
             return parentElement.AppendElement(XmlElementNames.Record);
         }
 
+        public static XmlElement AppendDelegate(this XmlElement parentElement)
+        {
+            return parentElement.AppendElement(XmlElementNames.Delegate);
+        }
+
         public static XmlElement AppendMember(this XmlElement parentElement)
         {
             return parentElement.AppendElement(XmlElementNames.Member);

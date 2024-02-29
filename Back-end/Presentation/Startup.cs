@@ -48,7 +48,7 @@ class PresentationMain
         string filePath = $"{directory}/Program.cs";
         string content = File.ReadAllText(filePath);
         var allFiles = new List<ContentFile>() { new ContentFile("penis.cs", content) };
-        var codeAnalysisService = new CodeAnalysisService(new MethodToXmlWalkerCreator());
+        var codeAnalysisService = new CodeAnalysisService(new ClassToXmlWalkerCreator());
         var resultXml = codeAnalysisService.AnalyzeCodeFiles(allFiles);
 
         string resultPath = $"{directory}/result.xml";

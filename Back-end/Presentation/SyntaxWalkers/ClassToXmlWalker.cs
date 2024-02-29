@@ -196,8 +196,40 @@ namespace Presentation.SyntaxWalkers
 
             var symbol = _semanticModel.GetDeclaredSymbol(node)!;
 
-            // Extract info
             var recordName = symbol.Name;
+            var namespaceName = symbol.ContainingNamespace.ToDisplayString();
+            var modifiersStr = string.Join(
+                " ",
+                node.Modifiers.Select(modifier => modifier.ToString())
+            );
+            var genericParamsStr = symbol.TypeParameters.Any()
+                ? string.Join(", ", symbol.TypeParameters.Select(param => param.Name))
+                : "";
+
+            var recordElement = _xmlElement!.AppendRecord();
+            recordElement.SetName(recordName);
+            recordElement.SetNamespace(namespaceName);
+            recordElement.SetModifiers(modifiersStr);
+            recordElement.SetGenericParameters(genericParamsStr);
+
+            _nestingDepth++;
+            _currentTypeElement = recordElement;
+            AddInheritanceFrom(node);
+            base.VisitRecordDeclaration(node);
+            _nestingDepth--;
+        }
+
+        public override void VisitDelegateDeclaration(DelegateDeclarationSyntax node)
+        {
+            if (SkipInnerTypeDeclaration(node))
+            {
+                return;
+            }
+
+            var symbol = _semanticModel.GetDeclaredSymbol(node) as INamedTypeSymbol;
+
+            // Extract info
+            var delegateName = symbol.Name;
             var namespaceName = symbol.ContainingNamespace.ToDisplayString();
             var modifiersStr = string.Join(
                 " ",
@@ -205,15 +237,34 @@ namespace Presentation.SyntaxWalkers
             );
 
             // Write information into XML or other data structure
-            var recordElement = _xmlElement!.AppendRecord();
-            recordElement.SetName(recordName);
-            recordElement.SetNamespace(namespaceName);
-            recordElement.SetModifiers(modifiersStr);
+            var delegateElement = _xmlElement!.AppendDelegate();
+            delegateElement.SetName(delegateName);
+            delegateElement.SetNamespace(namespaceName);
+            delegateElement.SetModifiers(modifiersStr);
+
+            // Handle delegate parameters
+            var invokeMethod = symbol.DelegateInvokeMethod;
+            if (invokeMethod != null)
+            {
+                var returnType = invokeMethod.ReturnType.ToDisplayString();
+                delegateElement.SetReturnType(returnType);
+
+                foreach (var parameter in invokeMethod.Parameters)
+                {
+                    var paramName = parameter.Name;
+                    var paramType = parameter.Type.ToDisplayString();
+
+                    // Create and append the Parameter element
+                    var parameterElement = delegateElement.AppendParameter()!;
+                    parameterElement.SetName(paramName);
+                    parameterElement.SetType(paramType);
+                    delegateElement.AppendChild(parameterElement);
+                }
+            }
 
             _nestingDepth++;
-            _currentTypeElement = recordElement;
-            AddInheritanceFrom(node);
-            base.VisitRecordDeclaration(node);
+            _currentTypeElement = delegateElement;
+            base.VisitDelegateDeclaration(node);
             _nestingDepth--;
         }
 
