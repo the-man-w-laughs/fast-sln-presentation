@@ -16,6 +16,7 @@ namespace Presentation.Consts
         public const string Struct = "Struct";
         public const string Enum = "Enum";
         public const string Record = "Record";
+        public const string Delegate = "Delegate";
         public const string Member = "Member";
         public const string If = "If";
         public const string For = "For";
