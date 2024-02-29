@@ -1,5 +1,6 @@
 import React from "react";
 import "./ClassNode.css";
+import { Handle } from "reactflow";
 
 function ClassNode({ id, data }) {
   return (
@@ -21,6 +22,8 @@ function ClassNode({ id, data }) {
           ))}
         </ul>
       </div>
+      <Handle type="target" />
+      <Handle type="source" />
     </div>
   );
 }

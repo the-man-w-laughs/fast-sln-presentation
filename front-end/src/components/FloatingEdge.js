@@ -1,5 +1,11 @@
 import { useCallback } from "react";
-import { useStore, getBezierPath } from "reactflow";
+import {
+  useStore,
+  getBezierPath,
+  getStraightPath,
+  getSimpleBezierPath,
+  BaseEdge,
+} from "reactflow";
 
 import { getEdgeParams } from "./utils.js";
 
@@ -29,15 +35,7 @@ function FloatingEdge({ id, source, target, markerEnd, style }) {
     targetY: ty,
   });
 
-  return (
-    <path
-      id={id}
-      className="react-flow__edge-path"
-      d={edgePath}
-      markerEnd={markerEnd}
-      style={style}
-    />
-  );
+  return <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />;
 }
 
 export default FloatingEdge;

@@ -1,5 +1,6 @@
 import React from "react";
 import "./RecordNode.css";
+import { Handle } from "reactflow";
 
 function RecordNode({ id, data }) {
   return (
@@ -21,6 +22,8 @@ function RecordNode({ id, data }) {
           ))}
         </ul>
       </div>
+      <Handle type="target" />
+      <Handle type="source" />
     </div>
   );
 }

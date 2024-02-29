@@ -13,7 +13,6 @@ import {
   nodes as initialNodes,
   edges as initialEdges,
 } from "./initial-elements";
-import CustomNode from "./CustomNode";
 
 import "reactflow/dist/style.css";
 import "./overview.css";
@@ -22,14 +21,19 @@ import InterfaceNode from "./Nodes/InterfaceNode/InterfaceNode";
 import StructNode from "./Nodes/StructNode/StructNode";
 import RecordNode from "./Nodes/RecordNode/RecordNode";
 import EnumNode from "./Nodes/EnumNode/EnumNode";
+import FloatingEdge from "./FloatingEdge";
+import "./index.css";
 
 const nodeTypes = {
-  custom: CustomNode,
   classNode: ClassNode,
   interfaceNode: InterfaceNode,
   structNode: StructNode,
   recordNode: RecordNode,
   enumNode: EnumNode,
+};
+
+const edgeTypes = {
+  floating: FloatingEdge,
 };
 
 const minimapStyle = {
@@ -42,10 +46,7 @@ const onInit = (reactFlowInstance) =>
 const OverviewFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    []
-  );
+  const onConnect = useCallback(console.log("connected"));
 
   return (
     <ReactFlow
@@ -58,6 +59,7 @@ const OverviewFlow = () => {
       fitView
       attributionPosition="top-right"
       nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
     >
       <MiniMap style={minimapStyle} zoomable pannable />
       <Controls />

@@ -1,5 +1,6 @@
 import React from "react";
 import "./StructNode.css";
+import { Handle } from "reactflow";
 
 function StructNode({ id, data }) {
   return (
@@ -21,6 +22,8 @@ function StructNode({ id, data }) {
           ))}
         </ul>
       </div>
+      <Handle type="target" />
+      <Handle type="source" />
     </div>
   );
 }

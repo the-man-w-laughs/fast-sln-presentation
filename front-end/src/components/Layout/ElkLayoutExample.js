@@ -1,4 +1,4 @@
-import { initialNodes, initialEdges } from "./nodes-edges.js";
+import { initialNodes, initialEdges } from "../nodes-edges.js";
 import ELK from "elkjs/lib/elk.bundled.js";
 import React, { useCallback, useLayoutEffect } from "react";
 import ReactFlow, {
@@ -9,7 +9,7 @@ import ReactFlow, {
   useEdgesState,
   useReactFlow,
 } from "reactflow";
-import "./overview.css";
+import "../overview.css";
 
 import "reactflow/dist/style.css";
 
@@ -19,6 +19,7 @@ const elkOptions = {
   "elk.algorithm": "org.eclipse.elk.disco",
   "org.eclipse.elk.disco.componentCompaction.componentLayoutAlgorithm":
     "radial",
+  "elk.direction": "DOWN",
 };
 
 const getLayoutedElements = (nodes, edges, options = {}) => {

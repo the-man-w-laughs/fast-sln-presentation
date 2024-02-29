@@ -68,13 +68,21 @@ export const nodes = [
 ];
 
 export const edges = [
-  // {
-  //   id: "e1-2",
-  //   source: "1",
-  //   target: "2",
-  //   label: "this is an edge label",
-  //   type: "step",
-  // },
+  {
+    id: `edge-${1}`,
+    target: "1",
+    source: `2`,
+    type: "floating",
+    markerEnd: {
+      type: MarkerType.Arrow,
+      color: "#FF0072",
+    },
+    style: {
+      strokeWidth: 2,
+      strokeDasharray: [5, 5],
+      stroke: "#FF0072",
+    },
+  },
   // { id: "e1-3", source: "2", target: "3", animated: true },
   // {
   //   id: "e4-5",

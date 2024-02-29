@@ -2,6 +2,7 @@
 
 import React from "react";
 import "./InterfaceNode.css";
+import { Handle } from "reactflow";
 
 function InterfaceNode({ id, data }) {
   return (
@@ -15,6 +16,8 @@ function InterfaceNode({ id, data }) {
           ))}
         </ul>
       </div>
+      <Handle type="target" />
+      <Handle type="source" />
     </div>
   );
 }

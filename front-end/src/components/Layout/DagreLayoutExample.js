@@ -8,10 +8,10 @@ import ReactFlow, {
 } from "reactflow";
 import dagre from "@dagrejs/dagre";
 
-import { initialNodes, initialEdges } from "./nodes-edges.js";
+import { initialNodes, initialEdges } from "../nodes-edges.js";
 
 import "reactflow/dist/style.css";
-import "./overview.css";
+import "../overview.css";
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
