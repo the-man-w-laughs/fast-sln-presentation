@@ -7,8 +7,9 @@ import ElkLayoutExample from "./components/Layout/ElkLayoutExample";
 
 function App() {
   return (
-    <div style={{ height: 800 }}>
+    <div style={{ height: "100vh" }}>
       <OverviewFlow></OverviewFlow>
+
       {/* <LayoutExample></LayoutExample> */}
       {/* <DagreLayoutExample></DagreLayoutExample> */}
       {/* <ElkLayoutExample></ElkLayoutExample> */}

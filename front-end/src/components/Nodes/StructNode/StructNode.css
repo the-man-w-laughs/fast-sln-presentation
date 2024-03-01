@@ -1,21 +1,8 @@
-.struct-node {
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
+.struct-node .circle-with-letter {
+    border: 1px solid #000;
+    background-color: #ffffff;
+    color: #bd4459;
 }
 
-.struct-node .title {
-    font-weight: bold;
-}
-
-.struct-node .fields,
-.struct-node .methods {
-    margin-left: 20px;
-}
-
-.struct-node .fields li,
-.struct-node .methods li {
-    list-style-type: circle;
+.struct-node {    
 }

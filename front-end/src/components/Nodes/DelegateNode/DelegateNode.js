@@ -1,25 +1,27 @@
 import React from "react";
-import { Handle } from "reactflow";
 import CircleWithLetter from "../Utils/CircleWithLetter/CircleWithLetter";
+import { Handle } from "reactflow";
 import Divider from "../Utils/Divider/Divider";
 import GenericInfo from "../Utils/GenericInfo/GenericInfo";
-import "./InterfaceNode.css";
+import "./DelegateNode.css";
 
-function InterfaceNode({ id, data }) {
+function DelegateNode({ id, data }) {
   return (
-    <div className="interface-node node">
+    <div className="delegate-node node">
       <div className="title-container">
-        <CircleWithLetter letter="I" />
-        <div className="title">{data.interfaceName}</div>
+        <CircleWithLetter letter="D" />
+        <div className="title">{data.delegateName}</div>
       </div>
       {data.genericInfo && <GenericInfo info={data.genericInfo} />}
       <Divider></Divider>
-      <div className="methods">
+      <div className="return-type">{data.returnType}</div>
+      <Divider></Divider>
+      <div className="parameters">
         <table>
           <tbody>
-            {data.methods.map((method, index) => (
+            {data.parameters.map((parameter, index) => (
               <tr key={index}>
-                <td>{method}</td>
+                <td>{parameter}</td>
               </tr>
             ))}
           </tbody>
@@ -31,4 +33,4 @@ function InterfaceNode({ id, data }) {
   );
 }
 
-export default InterfaceNode;
+export default DelegateNode;

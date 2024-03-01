@@ -1,4 +1,4 @@
-import { initialNodes, initialEdges } from "../nodes-edges.js";
+import { initialNodes, initialEdges } from "../initial-elements.js";
 import ELK from "elkjs/lib/elk.bundled.js";
 import React, { useCallback, useLayoutEffect } from "react";
 import ReactFlow, {

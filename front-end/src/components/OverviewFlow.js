@@ -9,13 +9,11 @@ import ReactFlow, {
   Panel,
 } from "reactflow";
 
-import {
-  nodes as initialNodes,
-  edges as initialEdges,
-} from "./initial-elements";
+import { initialNodes, initialEdges } from "./initial-elements";
 
 import "reactflow/dist/style.css";
 import "./overview.css";
+import "./Nodes/Nodes.css";
 import ClassNode from "./Nodes/ClassNode/ClassNode";
 import InterfaceNode from "./Nodes/InterfaceNode/InterfaceNode";
 import StructNode from "./Nodes/StructNode/StructNode";
@@ -23,6 +21,7 @@ import RecordNode from "./Nodes/RecordNode/RecordNode";
 import EnumNode from "./Nodes/EnumNode/EnumNode";
 import FloatingEdge from "./FloatingEdge";
 import "./index.css";
+import DelegateNode from "./Nodes/DelegateNode/DelegateNode";
 
 const nodeTypes = {
   classNode: ClassNode,
@@ -30,6 +29,7 @@ const nodeTypes = {
   structNode: StructNode,
   recordNode: RecordNode,
   enumNode: EnumNode,
+  delegateNode: DelegateNode,
 };
 
 const edgeTypes = {
@@ -46,7 +46,7 @@ const onInit = (reactFlowInstance) =>
 const OverviewFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const onConnect = useCallback(console.log("connected"));
+  const onConnect = useCallback();
 
   return (
     <ReactFlow
@@ -63,7 +63,6 @@ const OverviewFlow = () => {
     >
       <MiniMap style={minimapStyle} zoomable pannable />
       <Controls />
-      <Background color="#aaa" gap={16} />
     </ReactFlow>
   );
 };

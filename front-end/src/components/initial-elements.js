@@ -1,7 +1,7 @@
 import React from "react";
 import { MarkerType, Position } from "reactflow";
 
-export const nodes = [
+export const initialNodes = [
   {
     id: "1",
     type: "classNode",
@@ -10,6 +10,7 @@ export const nodes = [
       className: "MyClass",
       fields: ["field1", "field2", "field3"],
       methods: ["method1()", "method2()", "method3()"],
+      genericInfo: "zalupa",
     },
     draggable: true,
     selectable: false,
@@ -22,6 +23,7 @@ export const nodes = [
     data: {
       interfaceName: "MyInterface",
       methods: ["method1()", "method2()", "method3()"],
+      genericInfo: "zalupa",
     },
     draggable: true,
     selectable: false,
@@ -35,6 +37,7 @@ export const nodes = [
       structName: "MyStruct",
       fields: ["field1", "field2", "field3"],
       methods: ["method1()", "method2()", "method3()"],
+      genericInfo: "zalupa",
     },
     draggable: true,
     selectable: false,
@@ -48,6 +51,7 @@ export const nodes = [
       recordName: "MyRecord",
       fields: ["field1", "field2", "field3"],
       methods: ["method1()", "method2()", "method3()"],
+      genericInfo: "zalupa",
     },
     draggable: true,
     selectable: false,
@@ -60,14 +64,29 @@ export const nodes = [
     data: {
       enumName: "MyEnum",
       values: ["Value1", "Value2", "Value3"],
+      genericInfo: "zalupa",
     },
     draggable: true,
     selectable: false,
     position: { x: 400, y: 400 },
   },
+  {
+    id: "6",
+    type: "delegateNode",
+    className: "delegateNode",
+    data: {
+      delegateName: "MyDelegate",
+      returnType: "void",
+      parameters: ["param1: int", "param2: string"],
+      genericInfo: "zalupa",
+    },
+    draggable: true,
+    selectable: false,
+    position: { x: 500, y: 500 },
+  },
 ];
 
-export const edges = [
+export const initialEdges = [
   {
     id: `edge-${1}`,
     target: "1",

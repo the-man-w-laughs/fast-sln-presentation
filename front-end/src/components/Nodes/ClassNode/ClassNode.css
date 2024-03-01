@@ -1,21 +1,14 @@
-.react-flow__node-classNode {
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
+.class-node {
+
 }
 
-.react-flow__node-classNode .title {
-    font-weight: bold;
+.class-node .circle-with-letter {
+    border: 1px solid #000;
+    background-color: #ffffff;
+    color: #82f655;
+    margin-right: 10px;
 }
 
-.react-flow__node-classNode .fields,
-.react-flow__node-classNode .methods {
-    margin-left: 20px;
+.class-node {    
 }
 
-.react-flow__node-classNode .fields li,
-.react-flow__node-classNode .methods li {
-    list-style-type: circle;
-}
