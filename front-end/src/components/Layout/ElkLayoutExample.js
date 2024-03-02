@@ -10,6 +10,13 @@ import ReactFlow, {
   useReactFlow,
 } from "reactflow";
 import "../overview.css";
+import ClassNode from "../Nodes/ClassNode/ClassNode.js";
+import EnumNode from "../Nodes/EnumNode/EnumNode.js";
+import InterfaceNode from "../Nodes/InterfaceNode/InterfaceNode.js";
+import StructNode from "../Nodes/StructNode/StructNode.js";
+import RecordNode from "../Nodes/RecordNode/RecordNode.js";
+import DelegateNode from "../Nodes/DelegateNode/DelegateNode.js";
+import FloatingEdge from "../FloatingEdge.js";
 
 import "reactflow/dist/style.css";
 
@@ -43,6 +50,19 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
     .catch(console.error);
 };
 
+const nodeTypes = {
+  classNode: ClassNode,
+  interfaceNode: InterfaceNode,
+  structNode: StructNode,
+  recordNode: RecordNode,
+  enumNode: EnumNode,
+  delegateNode: DelegateNode,
+};
+
+const edgeTypes = {
+  floating: FloatingEdge,
+};
+
 function LayoutFlow() {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -58,7 +78,6 @@ function LayoutFlow() {
         setNodes(layoutedNodes);
         setEdges(layoutedEdges);
         window.requestAnimationFrame(() => {
-          console.log(nodes);
           fitView();
         });
       }
@@ -71,6 +90,8 @@ function LayoutFlow() {
       onConnect={onConnect}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
+      nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
       fitView
     >
       <Panel position="top-right">

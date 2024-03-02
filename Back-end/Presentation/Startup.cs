@@ -1,13 +1,9 @@
-﻿using System.Configuration;
-using System.Diagnostics;
-using System.Xml;
-using Business.Octokit;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
+﻿using System.Text;
+using Newtonsoft.Json;
 using Presentation.Creators;
 using Presentation.Models;
+using Presentation.Models.JsonModels;
 using Presentation.Services;
-using Presentation.SyntaxWalkers;
 
 class PresentationMain
 {
@@ -44,14 +40,47 @@ class PresentationMain
         // Console.WriteLine(allFiles.Count);
         // var allContent = allFiles.Select(file => file.Content).ToList();
 
-        string directory = "/home/nazar/projects/dotnetResearch/Research";
-        string filePath = $"{directory}/Program.cs";
-        string content = File.ReadAllText(filePath);
-        var allFiles = new List<ContentFile>() { new ContentFile("penis.cs", content) };
-        var codeAnalysisService = new CodeAnalysisService(new ClassToXmlWalkerCreator());
+        // string directory = "/home/nazar/projects/dotnetResearch/Research";
+        // string filePath = $"{directory}/Program.cs";
+        // string content = File.ReadAllText(filePath);
+        // var allFiles = new List<ContentFile>() { new ContentFile("penis.cs", content) };
+
+        string directory = "/home/nazar/projects/dotnetResearch";
+        var allFiles = Directory
+            .GetFiles(directory, "*.cs", SearchOption.AllDirectories)
+            .Select(
+                filePath =>
+                    new ContentFile(
+                        filePath.Substring(directory.Length + 1),
+                        File.ReadAllText(filePath)
+                    )
+            )
+            .ToList();
+        // var codeAnalysisService = new CodeAnalysisService(new ClassToXmlWalkerCreator());
+        var codeAnalysisService = new CodeAnalysisService(new ClassToJsonWalkerCreator());
         var resultXml = codeAnalysisService.AnalyzeCodeFiles(allFiles);
 
         string resultPath = $"{directory}/result.xml";
         resultXml.Save(resultPath);
+
+        JsonTest();
+    }
+
+    static void JsonTest()
+    {
+        // Create instances of JsonClass
+        List<object> jsonClasses = new List<object>
+        {
+            // new JsonStruct("ClassName2", default, "internal")
+        };
+
+        string json = JsonConvert.SerializeObject(jsonClasses);
+
+        string directory = "/home/nazar/projects/dotnetResearch/Research";
+
+        string resultPath = $"{directory}/result.json";
+        File.WriteAllText(resultPath, json, Encoding.UTF8);
+
+        Console.WriteLine("JSON data has been written to file: " + resultPath);
     }
 }

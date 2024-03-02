@@ -62,7 +62,7 @@ export const initialNodes = [
     type: "enumNode",
     className: "enumNode",
     data: {
-      enumName: "MyEnum",
+      enumName: "MyBeautifulEnum",
       values: ["Value1", "Value2", "Value3"],
       genericInfo: "zalupa",
     },

@@ -26,7 +26,7 @@ function FloatingEdge({ id, source, target, markerEnd, style }) {
     targetNode
   );
 
-  const [edgePath] = getBezierPath({
+  const [edgePath] = getStraightPath({
     sourceX: sx,
     sourceY: sy,
     sourcePosition: sourcePos,
