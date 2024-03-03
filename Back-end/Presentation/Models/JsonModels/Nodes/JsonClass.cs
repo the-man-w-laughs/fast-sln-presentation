@@ -1,15 +1,18 @@
+using System.Text.Json.Serialization;
+using Presentation.Models.JsonModels.Nodes.Data;
+
 namespace Presentation.Models.JsonModels
 {
     public class JsonClass
     {
+        [JsonPropertyName("id")]
         public string Id { get; }
-        public string Name { get; }
-        public string FullName { get; }
-        public string Modifiers { get; }
+
+        [JsonPropertyName("type")]
         public string Type { get; set; } = "classNode";
-        public List<string> GenericInfo { get; }
-        public List<string> Methods { get; set; } = new List<string>();
-        public List<string> Members { get; set; } = new List<string>();
+
+        [JsonPropertyName("data")]
+        public ClassData Data { get; }
 
         public JsonClass(
             string id,
@@ -20,10 +23,7 @@ namespace Presentation.Models.JsonModels
         )
         {
             Id = id;
-            Name = name;
-            FullName = fullName;
-            Modifiers = modifiers;
-            GenericInfo = genericInfo;
+            Data = new ClassData(name, fullName, modifiers, genericInfo);
         }
     }
 }

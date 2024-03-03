@@ -1,18 +1,28 @@
+using System.Text.Json.Serialization;
+
 namespace Presentation.Models.JsonModels
 {
-    public class JsonDelegate
+    public class DelegateData
     {
-        public string Id { get; }
+        [JsonPropertyName("name")]
         public string Name { get; }
+
+        [JsonPropertyName("fullName")]
         public string FullName { get; }
+
+        [JsonPropertyName("modifiers")]
         public string Modifiers { get; }
+
+        [JsonPropertyName("returnType")]
         public string ReturnType { get; }
-        public string Type { get; } = "delegateNode";
+
+        [JsonPropertyName("genericInfo")]
         public List<string> GenericInfo { get; set; } = new List<string>();
+
+        [JsonPropertyName("parameters")]
         public List<string> Parameters { get; set; } = new List<string>();
 
-        public JsonDelegate(
-            string id,
+        public DelegateData(
             string name,
             string fullName,
             string modifiers,
@@ -21,11 +31,9 @@ namespace Presentation.Models.JsonModels
             List<string> parameters
         )
         {
-            Id = id;
             Name = name;
             FullName = fullName;
             Modifiers = modifiers;
-            Id = fullName;
             GenericInfo = genericInfo;
             ReturnType = returnType;
             Parameters = parameters;

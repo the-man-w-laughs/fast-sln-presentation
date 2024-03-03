@@ -350,17 +350,7 @@ namespace Presentation.SyntaxWalkers
                 _innerMembers[MemberTypes.Members].Add(resultString);
             }
 
-            if (!isPredefinedType)
-            {
-                var id = _idSerivice.GetNextId();
-                var edge = new JsonEdge(
-                    id,
-                    typeFullName,
-                    _currentTypeFullName!,
-                    isReferenceType ? EdgeTypes.Aggregation : EdgeTypes.Composition
-                );
-                _resultEdges.Add(edge);
-            }
+            CreateEdge(isPredefinedType, typeFullName, isReferenceType);
 
             base.VisitFieldDeclaration(node);
         }
@@ -389,12 +379,17 @@ namespace Presentation.SyntaxWalkers
                 accessorList?.Accessors.Any(a => a.IsKind(SyntaxKind.SetAccessorDeclaration))
                 ?? false;
 
+            var resultString =
+                $"{propertyModifiers} {propertyName}{(isNullable ? "?" : "")} : {propertyType}";
+
             if (hasGetter)
             {
                 var getterModifiers =
                     accessorList?.Accessors
                         .FirstOrDefault(a => a.IsKind(SyntaxKind.GetAccessorDeclaration))
-                        ?.Modifiers.ToString() ?? string.Empty;
+                        ?.Modifiers.ToString() + " "
+                    ?? string.Empty;
+                resultString += $"<<{getterModifiers}get>>";
             }
 
             if (hasSetter)
@@ -402,11 +397,11 @@ namespace Presentation.SyntaxWalkers
                 var setterModifiers =
                     accessorList?.Accessors
                         .FirstOrDefault(a => a.IsKind(SyntaxKind.SetAccessorDeclaration))
-                        ?.Modifiers.ToString() ?? string.Empty;
+                        ?.Modifiers.ToString() + " "
+                    ?? string.Empty;
+                resultString += $"<<{setterModifiers}set>>";
             }
 
-            var resultString =
-                $"{propertyModifiers} {propertyName}{(isNullable ? "?" : "")} : {propertyType}";
             if (initializationValue != null)
             {
                 resultString += $" = {initializationValue}";
@@ -414,6 +409,42 @@ namespace Presentation.SyntaxWalkers
 
             _innerMembers[MemberTypes.Members].Add(resultString);
 
+            CreateEdge(isPredefinedType, typeFullName, isReferenceType);
+
+            base.VisitPropertyDeclaration(node);
+        }
+
+        public override void VisitEventFieldDeclaration(EventFieldDeclarationSyntax node)
+        {
+            var modifiers = ExtractModifiers(node);
+            var nodeDeclarationType = node.Declaration.Type;
+            var eventType = _semanticModel.GetTypeInfo(nodeDeclarationType).Type!;
+
+            foreach (var variable in node.Declaration.Variables)
+            {
+                var eventName = variable.Identifier.Text;
+                var isNullable = nodeDeclarationType is NullableTypeSyntax;
+                var typeFullName = eventType.ToDisplayString();
+                var isPredefinedType = nodeDeclarationType is PredefinedTypeSyntax;
+                var isReferenceType = eventType.IsReferenceType;
+                var initializationValue = variable.Initializer?.Value?.ToString();
+
+                var resultString =
+                    $"{modifiers} <<event>> {eventName}{(isNullable ? "?" : "")} : {eventType}";
+                if (initializationValue != null)
+                {
+                    resultString += $" = {initializationValue}";
+                }
+                _innerMembers[MemberTypes.Members].Add(resultString);
+
+                CreateEdge(isPredefinedType, typeFullName, isReferenceType);
+            }
+
+            base.VisitEventFieldDeclaration(node);
+        }
+
+        private void CreateEdge(bool isPredefinedType, string typeFullName, bool isReferenceType)
+        {
             if (!isPredefinedType)
             {
                 var id = _idSerivice.GetNextId();
@@ -425,29 +456,6 @@ namespace Presentation.SyntaxWalkers
                 );
                 _resultEdges.Add(edge);
             }
-
-            base.VisitPropertyDeclaration(node);
-        }
-
-        public override void VisitEventFieldDeclaration(EventFieldDeclarationSyntax node)
-        {
-            var modifiers = string.Join(
-                " ",
-                node.Modifiers.Select(modifier => modifier.ToString())
-            );
-            var nodeDeclarationType = node.Declaration.Type;
-            var eventType = _semanticModel.GetTypeInfo(nodeDeclarationType).Type!;
-
-            foreach (var variable in node.Declaration.Variables)
-            {
-                var eventName = variable.Identifier.Text;
-                var typeFullName = eventType.ToDisplayString();
-                var isNullable = nodeDeclarationType is NullableTypeSyntax;
-                var isPredefinedType = nodeDeclarationType is PredefinedTypeSyntax;
-                var isReferenceType = eventType.IsReferenceType;
-            }
-
-            base.VisitEventFieldDeclaration(node);
         }
 
         private bool SkipInnerTypeDeclaration(SyntaxNode node)

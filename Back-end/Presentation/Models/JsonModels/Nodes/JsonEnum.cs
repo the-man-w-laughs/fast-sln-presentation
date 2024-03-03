@@ -1,13 +1,17 @@
+using System.Text.Json.Serialization;
+
 namespace Presentation.Models.JsonModels
 {
     public class JsonEnum
     {
+        [JsonPropertyName("id")]
         public string Id { get; }
-        public string Name { get; }
-        public string FullName { get; }
-        public string Modifiers { get; }
-        public string Type { get; set; } = "enumNode";
-        public List<string> Members { get; set; } = new List<string>();
+
+        [JsonPropertyName("type")]
+        public string Type { get; } = "enumNode";
+
+        [JsonPropertyName("data")]
+        public EnumData Data { get; }
 
         public JsonEnum(
             string id,
@@ -18,10 +22,7 @@ namespace Presentation.Models.JsonModels
         )
         {
             Id = id;
-            Name = name;
-            FullName = fullName;
-            Modifiers = modifiers;
-            Members = members;
+            Data = new EnumData(name, fullName, modifiers, members);
         }
     }
 }

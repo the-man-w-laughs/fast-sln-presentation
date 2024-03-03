@@ -27,7 +27,6 @@ export const initialNodes = [
     },
     draggable: true,
     selectable: false,
-    position: { x: 400, y: 0 },
   },
   {
     id: "3",
@@ -39,8 +38,6 @@ export const initialNodes = [
       methods: ["method1()", "method2()", "method3()"],
       genericInfo: "zalupa",
     },
-    draggable: true,
-    selectable: false,
     position: { x: 0, y: 400 },
   },
   {

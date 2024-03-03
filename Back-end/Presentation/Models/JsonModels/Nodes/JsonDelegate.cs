@@ -2,27 +2,29 @@ using System.Text.Json.Serialization;
 
 namespace Presentation.Models.JsonModels
 {
-    public class JsonStruct
+    public class JsonDelegate
     {
         [JsonPropertyName("id")]
         public string Id { get; }
 
         [JsonPropertyName("type")]
-        public string Type { get; } = "structNode";
+        public string Type { get; } = "delegateNode";
 
         [JsonPropertyName("data")]
-        public StructData Data { get; }
+        public DelegateData Data { get; }
 
-        public JsonStruct(
+        public JsonDelegate(
             string id,
             string name,
             string fullName,
             string modifiers,
-            List<string> genericInfo
+            List<string> genericInfo,
+            string returnType,
+            List<string> parameters
         )
         {
             Id = id;
-            Data = new StructData(name, fullName, modifiers, genericInfo);
+            Data = new DelegateData(name, fullName, modifiers, genericInfo, returnType, parameters);
         }
     }
 }

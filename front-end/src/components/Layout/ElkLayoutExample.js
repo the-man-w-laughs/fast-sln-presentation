@@ -1,4 +1,3 @@
-import { initialNodes, initialEdges } from "../initial-elements.js";
 import ELK from "elkjs/lib/elk.bundled.js";
 import React, { useCallback, useLayoutEffect } from "react";
 import ReactFlow, {
@@ -8,8 +7,10 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   useReactFlow,
+  MiniMap,
+  Controls,
 } from "reactflow";
-import "../overview.css";
+import "./overview.css";
 import ClassNode from "../Nodes/ClassNode/ClassNode.js";
 import EnumNode from "../Nodes/EnumNode/EnumNode.js";
 import InterfaceNode from "../Nodes/InterfaceNode/InterfaceNode.js";
@@ -17,8 +18,15 @@ import StructNode from "../Nodes/StructNode/StructNode.js";
 import RecordNode from "../Nodes/RecordNode/RecordNode.js";
 import DelegateNode from "../Nodes/DelegateNode/DelegateNode.js";
 import FloatingEdge from "../FloatingEdge.js";
+import "../Nodes/Nodes.css";
 
 import "reactflow/dist/style.css";
+import { initialNodes, initialEdges } from "../initial-elements.js";
+
+const initialNodesWithPosition = initialNodes.map((node) => ({
+  ...node,
+  position: { x: 0, y: 0 },
+}));
 
 const elk = new ELK();
 
@@ -63,8 +71,14 @@ const edgeTypes = {
   floating: FloatingEdge,
 };
 
+const minimapStyle = {
+  height: 120,
+};
+
 function LayoutFlow() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState(
+    initialNodesWithPosition
+  );
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { fitView } = useReactFlow();
 
@@ -97,6 +111,8 @@ function LayoutFlow() {
       <Panel position="top-right">
         <button onClick={() => onLayout()}>Use layout</button>
       </Panel>
+      <MiniMap style={minimapStyle} zoomable pannable />
+      <Controls />
     </ReactFlow>
   );
 }

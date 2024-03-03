@@ -1,15 +1,17 @@
+using System.Text.Json.Serialization;
+
 namespace Presentation.Models.JsonModels
 {
     public class JsonRecord
     {
+        [JsonPropertyName("id")]
         public string Id { get; }
-        public string Name { get; }
-        public string FullName { get; }
-        public string Modifiers { get; }
+
+        [JsonPropertyName("data")]
+        public RecordData Data { get; }
+
+        [JsonPropertyName("type")]
         public string Type { get; } = "recordNode";
-        public List<string> GenericInfo { get; set; } = new List<string>();
-        public List<string> Methods { get; set; } = new List<string>();
-        public List<string> Members { get; set; } = new List<string>();
 
         public JsonRecord(
             string id,
@@ -20,11 +22,7 @@ namespace Presentation.Models.JsonModels
         )
         {
             Id = id;
-            Name = name;
-            FullName = fullName;
-            Modifiers = modifiers;
-            Id = fullName;
-            GenericInfo = genericInfo;
+            Data = new RecordData(name, fullName, modifiers, genericInfo);
         }
     }
 }

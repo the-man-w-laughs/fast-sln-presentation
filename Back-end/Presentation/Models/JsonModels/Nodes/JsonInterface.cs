@@ -1,15 +1,17 @@
+using System.Text.Json.Serialization;
+
 namespace Presentation.Models.JsonModels
 {
     public class JsonInterface
     {
+        [JsonPropertyName("id")]
         public string Id { get; }
-        public string Name { get; }
-        public string FullName { get; }
-        public string Modifiers { get; }
+
+        [JsonPropertyName("type")]
         public string Type { get; set; } = "interfaceNode";
-        public List<string> GenericInfo { get; }
-        public List<string> Methods { get; set; } = new List<string>();
-        public List<string> Members { get; set; } = new List<string>();
+
+        [JsonPropertyName("data")]
+        public InterfaceData Data { get; }
 
         public JsonInterface(
             string id,
@@ -20,10 +22,7 @@ namespace Presentation.Models.JsonModels
         )
         {
             Id = id;
-            Name = name;
-            FullName = fullName;
-            Modifiers = modifiers;
-            GenericInfo = genericInfo;
+            Data = new InterfaceData(name, fullName, modifiers, genericInfo);
         }
     }
 }
