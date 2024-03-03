@@ -9,7 +9,8 @@ namespace Presentation.Creators
         ISourceCodeToXmlWalker Create(
             SemanticModel semanticModel,
             SyntaxNode root,
-            XmlElement xmlElement
+            List<object> nodes,
+            List<object> edges
         );
     }
 }

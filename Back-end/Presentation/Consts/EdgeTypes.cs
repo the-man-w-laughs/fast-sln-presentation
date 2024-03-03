@@ -4,5 +4,10 @@ namespace Presentation.Consts
     {
         public const string Inheritance = "inheritance";
         public const string Implementation = "impelementation";
+        public const string Aggregation = "aggregation";
+        public const string Composition = "composition";
+        public const string Dependency = "dependency";
+        public const string Association = "association";
+        public const string DirectedAssociation = "directedAssociation";
     }
 }

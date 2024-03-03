@@ -43,10 +43,14 @@ public class CodeAnalysisService
             fileElement.SetAttribute("name", file.Path);
             rootElement.AppendChild(fileElement);
 
+            var nodes = new List<object>();
+            var edges = new List<object>();
+
             var sourceCodeWalker = _sourceCodeToXmlWalkerCreator.Create(
                 semanticModel,
                 root,
-                fileElement
+                nodes,
+                edges
             );
 
             sourceCodeWalker.Parse();

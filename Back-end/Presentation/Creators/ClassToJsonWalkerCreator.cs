@@ -11,10 +11,20 @@ public class ClassToJsonWalkerCreator : ISourceCodeToXmlWalkerCreator
     public ISourceCodeToXmlWalker Create(
         SemanticModel semanticModel,
         SyntaxNode root,
-        XmlElement xmlElement
+        List<object> nodes,
+        List<object> edges
     )
     {
         var idSerivice = new IdService();
-        return new SourceToJsonWalker(semanticModel, root, xmlElement, idSerivice);
+        var modifiersMappingHelper = new ModifiersMappingHelper();
+
+        return new SourceToJsonWalker(
+            nodes,
+            edges,
+            semanticModel,
+            root,
+            idSerivice,
+            modifiersMappingHelper
+        );
     }
 }
