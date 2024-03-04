@@ -8,15 +8,15 @@ function EnumNode({ id, data }) {
     <div className="enum-node node">
       <div className="title-container">
         <CircleWithLetter letter="E" />
-        <div className="title">{data.enumName}</div>
+        <div className="title">{data.name}</div>
       </div>
       <Divider />
       <div className="values">
         <table>
           <tbody>
-            {data.values.map((value, index) => (
+            {data.members.map((member, index) => (
               <tr key={index}>
-                <td>{value},</td>
+                <td>{member},</td>
               </tr>
             ))}
           </tbody>

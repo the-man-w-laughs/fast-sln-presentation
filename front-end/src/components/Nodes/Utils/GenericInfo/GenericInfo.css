@@ -1,7 +1,7 @@
 .generic-info-container {
     position: absolute;
-    top: calc(-10%);
-    left: calc(80%);
+    bottom: calc(100% - 15px);
+    left: calc(100% - 15px);
 }
 
 .generic-info {

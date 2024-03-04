@@ -8,23 +8,32 @@ namespace Presentation.Creators;
 
 public class ClassToJsonWalkerCreator : ISourceCodeToXmlWalkerCreator
 {
-    public ISourceCodeToXmlWalker Create(
+    private readonly IIdSerivice _idSerivice;
+    private readonly IModifiersMappingHelper _modifiersMappingHelper;
+
+    public ClassToJsonWalkerCreator(
+        IIdSerivice idSerivice,
+        IModifiersMappingHelper modifiersMappingHelper
+    )
+    {
+        _idSerivice = idSerivice;
+        _modifiersMappingHelper = modifiersMappingHelper;
+    }
+
+    public ISourceCodeToJsonWalker Create(
         SemanticModel semanticModel,
         SyntaxNode root,
         List<object> nodes,
         List<object> edges
     )
     {
-        var idSerivice = new IdService();
-        var modifiersMappingHelper = new ModifiersMappingHelper();
-
         return new SourceToJsonWalker(
             nodes,
             edges,
             semanticModel,
             root,
-            idSerivice,
-            modifiersMappingHelper
+            _idSerivice,
+            _modifiersMappingHelper
         );
     }
 }

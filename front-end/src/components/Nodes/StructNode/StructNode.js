@@ -10,16 +10,16 @@ function StructNode({ id, data }) {
     <div className="struct-node node">
       <div className="title-container">
         <CircleWithLetter letter="S" />
-        <div className="title">{data.structName}</div>
+        <div className="title">{data.name}</div>
       </div>
-      {data.genericInfo && <GenericInfo info={data.genericInfo} />}
+      {data.genericInfo?.length > 0 && <GenericInfo info={data.genericInfo} />}
       <Divider />
-      <div className="fields">
+      <div className="members">
         <table>
           <tbody>
-            {data.fields.map((field, index) => (
+            {data.members.map((member, index) => (
               <tr key={index}>
-                <td>{field}</td>
+                <td>{member}</td>
               </tr>
             ))}
           </tbody>

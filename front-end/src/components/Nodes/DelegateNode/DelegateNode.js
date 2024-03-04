@@ -10,9 +10,9 @@ function DelegateNode({ id, data }) {
     <div className="delegate-node node">
       <div className="title-container">
         <CircleWithLetter letter="D" />
-        <div className="title">{data.delegateName}</div>
+        <div className="title">{data.name}</div>
       </div>
-      {data.genericInfo && <GenericInfo info={data.genericInfo} />}
+      {data.genericInfo?.length > 0 && <GenericInfo info={data.genericInfo} />}
       <Divider></Divider>
       <div className="return-type">{data.returnType}</div>
       <Divider></Divider>

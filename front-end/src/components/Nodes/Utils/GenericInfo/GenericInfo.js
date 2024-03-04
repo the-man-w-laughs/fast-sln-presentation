@@ -5,7 +5,11 @@ function GenericInfo({ info }) {
   return (
     <div className="generic-info-container">
       <div className="generic-info">
-        <span>{info}</span>
+        {info.map((item, index) => (
+          <div key={index}>
+            <span>{item},</span>
+          </div>
+        ))}
       </div>
     </div>
   );

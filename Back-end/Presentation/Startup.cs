@@ -1,5 +1,7 @@
 ﻿using System.Text;
-using Newtonsoft.Json;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Unicode;
 using Presentation.Creators;
 using Presentation.Models;
 using Presentation.Models.JsonModels;
@@ -57,30 +59,18 @@ class PresentationMain
             )
             .ToList();
         // var codeAnalysisService = new CodeAnalysisService(new ClassToXmlWalkerCreator());
-        var codeAnalysisService = new CodeAnalysisService(new ClassToJsonWalkerCreator());
-        var resultXml = codeAnalysisService.AnalyzeCodeFiles(allFiles);
+        var codeAnalysisService = new CodeAnalysisService(
+            new ClassToJsonWalkerCreator(new IdService(), new ModifiersMappingHelper())
+        );
 
-        string resultPath = $"{directory}/result.xml";
-        resultXml.Save(resultPath);
-
-        JsonTest();
-    }
-
-    static void JsonTest()
-    {
-        // Create instances of JsonClass
-        List<object> jsonClasses = new List<object>
+        var graph = codeAnalysisService.AnalyzeCodeFiles(allFiles);
+        var serializeOptions = new JsonSerializerOptions
         {
-            // new JsonStruct("ClassName2", default, "internal")
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
         };
-
-        string json = JsonConvert.SerializeObject(jsonClasses);
-
-        string directory = "/home/nazar/projects/dotnetResearch/Research";
+        string json = JsonSerializer.Serialize(graph, serializeOptions);
 
         string resultPath = $"{directory}/result.json";
         File.WriteAllText(resultPath, json, Encoding.UTF8);
-
-        Console.WriteLine("JSON data has been written to file: " + resultPath);
     }
 }

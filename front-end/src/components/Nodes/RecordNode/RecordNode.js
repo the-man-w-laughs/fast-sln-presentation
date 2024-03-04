@@ -10,16 +10,16 @@ function RecordNode({ id, data }) {
     <div className="record-node node">
       <div className="title-container">
         <CircleWithLetter letter="R" />
-        <div className="title">{data.recordName}</div>
+        <div className="title">{data.name}</div>
       </div>
-      {data.genericInfo && <GenericInfo info={data.genericInfo} />}
+      {data.genericInfo?.length > 0 && <GenericInfo info={data.genericInfo} />}
       <Divider></Divider>
-      <div className="fields">
+      <div className="members">
         <table>
           <tbody>
-            {data.fields.map((field, index) => (
+            {data.members.map((member, index) => (
               <tr key={index}>
-                <td>{field}</td>
+                <td>{member};</td>
               </tr>
             ))}
           </tbody>
@@ -31,7 +31,7 @@ function RecordNode({ id, data }) {
           <tbody>
             {data.methods.map((method, index) => (
               <tr key={index}>
-                <td>{method}</td>
+                <td>{method};</td>
               </tr>
             ))}
           </tbody>

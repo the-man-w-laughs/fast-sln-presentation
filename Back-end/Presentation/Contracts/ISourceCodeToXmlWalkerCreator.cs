@@ -6,7 +6,7 @@ namespace Presentation.Creators
 {
     public interface ISourceCodeToXmlWalkerCreator
     {
-        ISourceCodeToXmlWalker Create(
+        ISourceCodeToJsonWalker Create(
             SemanticModel semanticModel,
             SyntaxNode root,
             List<object> nodes,

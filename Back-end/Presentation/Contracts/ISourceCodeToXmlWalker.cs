@@ -1,6 +1,6 @@
 namespace Presentation.Contracts
 {
-    public interface ISourceCodeToXmlWalker
+    public interface ISourceCodeToJsonWalker
     {
         public void Parse();
     }

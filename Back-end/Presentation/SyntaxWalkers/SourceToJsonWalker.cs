@@ -10,7 +10,7 @@ using Presentation.Models.JsonModels.Edges;
 
 namespace Presentation.SyntaxWalkers
 {
-    public class SourceToJsonWalker : CSharpSyntaxWalker, ISourceCodeToXmlWalker
+    public class SourceToJsonWalker : CSharpSyntaxWalker, ISourceCodeToJsonWalker
     {
         // resulting field
         private readonly List<object> _resultNodes;
@@ -75,9 +75,11 @@ namespace Presentation.SyntaxWalkers
             _innerMembers[MemberTypes.Methods] = new();
             _currentTypeFullName = fullName;
             base.VisitClassDeclaration(node);
-            jsonNode.Members.AddRange(_innerMembers[MemberTypes.Members]);
-            jsonNode.Methods.AddRange(_innerMembers[MemberTypes.Methods]);
+            jsonNode.Data.Members.AddRange(_innerMembers[MemberTypes.Members]);
+            jsonNode.Data.Methods.AddRange(_innerMembers[MemberTypes.Methods]);
             _nestingDepth--;
+
+            _resultNodes.Add(jsonNode);
         }
 
         public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
@@ -91,7 +93,7 @@ namespace Presentation.SyntaxWalkers
 
             // Extract info
             var name = symbol.Name;
-            var fullName = symbol.ContainingNamespace.ToDisplayString();
+            var fullName = symbol.ToDisplayString();
             var genericInfo = ExtractGenericInfo(symbol);
             var modifiersStr = ExtractModifiers(node);
 
@@ -104,8 +106,8 @@ namespace Presentation.SyntaxWalkers
             _innerMembers[MemberTypes.Methods] = new();
             _currentTypeFullName = fullName;
             base.VisitInterfaceDeclaration(node);
-            jsonNode.Members.AddRange(_innerMembers[MemberTypes.Members]);
-            jsonNode.Methods.AddRange(_innerMembers[MemberTypes.Methods]);
+            jsonNode.Data.Members.AddRange(_innerMembers[MemberTypes.Members]);
+            jsonNode.Data.Methods.AddRange(_innerMembers[MemberTypes.Methods]);
             _nestingDepth--;
 
             _resultNodes.Add(jsonNode);
@@ -142,8 +144,8 @@ namespace Presentation.SyntaxWalkers
             _innerMembers[MemberTypes.Methods] = new();
             _currentTypeFullName = fullName;
             base.VisitStructDeclaration(node);
-            jsonNode.Members.AddRange(_innerMembers[MemberTypes.Members]);
-            jsonNode.Methods.AddRange(_innerMembers[MemberTypes.Methods]);
+            jsonNode.Data.Members.AddRange(_innerMembers[MemberTypes.Members]);
+            jsonNode.Data.Methods.AddRange(_innerMembers[MemberTypes.Methods]);
             _nestingDepth--;
 
             _resultNodes.Add(jsonNode);
@@ -209,8 +211,8 @@ namespace Presentation.SyntaxWalkers
             _innerMembers[MemberTypes.Members] = new();
             _currentTypeFullName = fullName;
             base.VisitRecordDeclaration(node);
-            jsonNode.Members.AddRange(_innerMembers[MemberTypes.Members]);
-            jsonNode.Methods.AddRange(_innerMembers[MemberTypes.Methods]);
+            jsonNode.Data.Members.AddRange(_innerMembers[MemberTypes.Members]);
+            jsonNode.Data.Methods.AddRange(_innerMembers[MemberTypes.Methods]);
             _nestingDepth--;
 
             _resultNodes.Add(jsonNode);
@@ -387,8 +389,13 @@ namespace Presentation.SyntaxWalkers
                 var getterModifiers =
                     accessorList?.Accessors
                         .FirstOrDefault(a => a.IsKind(SyntaxKind.GetAccessorDeclaration))
-                        ?.Modifiers.ToString() + " "
-                    ?? string.Empty;
+                        ?.Modifiers.ToString() ?? string.Empty;
+
+                if (!string.IsNullOrEmpty(getterModifiers))
+                {
+                    getterModifiers = $"{getterModifiers} ";
+                }
+
                 resultString += $"<<{getterModifiers}get>>";
             }
 
@@ -397,8 +404,13 @@ namespace Presentation.SyntaxWalkers
                 var setterModifiers =
                     accessorList?.Accessors
                         .FirstOrDefault(a => a.IsKind(SyntaxKind.SetAccessorDeclaration))
-                        ?.Modifiers.ToString() + " "
-                    ?? string.Empty;
+                        ?.Modifiers.ToString() ?? string.Empty;
+
+                if (!string.IsNullOrEmpty(setterModifiers))
+                {
+                    setterModifiers = $"{setterModifiers} ";
+                }
+
                 resultString += $"<<{setterModifiers}set>>";
             }
 
@@ -491,11 +503,11 @@ namespace Presentation.SyntaxWalkers
             return symbol.TypeParameters
                 .Select(param =>
                 {
-                    var constraintString = string.Join(
-                        ", ",
-                        param.ConstraintTypes.Select(constraint => constraint.Name)
-                    );
-                    return $"{param.Name} : {constraintString}";
+                    string constraintString = param.ConstraintTypes.Any()
+                        ? $"{param.Name} : {string.Join(", ", param.ConstraintTypes.Select(constraint => constraint.Name))}"
+                        : param.Name;
+
+                    return constraintString;
                 })
                 .ToList();
         }

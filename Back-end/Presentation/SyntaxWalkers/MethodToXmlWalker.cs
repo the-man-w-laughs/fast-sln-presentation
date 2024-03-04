@@ -7,7 +7,7 @@ using Presentation.Extensions;
 
 namespace Presentation.SyntaxWalkers
 {
-    public class MethodToXmlWalker : CSharpSyntaxWalker, ISourceCodeToXmlWalker
+    public class MethodToXmlWalker : CSharpSyntaxWalker, ISourceCodeToJsonWalker
     {
         // resulting field
         private XmlElement _xmlElement;

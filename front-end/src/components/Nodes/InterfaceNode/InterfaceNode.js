@@ -10,16 +10,16 @@ function InterfaceNode({ id, data }) {
     <div className="interface-node node">
       <div className="title-container">
         <CircleWithLetter letter="I" />
-        <div className="title">{data.interfaceName}</div>
+        <div className="title">{data.name}</div>
       </div>
-      {data.genericInfo && <GenericInfo info={data.genericInfo} />}
+      {data.genericInfo?.length > 0 && <GenericInfo info={data.genericInfo} />}
       <Divider></Divider>
       <div className="methods">
         <table>
           <tbody>
             {data.methods.map((method, index) => (
               <tr key={index}>
-                <td>{method}</td>
+                <td>{method};</td>
               </tr>
             ))}
           </tbody>

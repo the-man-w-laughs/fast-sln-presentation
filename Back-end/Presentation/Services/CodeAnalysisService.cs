@@ -2,8 +2,10 @@ using System.Diagnostics;
 using System.Xml;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Presentation.Creators;
 using Presentation.Models;
+using Presentation.Models.Graph.GraphData;
 
 namespace Presentation.Services;
 
@@ -16,7 +18,7 @@ public class CodeAnalysisService
         _sourceCodeToXmlWalkerCreator = sourceCodeToXmlWalkerCreator;
     }
 
-    public XmlDocument AnalyzeCodeFiles(List<ContentFile> allFiles)
+    public JsonGraph AnalyzeCodeFiles(List<ContentFile> allFiles)
     {
         var syntaxTrees = allFiles
             .Select(file => CSharpSyntaxTree.ParseText(file.Content))
@@ -28,9 +30,9 @@ public class CodeAnalysisService
             .AddSyntaxTrees(syntaxTrees);
 
         var stopwatchOverall = Stopwatch.StartNew();
-        var xmlDocument = new XmlDocument();
-        XmlElement rootElement = xmlDocument.CreateElement("root");
-        xmlDocument.AppendChild(rootElement);
+
+        var nodes = new List<object>();
+        var edges = new List<object>();
 
         foreach (var (tree, file) in syntaxTrees.Zip(allFiles, (tree, file) => (tree, file)))
         {
@@ -38,13 +40,6 @@ public class CodeAnalysisService
 
             var root = tree.GetRoot();
             var semanticModel = compilation.GetSemanticModel(tree);
-
-            var fileElement = xmlDocument.CreateElement("File");
-            fileElement.SetAttribute("name", file.Path);
-            rootElement.AppendChild(fileElement);
-
-            var nodes = new List<object>();
-            var edges = new List<object>();
 
             var sourceCodeWalker = _sourceCodeToXmlWalkerCreator.Create(
                 semanticModel,
@@ -64,6 +59,6 @@ public class CodeAnalysisService
         stopwatchOverall.Stop();
         Console.WriteLine($"Total time taken: {stopwatchOverall.ElapsedMilliseconds} ms");
 
-        return xmlDocument;
+        return new JsonGraph(nodes, edges);
     }
 }

@@ -17,7 +17,7 @@ import InterfaceNode from "../Nodes/InterfaceNode/InterfaceNode.js";
 import StructNode from "../Nodes/StructNode/StructNode.js";
 import RecordNode from "../Nodes/RecordNode/RecordNode.js";
 import DelegateNode from "../Nodes/DelegateNode/DelegateNode.js";
-import FloatingEdge from "../FloatingEdge.js";
+import FloatingEdge from "../Edges/FloatingEdge.js";
 import "../Nodes/Nodes.css";
 
 import "reactflow/dist/style.css";
