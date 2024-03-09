@@ -71,3 +71,15 @@ export function getEdgeParams(source, target) {
     targetPos,
   };
 }
+
+export function createUrl(properties) {
+  if (typeof properties === "string") {
+    return `url('#${properties}')`;
+  }
+
+  const urlParams = Object.entries(properties)
+    .map(([key, value]) => `${key}=${value}`)
+    .join("&");
+
+  return `url('#1__${urlParams}')`;
+}

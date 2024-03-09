@@ -1,9 +1,30 @@
 import { useCallback } from "react";
-import { useStore, getStraightPath, BaseEdge } from "reactflow";
+import {
+  useStore,
+  getStraightPath,
+  BaseEdge,
+  MarkerType,
+  getBezierPath,
+  getSmoothStepPath,
+  getSimpleBezierPath,
+  getMarkerEnd,
+} from "reactflow";
+
+import { createUrl } from "../utils.js";
+import TriangleUnfilledArrow from "../Markers/TriangleUnfilledArrow.js";
 
 import { getEdgeParams } from "../utils.js";
 
-function FloatingEdge({ id, source, target, markerEnd, style }) {
+function FloatingEdge({
+  id,
+  source,
+  target,
+  markerStart,
+  markerEnd,
+  style,
+  rfId,
+  ...props
+}) {
   const sourceNode = useStore(
     useCallback((store) => store.nodeInternals.get(source), [source])
   );
@@ -29,7 +50,24 @@ function FloatingEdge({ id, source, target, markerEnd, style }) {
     targetY: ty,
   });
 
-  return <BaseEdge path={edgePath} markerEnd={markerEnd} style={style} />;
+  style = {
+    strokeWidth: 1,
+    strokeDasharray: [5, 5],
+    stroke: "#FF0072",
+  };
+
+  markerEnd = createUrl("TriangleUnfilledArrow");
+
+  return (
+    <>
+      <BaseEdge
+        path={edgePath}
+        markerEnd={markerEnd}
+        style={style}
+        {...props}
+      />
+    </>
+  );
 }
 
 export default FloatingEdge;

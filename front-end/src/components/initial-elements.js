@@ -121,17 +121,25 @@ export const initialEdges = [
     target: "Rucoblud.Ssanina",
     source: "penis.pizda.Zalupa<T>",
     type: "floating",
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      width: 50,
+      height: 50,
+      color: "#FF0072",
+    },
   },
   {
     id: "1",
     target: "penis.pizda.IZalupa",
     source: "penis.pizda.Zalupa<T>",
     type: "floating",
+    markerEnd: { type: MarkerType.ArrowClosed },
   },
   {
-    id: "2",
+    id: "212341234",
     target: "penis.govno.Vagina1<T>",
     source: "penis.pizda.Zalupa<T>",
     type: "floating",
+    markerEnd: "TriangleUnfilledArrow",
   },
 ];

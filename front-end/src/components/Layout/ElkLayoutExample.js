@@ -22,6 +22,7 @@ import "../Nodes/Nodes.css";
 
 import "reactflow/dist/style.css";
 import { initialNodes, initialEdges } from "../initial-elements.js";
+import TriangleUnfilledArrow from "../Markers/TriangleUnfilledArrow.js";
 
 const initialNodesWithPosition = initialNodes.map((node) => ({
   ...node,
@@ -98,22 +99,25 @@ function LayoutFlow() {
     );
   }, [nodes, edges]);
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onConnect={onConnect}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      nodeTypes={nodeTypes}
-      edgeTypes={edgeTypes}
-      fitView
-    >
-      <Panel position="top-right">
-        <button onClick={() => onLayout()}>Use layout</button>
-      </Panel>
-      <MiniMap style={minimapStyle} zoomable pannable />
-      <Controls />
-    </ReactFlow>
+    <>
+      <TriangleUnfilledArrow></TriangleUnfilledArrow>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onConnect={onConnect}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        fitView
+      >
+        <Panel position="top-right">
+          <button onClick={() => onLayout()}>Use layout</button>
+        </Panel>
+        <MiniMap style={minimapStyle} zoomable pannable />
+        <Controls />
+      </ReactFlow>
+    </>
   );
 }
 
