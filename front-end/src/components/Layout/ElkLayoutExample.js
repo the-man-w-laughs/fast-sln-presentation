@@ -1,8 +1,7 @@
 import ELK from "elkjs/lib/elk.bundled.js";
-import React, { useCallback, useLayoutEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ReactFlow, {
   ReactFlowProvider,
-  addEdge,
   Panel,
   useNodesState,
   useEdgesState,
@@ -17,12 +16,16 @@ import InterfaceNode from "../Nodes/InterfaceNode/InterfaceNode.js";
 import StructNode from "../Nodes/StructNode/StructNode.js";
 import RecordNode from "../Nodes/RecordNode/RecordNode.js";
 import DelegateNode from "../Nodes/DelegateNode/DelegateNode.js";
-import FloatingEdge from "../Edges/FloatingEdge.js";
+import ImplementationEdge from "../Edges/ImplementationEdge.js";
 import "../Nodes/Nodes.css";
 
 import "reactflow/dist/style.css";
 import { initialNodes, initialEdges } from "../initial-elements.js";
-import TriangleUnfilledArrow from "../Markers/TriangleUnfilledArrow.js";
+import Markers from "../Markers/Markers.js";
+import InheritanceEdge from "../Edges/InheritanceEdge.js";
+import FloatingEdge from "../Edges/FloatingEdge.js";
+import AggregationEdge from "../Edges/AggregationEdge.js";
+import CompositonEdge from "../Edges/CompositonEdge.js";
 
 const initialNodesWithPosition = initialNodes.map((node) => ({
   ...node,
@@ -69,7 +72,10 @@ const nodeTypes = {
 };
 
 const edgeTypes = {
-  floating: FloatingEdge,
+  implementation: ImplementationEdge,
+  inheritance: InheritanceEdge,
+  aggregation: AggregationEdge,
+  composition: CompositonEdge,
 };
 
 const minimapStyle = {
@@ -83,25 +89,41 @@ function LayoutFlow() {
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const { fitView } = useReactFlow();
 
-  const onConnect = useCallback((params) => console.log("loaded"), []);
+  const onConnect = useCallback((params) => console.log("onConnect"), []);
   const onLayout = useCallback(() => {
     const opts = elkOptions;
     const ns = nodes;
     const es = edges;
+
     getLayoutedElements(ns, es, opts).then(
       ({ nodes: layoutedNodes, edges: layoutedEdges }) => {
         setNodes(layoutedNodes);
         setEdges(layoutedEdges);
         window.requestAnimationFrame(() => {
-          fitView();
+          setTimeout(fitView);
         });
       }
     );
   }, [nodes, edges]);
+
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+
+  useEffect(() => {
+    if (reactFlowInstance) {
+      onLayout();
+    }
+  }, [reactFlowInstance]);
+
+  const onInit = (rf) => {
+    setReactFlowInstance(rf);
+  };
+
   return (
     <>
-      <TriangleUnfilledArrow></TriangleUnfilledArrow>
+      <Markers></Markers>
       <ReactFlow
+        fitView
+        onInit={onInit}
         nodes={nodes}
         edges={edges}
         onConnect={onConnect}
@@ -109,7 +131,6 @@ function LayoutFlow() {
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
-        fitView
       >
         <Panel position="top-right">
           <button onClick={() => onLayout()}>Use layout</button>
