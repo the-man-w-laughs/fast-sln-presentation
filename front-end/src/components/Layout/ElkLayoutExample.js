@@ -27,6 +27,9 @@ import FloatingEdge from "../Edges/FloatingEdge.js";
 import AggregationEdge from "../Edges/AggregationEdge.js";
 import CompositonEdge from "../Edges/CompositonEdge.js";
 
+const minZoom = 0.1;
+const maxZoom = 1000;
+
 const initialNodesWithPosition = initialNodes.map((node) => ({
   ...node,
   position: { x: 0, y: 0 },
@@ -122,6 +125,8 @@ function LayoutFlow() {
     <>
       <Markers></Markers>
       <ReactFlow
+        minZoom={minZoom}
+        maxZoom={maxZoom}
         fitView
         onInit={onInit}
         nodes={nodes}

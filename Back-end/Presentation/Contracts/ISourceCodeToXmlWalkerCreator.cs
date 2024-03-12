@@ -1,16 +1,17 @@
-using System.Xml;
 using Microsoft.CodeAnalysis;
 using Presentation.Contracts;
+using Presentation.Models.JsonModels.Edges;
+using Presentation.Models.JsonModels.Nodes;
 
 namespace Presentation.Creators
 {
-    public interface ISourceCodeToXmlWalkerCreator
+    public interface ISourceCodeToJsonWalkerCreator
     {
         ISourceCodeToJsonWalker Create(
             SemanticModel semanticModel,
             SyntaxNode root,
-            List<object> nodes,
-            List<object> edges
+            List<INode> nodes,
+            List<JsonEdge> edges
         );
     }
 }

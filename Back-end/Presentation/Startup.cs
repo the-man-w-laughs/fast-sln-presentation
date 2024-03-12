@@ -1,10 +1,8 @@
 ﻿using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Unicode;
 using Presentation.Creators;
 using Presentation.Models;
-using Presentation.Models.JsonModels;
 using Presentation.Services;
 
 class PresentationMain
@@ -42,25 +40,25 @@ class PresentationMain
         // Console.WriteLine(allFiles.Count);
         // var allContent = allFiles.Select(file => file.Content).ToList();
 
-        // string directory = "/home/nazar/projects/dotnetResearch/Research";
-        // string filePath = $"{directory}/Program.cs";
-        // string content = File.ReadAllText(filePath);
-        // var allFiles = new List<ContentFile>() { new ContentFile("penis.cs", content) };
+        string directory = "/home/nazar/projects/dotnetResearch/Research";
+        string filePath = $"{directory}/Program.cs";
+        string content = File.ReadAllText(filePath);
+        var allFiles = new List<ContentFile>() { new ContentFile("penis.cs", content) };
 
-        string directory = "/home/nazar/projects/dotnetResearch";
-        var allFiles = Directory
-            .GetFiles(directory, "*.cs", SearchOption.AllDirectories)
-            .Select(
-                filePath =>
-                    new ContentFile(
-                        filePath.Substring(directory.Length + 1),
-                        File.ReadAllText(filePath)
-                    )
-            )
-            .ToList();
+        // string directory = "/home/nazar/projects/dotnetResearch";
+        // var allFiles = Directory
+        //     .GetFiles(directory, "*.cs", SearchOption.AllDirectories)
+        //     .Select(
+        //         filePath =>
+        //             new ContentFile(
+        //                 filePath.Substring(directory.Length + 1),
+        //                 File.ReadAllText(filePath)
+        //             )
+        //     )
+        //     .ToList();
         // var codeAnalysisService = new CodeAnalysisService(new ClassToXmlWalkerCreator());
         var codeAnalysisService = new CodeAnalysisService(
-            new ClassToJsonWalkerCreator(new IdService(), new ModifiersMappingHelper())
+            new MethodToJsonWalkerCreator(new IdService())
         );
 
         var graph = codeAnalysisService.AnalyzeCodeFiles(allFiles);

@@ -1,23 +1,22 @@
-using System.Xml;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Presentation.Consts;
 using Presentation.Contracts;
-using Presentation.Extensions;
 using Presentation.Models.JsonModels;
 using Presentation.Models.JsonModels.Edges;
+using Presentation.Models.JsonModels.Nodes;
 
 namespace Presentation.SyntaxWalkers
 {
     public class SourceToJsonWalker : CSharpSyntaxWalker, ISourceCodeToJsonWalker
     {
         // resulting field
-        private readonly List<object> _resultNodes;
-        private readonly List<object> _resultEdges;
+        private readonly List<INode> _resultNodes;
+        private readonly List<JsonEdge> _resultEdges;
 
         // services
-        private readonly IIdSerivice _idSerivice;
+        private readonly IIdService _idSerivice;
         private readonly IModifiersMappingHelper _modifiersMappingHelper;
 
         // inner fields
@@ -29,11 +28,11 @@ namespace Presentation.SyntaxWalkers
         private string? _currentTypeFullName;
 
         public SourceToJsonWalker(
-            List<object> nodes,
-            List<object> edges,
+            List<INode> nodes,
+            List<JsonEdge> edges,
             SemanticModel semanticModel,
             SyntaxNode root,
-            IIdSerivice idSerivice,
+            IIdService idSerivice,
             IModifiersMappingHelper modifiersMappingHelper
         )
         {

@@ -1,19 +1,19 @@
 using System.Diagnostics;
-using System.Xml;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Presentation.Creators;
 using Presentation.Models;
 using Presentation.Models.Graph.GraphData;
+using Presentation.Models.JsonModels.Edges;
+using Presentation.Models.JsonModels.Nodes;
 
 namespace Presentation.Services;
 
 public class CodeAnalysisService
 {
-    private readonly ISourceCodeToXmlWalkerCreator _sourceCodeToXmlWalkerCreator;
+    private readonly ISourceCodeToJsonWalkerCreator _sourceCodeToXmlWalkerCreator;
 
-    public CodeAnalysisService(ISourceCodeToXmlWalkerCreator sourceCodeToXmlWalkerCreator)
+    public CodeAnalysisService(ISourceCodeToJsonWalkerCreator sourceCodeToXmlWalkerCreator)
     {
         _sourceCodeToXmlWalkerCreator = sourceCodeToXmlWalkerCreator;
     }
@@ -31,8 +31,8 @@ public class CodeAnalysisService
 
         var stopwatchOverall = Stopwatch.StartNew();
 
-        var nodes = new List<object>();
-        var edges = new List<object>();
+        var nodes = new List<INode>();
+        var edges = new List<JsonEdge>();
 
         foreach (var (tree, file) in syntaxTrees.Zip(allFiles, (tree, file) => (tree, file)))
         {
@@ -59,6 +59,6 @@ public class CodeAnalysisService
         stopwatchOverall.Stop();
         Console.WriteLine($"Total time taken: {stopwatchOverall.ElapsedMilliseconds} ms");
 
-        return new JsonGraph(nodes, edges);
+        return new JsonGraph(nodes.Cast<object>().ToList(), edges.Cast<object>().ToList());
     }
 }

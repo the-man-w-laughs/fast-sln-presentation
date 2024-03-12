@@ -1,9 +1,10 @@
 namespace Presentation.Contracts
 {
-    public interface IIdSerivice
+    public interface IIdService
     {
-        public string GetNextId();
-
-        public void Reset();
+        string GetNextId();
+        public string GetNextId(string name, string format = "{0}-{1}");
+        void Reset();
+        void Reset(string name);
     }
 }

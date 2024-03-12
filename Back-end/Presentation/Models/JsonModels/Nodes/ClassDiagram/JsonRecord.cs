@@ -1,19 +1,20 @@
 using System.Text.Json.Serialization;
+using Presentation.Models.JsonModels.Nodes;
 
 namespace Presentation.Models.JsonModels
 {
-    public class JsonInterface
+    public class JsonRecord : INode
     {
         [JsonPropertyName("id")]
-        public string Id { get; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; } = "interfaceNode";
+        public string Id { get; set; }
 
         [JsonPropertyName("data")]
-        public InterfaceData Data { get; }
+        public RecordData Data { get; }
 
-        public JsonInterface(
+        [JsonPropertyName("type")]
+        public string Type { get; } = "recordNode";
+
+        public JsonRecord(
             string id,
             string name,
             string fullName,
@@ -22,7 +23,7 @@ namespace Presentation.Models.JsonModels
         )
         {
             Id = id;
-            Data = new InterfaceData(name, fullName, modifiers, genericInfo);
+            Data = new RecordData(name, fullName, modifiers, genericInfo);
         }
     }
 }

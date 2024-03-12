@@ -1,18 +1,18 @@
-using System.Xml;
 using Microsoft.CodeAnalysis;
 using Presentation.Contracts;
-using Presentation.Services;
+using Presentation.Models.JsonModels.Edges;
+using Presentation.Models.JsonModels.Nodes;
 using Presentation.SyntaxWalkers;
 
 namespace Presentation.Creators;
 
-public class ClassToJsonWalkerCreator : ISourceCodeToXmlWalkerCreator
+public class SourceToJsonWalkerCreator : ISourceCodeToJsonWalkerCreator
 {
-    private readonly IIdSerivice _idSerivice;
+    private readonly IIdService _idSerivice;
     private readonly IModifiersMappingHelper _modifiersMappingHelper;
 
-    public ClassToJsonWalkerCreator(
-        IIdSerivice idSerivice,
+    public SourceToJsonWalkerCreator(
+        IIdService idSerivice,
         IModifiersMappingHelper modifiersMappingHelper
     )
     {
@@ -23,8 +23,8 @@ public class ClassToJsonWalkerCreator : ISourceCodeToXmlWalkerCreator
     public ISourceCodeToJsonWalker Create(
         SemanticModel semanticModel,
         SyntaxNode root,
-        List<object> nodes,
-        List<object> edges
+        List<INode> nodes,
+        List<JsonEdge> edges
     )
     {
         return new SourceToJsonWalker(

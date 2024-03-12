@@ -9,5 +9,6 @@ namespace Presentation.Consts
         public const string Dependency = "dependency";
         public const string Association = "association";
         public const string DirectedAssociation = "directedAssociation";
+        public const string Arrow = "arrow";
     }
 }

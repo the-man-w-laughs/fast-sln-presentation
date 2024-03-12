@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using Presentation.Models.JsonModels.Edges;
+using Presentation.Models.JsonModels.Nodes;
 
 namespace Presentation.Models.Graph.GraphData
 {

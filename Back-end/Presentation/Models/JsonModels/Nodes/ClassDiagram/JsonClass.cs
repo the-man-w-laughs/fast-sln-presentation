@@ -1,19 +1,21 @@
 using System.Text.Json.Serialization;
+using Presentation.Models.JsonModels.Nodes;
+using Presentation.Models.JsonModels.Nodes.Data;
 
 namespace Presentation.Models.JsonModels
 {
-    public class JsonStruct
+    public class JsonClass : INode
     {
         [JsonPropertyName("id")]
-        public string Id { get; }
+        public string Id { get; set; }
 
         [JsonPropertyName("type")]
-        public string Type { get; } = "structNode";
+        public string Type { get; } = "classNode";
 
         [JsonPropertyName("data")]
-        public StructData Data { get; }
+        public ClassData Data { get; }
 
-        public JsonStruct(
+        public JsonClass(
             string id,
             string name,
             string fullName,
@@ -22,7 +24,7 @@ namespace Presentation.Models.JsonModels
         )
         {
             Id = id;
-            Data = new StructData(name, fullName, modifiers, genericInfo);
+            Data = new ClassData(name, fullName, modifiers, genericInfo);
         }
     }
 }

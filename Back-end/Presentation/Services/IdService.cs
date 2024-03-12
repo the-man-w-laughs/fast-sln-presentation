@@ -2,23 +2,50 @@ using Presentation.Contracts;
 
 namespace Presentation.Services
 {
-    public class IdService : IIdSerivice
+    public class IdService : IIdService
     {
-        private int nextId;
+        private const string DefaultName = "default";
+        private int _nextId;
+        private Dictionary<string, int> _keyValuePairs;
 
         public IdService()
         {
-            nextId = 0;
+            _keyValuePairs = new Dictionary<string, int> { { DefaultName, 0 } };
         }
 
         public string GetNextId()
         {
-            return nextId++.ToString();
+            _nextId++;
+            return _nextId.ToString();
+        }
+
+        public string GetNextId(string name, string format = "{0}-{1}")
+        {
+            if (!_keyValuePairs.ContainsKey(name))
+            {
+                _keyValuePairs.Add(name, 0);
+            }
+            _keyValuePairs[name]++;
+            return string.Format(format, name, _keyValuePairs[name]);
         }
 
         public void Reset()
         {
-            nextId = 0;
+            _nextId = 0;
+            _keyValuePairs.Clear();
+            _keyValuePairs.Add(DefaultName, 0);
+        }
+
+        public void Reset(string name)
+        {
+            if (_keyValuePairs.ContainsKey(name))
+            {
+                _keyValuePairs[name] = 0;
+            }
+            else
+            {
+                _keyValuePairs.Add(name, 0);
+            }
         }
     }
 }
