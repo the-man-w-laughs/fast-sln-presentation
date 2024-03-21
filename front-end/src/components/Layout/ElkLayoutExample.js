@@ -38,11 +38,19 @@ const initialNodesWithPosition = initialNodes.map((node) => ({
 
 const elk = new ELK();
 
+// const elkOptions = {
+//   "elk.algorithm": "org.eclipse.elk.disco",
+//   "org.eclipse.elk.disco.componentCompaction.componentLayoutAlgorithm":
+//     "radial",
+//   "elk.direction": "DOWN",
+// };
+
 const elkOptions = {
-  "elk.algorithm": "org.eclipse.elk.disco",
-  "org.eclipse.elk.disco.componentCompaction.componentLayoutAlgorithm":
-    "radial",
+  "elk.algorithm": "org.eclipse.elk.layered",
   "elk.direction": "DOWN",
+  "org.eclipse.elk.spacing.nodeNode": 50,
+  "org.eclipse.elk.layered.spacing.edgeNodeBetweenLayers": 50,
+  "org.eclipse.elk.layered.nodePlacement.strategy": "SIMPLE",
 };
 
 const getLayoutedElements = (nodes, edges, options = {}) => {
