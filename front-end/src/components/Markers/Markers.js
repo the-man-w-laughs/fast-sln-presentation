@@ -70,6 +70,23 @@ const Markers = () => (
           strokeWidth="2"
         />
       </marker>
+
+      <marker
+        id="Arrow"
+        viewBox="0 0 40 40"
+        markerHeight={20}
+        markerWidth={20}
+        refX={40}
+        refY={20}
+        orient="auto"
+      >
+        <path
+          d="M0,40 L40,20 L0,0 M40,20 L0,20"
+          fill="#FFFFFF"
+          stroke="#000000"
+          strokeWidth="2"
+        />
+      </marker>
     </defs>
   </svg>
 );

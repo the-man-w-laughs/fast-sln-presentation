@@ -10,22 +10,23 @@ import ReactFlow, {
   Controls,
 } from "reactflow";
 import "./overview.css";
-import ClassNode from "../Nodes/ClassNode/ClassNode.js";
-import EnumNode from "../Nodes/EnumNode/EnumNode.js";
-import InterfaceNode from "../Nodes/InterfaceNode/InterfaceNode.js";
-import StructNode from "../Nodes/StructNode/StructNode.js";
-import RecordNode from "../Nodes/RecordNode/RecordNode.js";
-import DelegateNode from "../Nodes/DelegateNode/DelegateNode.js";
+import ClassNode from "../Nodes/ClassDiagram/ClassNode/ClassNode.js";
+import EnumNode from "../Nodes/ClassDiagram/EnumNode/EnumNode.js";
+import InterfaceNode from "../Nodes/ClassDiagram/InterfaceNode/InterfaceNode.js";
+import StructNode from "../Nodes/ClassDiagram/StructNode/StructNode.js";
+import RecordNode from "../Nodes/ClassDiagram/RecordNode/RecordNode.js";
+import DelegateNode from "../Nodes/ClassDiagram/DelegateNode/DelegateNode.js";
 import ImplementationEdge from "../Edges/ImplementationEdge.js";
+import BlockNode from "../Nodes/Flowchart/BlockNode/BlockNode.js";
 import "../Nodes/Nodes.css";
 
 import "reactflow/dist/style.css";
 import { initialNodes, initialEdges } from "../initial-elements.js";
 import Markers from "../Markers/Markers.js";
 import InheritanceEdge from "../Edges/InheritanceEdge.js";
-import FloatingEdge from "../Edges/FloatingEdge.js";
 import AggregationEdge from "../Edges/AggregationEdge.js";
 import CompositonEdge from "../Edges/CompositonEdge.js";
+import ArrowEdge from "../Edges/ArrowEdge.js";
 
 const minZoom = 0.1;
 const maxZoom = 1000;
@@ -72,6 +73,7 @@ const nodeTypes = {
   recordNode: RecordNode,
   enumNode: EnumNode,
   delegateNode: DelegateNode,
+  blockNode: BlockNode,
 };
 
 const edgeTypes = {
@@ -79,6 +81,7 @@ const edgeTypes = {
   inheritance: InheritanceEdge,
   aggregation: AggregationEdge,
   composition: CompositonEdge,
+  arrow: ArrowEdge,
 };
 
 const minimapStyle = {
