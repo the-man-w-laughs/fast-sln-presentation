@@ -10,22 +10,15 @@ import ReactFlow, {
   Controls,
 } from "reactflow";
 import "./overview.css";
-import ClassNode from "../Nodes/ClassDiagram/ClassNode/ClassNode.js";
-import EnumNode from "../Nodes/ClassDiagram/EnumNode/EnumNode.js";
-import InterfaceNode from "../Nodes/ClassDiagram/InterfaceNode/InterfaceNode.js";
-import StructNode from "../Nodes/ClassDiagram/StructNode/StructNode.js";
-import RecordNode from "../Nodes/ClassDiagram/RecordNode/RecordNode.js";
-import DelegateNode from "../Nodes/ClassDiagram/DelegateNode/DelegateNode.js";
-import ImplementationEdge from "../Edges/ImplementationEdge.js";
 import BlockNode from "../Nodes/Flowchart/BlockNode/BlockNode.js";
-import "../Nodes/Nodes.css";
+import TerminalNode from "../Nodes/Flowchart/TerminalNode/TerminalNode.js";
+import ConditionNode from "../Nodes/Flowchart/ConditionNode/ConditionNode.js";
+import CycleStartNode from "../Nodes/Flowchart/CycleStartNode/CycleStartNode.js";
+import "../Nodes/Flowchart/FlowchartNodes.css";
 
 import "reactflow/dist/style.css";
 import { initialNodes, initialEdges } from "../initial-elements.js";
 import Markers from "../Markers/Markers.js";
-import InheritanceEdge from "../Edges/InheritanceEdge.js";
-import AggregationEdge from "../Edges/AggregationEdge.js";
-import CompositonEdge from "../Edges/CompositonEdge.js";
 import ArrowEdge from "../Edges/ArrowEdge.js";
 
 const minZoom = 0.1;
@@ -38,18 +31,11 @@ const initialNodesWithPosition = initialNodes.map((node) => ({
 
 const elk = new ELK();
 
-// const elkOptions = {
-//   "elk.algorithm": "org.eclipse.elk.disco",
-//   "org.eclipse.elk.disco.componentCompaction.componentLayoutAlgorithm":
-//     "radial",
-//   "elk.direction": "DOWN",
-// };
-
 const elkOptions = {
   "elk.algorithm": "org.eclipse.elk.layered",
   "elk.direction": "DOWN",
-  "org.eclipse.elk.spacing.nodeNode": 50,
-  "org.eclipse.elk.layered.spacing.edgeNodeBetweenLayers": 50,
+  "org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers": 80,
+  "org.eclipse.elk.layered.spacing.edgeNodeBetweenLayers": 40,
   "org.eclipse.elk.layered.nodePlacement.strategy": "SIMPLE",
 };
 
@@ -75,20 +61,13 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
 };
 
 const nodeTypes = {
-  classNode: ClassNode,
-  interfaceNode: InterfaceNode,
-  structNode: StructNode,
-  recordNode: RecordNode,
-  enumNode: EnumNode,
-  delegateNode: DelegateNode,
   blockNode: BlockNode,
+  terminalNode: TerminalNode,
+  conditionNode: ConditionNode,
+  cycleStartNode: CycleStartNode,
 };
 
 const edgeTypes = {
-  implementation: ImplementationEdge,
-  inheritance: InheritanceEdge,
-  aggregation: AggregationEdge,
-  composition: CompositonEdge,
   arrow: ArrowEdge,
 };
 
@@ -158,7 +137,7 @@ function LayoutFlow() {
   );
 }
 
-const ElkLayoutExample = () => {
+const FlowchartLayout = () => {
   return (
     <ReactFlowProvider>
       <LayoutFlow />
@@ -166,4 +145,4 @@ const ElkLayoutExample = () => {
   );
 };
 
-export default ElkLayoutExample;
+export default FlowchartLayout;

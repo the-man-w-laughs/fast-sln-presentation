@@ -1,11 +1,11 @@
 import logo from "./logo.svg";
 import "./App.css";
-import ElkLayoutExample from "./components/Layout/ElkLayoutExample";
+import FlowchartLayout from "./components/Layout/FlowchartLayout";
 
 function App() {
   return (
     <div style={{ height: "100vh" }}>
-      <ElkLayoutExample></ElkLayoutExample>
+      <FlowchartLayout></FlowchartLayout>
     </div>
   );
 }

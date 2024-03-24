@@ -3,6 +3,13 @@ import { MarkerType, Position } from "reactflow";
 
 export const initialNodes = [
   {
+    id: "block-0",
+    type: "terminalNode",
+    data: {
+      content: ["Начало"],
+    },
+  },
+  {
     id: "block-1",
     type: "blockNode",
     data: {
@@ -11,7 +18,7 @@ export const initialNodes = [
   },
   {
     id: "block-2",
-    type: "blockNode",
+    type: "cycleStartNode",
     data: {
       content: ["var c = 3;", "var d = 4;"],
     },
@@ -25,9 +32,9 @@ export const initialNodes = [
   },
   {
     id: "block-4",
-    type: "blockNode",
+    type: "conditionNode",
     data: {
-      content: ["var c = 3;", "var d = 4;"],
+      content: ["a > b"],
     },
   },
   {
@@ -46,9 +53,9 @@ export const initialNodes = [
   },
   {
     id: "block-7",
-    type: "blockNode",
+    type: "terminalNode",
     data: {
-      content: ["var c = 3;", "var d = 4;"],
+      content: ["Конец"],
     },
   },
 ];
@@ -105,6 +112,12 @@ export const initialEdges = [
     id: "9",
     source: "block-5",
     target: "block-7",
+    type: "arrow",
+  },
+  {
+    id: "10",
+    source: "block-0",
+    target: "block-1",
     type: "arrow",
   },
 ];

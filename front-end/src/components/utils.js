@@ -83,3 +83,16 @@ export function createUrl(properties) {
 
   return `url('#1__${urlParams}')`;
 }
+
+/**
+ * Converts an array of points to an SVG path string.
+ * @param {Array} points - Array of points with x and y coordinates.
+ * @returns {string} SVG path string.
+ */
+export function pointsToSVG(points) {
+  let svgPath = "M" + points[0].x + "," + points[0].y;
+  for (let i = 1; i < points.length; i++) {
+    svgPath += " L" + points[i].x + "," + points[i].y;
+  }
+  return svgPath;
+}
