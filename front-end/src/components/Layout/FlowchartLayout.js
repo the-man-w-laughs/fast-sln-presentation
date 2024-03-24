@@ -14,6 +14,7 @@ import BlockNode from "../Nodes/Flowchart/BlockNode/BlockNode.js";
 import TerminalNode from "../Nodes/Flowchart/TerminalNode/TerminalNode.js";
 import ConditionNode from "../Nodes/Flowchart/ConditionNode/ConditionNode.js";
 import CycleStartNode from "../Nodes/Flowchart/CycleStartNode/CycleStartNode.js";
+import CycleEndNode from "../Nodes/Flowchart/CycleEndNode/CycleEndNode.js";
 import "../Nodes/Flowchart/FlowchartNodes.css";
 
 import "reactflow/dist/style.css";
@@ -36,7 +37,8 @@ const elkOptions = {
   "elk.direction": "DOWN",
   "org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers": 80,
   "org.eclipse.elk.layered.spacing.edgeNodeBetweenLayers": 40,
-  "org.eclipse.elk.layered.nodePlacement.strategy": "SIMPLE",
+  "org.eclipse.elk.direction": "DOWN",
+  "org.eclipse.elk.layered.nodePlacement.strategy": "LINEAR_SEGMENTS",
 };
 
 const getLayoutedElements = (nodes, edges, options = {}) => {
@@ -65,6 +67,7 @@ const nodeTypes = {
   terminalNode: TerminalNode,
   conditionNode: ConditionNode,
   cycleStartNode: CycleStartNode,
+  cycleEndNode: CycleEndNode,
 };
 
 const edgeTypes = {

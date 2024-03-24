@@ -58,6 +58,13 @@ export const initialNodes = [
       content: ["Конец"],
     },
   },
+  {
+    id: "block-8",
+    type: "cycleEndNode",
+    data: {
+      content: ["var c = 3;", "var d = 4;"],
+    },
+  },
 ];
 export const initialEdges = [
   {
@@ -74,7 +81,7 @@ export const initialEdges = [
   },
   {
     id: "3",
-    source: "block-2",
+    source: "block-8",
     target: "block-4",
     type: "arrow",
   },
@@ -118,6 +125,12 @@ export const initialEdges = [
     id: "10",
     source: "block-0",
     target: "block-1",
+    type: "arrow",
+  },
+  {
+    id: "11",
+    source: "block-2",
+    target: "block-8",
     type: "arrow",
   },
 ];

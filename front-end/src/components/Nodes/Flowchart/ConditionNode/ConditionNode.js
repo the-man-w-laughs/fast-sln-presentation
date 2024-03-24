@@ -1,28 +1,28 @@
-import React, { useEffect, useRef, getBoundingClientRect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Handle, Position } from "reactflow";
 import "./ConditionNode.css";
 
 function ConditionNode({ id, data }) {
-  const diamondRef = useRef(null);
+  const figureRef = useRef(null);
   const conditionRef = useRef(null);
 
   useEffect(() => {
-    if (diamondRef.current && conditionRef.current) {
+    if (figureRef.current && conditionRef.current) {
       const contentCondition = document.querySelector(".content-condition");
       const contentRect = contentCondition.getBoundingClientRect();
-      const size = Math.max(contentRect.width, contentRect.height);
-      diamondRef.current.style.width = `${size}px`;
-      diamondRef.current.style.height = `${size}px`;
-      const diamondSize = diamondRef.current.getBoundingClientRect();
-      console.log(diamondSize);
-      conditionRef.current.style.width = `${diamondSize.width}px`;
-      conditionRef.current.style.height = `${diamondSize.height}px`;
+      const size = Math.min(contentRect.height, contentRect.width);
+      figureRef.current.style.width = `${size}px`;
+      figureRef.current.style.height = `${size}px`;
+      conditionRef.current.style.width = `${size}px`;
+      conditionRef.current.style.height = `${size}px`;
     }
   }, [data.content]);
 
   return (
-    <div ref={conditionRef} className="condition">
-      <div ref={diamondRef} className="diamond"></div>
+    <div ref={conditionRef} className="condition-node">
+      <svg ref={figureRef} viewBox="0 0 100 100" className="rhombus">
+        <polygon points="50,0 100,50 50,100 0,50" />
+      </svg>
       <div className="content-condition">
         <table>
           <tbody>

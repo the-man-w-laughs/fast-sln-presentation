@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import { Handle, Position } from "reactflow";
-import "./CycleStartNode.css";
+import "./CycleEndNode.css";
 
-function CycleStartNode({ id, data }) {
+function CycleEndNode({ id, data }) {
   const figureRef = useRef(null);
   const cycleStartRef = useRef(null);
 
   useEffect(() => {
     if (figureRef.current && cycleStartRef.current) {
-      const contentCondition = document.querySelector(".content-cycleStart");
+      const contentCondition = document.querySelector(".content-cycleEnd");
       const contentRect = contentCondition.getBoundingClientRect();
       figureRef.current.style.width = `${contentRect.width}px`;
       figureRef.current.style.height = `${contentRect.height}px`;
@@ -18,11 +18,11 @@ function CycleStartNode({ id, data }) {
   }, [data.content]);
 
   return (
-    <div ref={cycleStartRef} className="cycleStart-node">
-      <svg ref={figureRef} viewBox="0 0 100 100" className="cycleStart">
-        <polygon points="0,100 0,20 20,0 80,0 100,20 100,100" />
+    <div ref={cycleStartRef} className="cycleEnd-node">
+      <svg ref={figureRef} viewBox="0 0 100 100" className="cycleEnd">
+        <polygon points="0,0 0,80 20,100 80,100 100,80 100,0" />
       </svg>
-      <div className="content-cycleStart">
+      <div className="content-cycleEnd">
         <table>
           <tbody>
             {data.content.map((member, index) => (
@@ -39,4 +39,4 @@ function CycleStartNode({ id, data }) {
   );
 }
 
-export default CycleStartNode;
+export default CycleEndNode;

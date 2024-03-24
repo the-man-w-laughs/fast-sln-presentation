@@ -2,11 +2,6 @@ import { useCallback } from "react";
 import { useStore, BaseEdge, getSmoothStepPath } from "reactflow";
 import { pointsToSVG } from "../utils";
 
-/**
- * Custom edge component for flowchart edges.
- * @param {Object} props - Component props.
- * @returns {JSX.Element|null} JSX element representing the flowchart edge.
- */
 function FlowchartEdge({ id, source, target, markerEnd, style, ...props }) {
   // Get source and target nodes from the store
   const sourceNode = useStore((store) => store.nodeInternals.get(source));
