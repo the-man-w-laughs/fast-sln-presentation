@@ -1,0 +1,12 @@
+.generic-info-container {
+    position: absolute;
+    bottom: calc(100% - 15px);
+    left: calc(100% - 15px);
+}
+
+.generic-info {
+    border: 1px dashed #ccc;
+    padding: 4px 8px;
+    background-color: white;
+    color: #333;
+}
