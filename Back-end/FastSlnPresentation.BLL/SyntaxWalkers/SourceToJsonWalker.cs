@@ -10,7 +10,7 @@ using FastSlnPresentation.BLL.Services;
 
 namespace FastSlnPresentation.BLL.SyntaxWalkers
 {
-    public class SourceToJsonWalker : CSharpSyntaxWalker, ISourceCodeToJsonWalker
+    public class ClassToJsonWalker : CSharpSyntaxWalker, ISourceToJsonWalker
     {
         // resulting field
         private readonly List<INode> _resultNodes;
@@ -27,7 +27,7 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
         private readonly Dictionary<string, List<string>> _innerMembers = new();
         private string? _currentTypeFullName;
 
-        public SourceToJsonWalker(
+        public ClassToJsonWalker(
             List<INode> nodes,
             List<JsonEdge> edges,
             SemanticModel semanticModel,

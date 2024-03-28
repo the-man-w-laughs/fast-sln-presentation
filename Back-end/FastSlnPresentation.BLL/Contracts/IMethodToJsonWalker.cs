@@ -1,6 +1,6 @@
 namespace FastSlnPresentation.BLL.Contracts
 {
-    public interface ISourceCodeToJsonWalker
+    public interface IMethodToJsonWalker
     {
         public void Parse();
     }

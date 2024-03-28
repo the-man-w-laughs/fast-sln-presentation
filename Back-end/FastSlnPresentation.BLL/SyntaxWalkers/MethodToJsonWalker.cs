@@ -11,14 +11,13 @@ using FastSlnPresentation.BLL.Models.JsonModels.Nodes.Flowchart;
 
 namespace FastSlnPresentation.BLL.SyntaxWalkers
 {
-    public class MethodToJsonWalker : CSharpSyntaxWalker, ISourceCodeToJsonWalker
+    public class MethodToJsonWalker : CSharpSyntaxWalker, IMethodToJsonWalker
     {
         // resulting field
         private readonly List<INode> _resultNodes;
         private readonly List<JsonEdge> _resultEdges;
 
         // inner fields
-        private SemanticModel _semanticModel;
         private readonly SyntaxNode _root;
         private readonly IIdService _idSerivice;
         private List<string> _label = new();
@@ -27,14 +26,12 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
         public MethodToJsonWalker(
             List<INode> nodes,
             List<JsonEdge> edges,
-            SemanticModel semanticModel,
             SyntaxNode root,
             IIdService idSerivice
         )
         {
             _resultEdges = edges;
             _resultNodes = nodes;
-            _semanticModel = semanticModel;
             _root = root;
             _idSerivice = idSerivice;
         }

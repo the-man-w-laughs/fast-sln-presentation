@@ -1,25 +1,28 @@
 using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using FastSlnPresentation.BLL.Creators;
 using FastSlnPresentation.BLL.Models;
 using FastSlnPresentation.BLL.Models.Graph.GraphData;
 using FastSlnPresentation.BLL.Models.JsonModels.Edges;
 using FastSlnPresentation.BLL.Models.JsonModels.Nodes;
+using FastSlnPresentation.BLL.SyntaxWalkers;
+using FastSlnPresentation.BLL.Contracts;
 
 namespace FastSlnPresentation.BLL.Services;
 
-public class CodeAnalysisService
+public class ClassAnalysisService : IClassAnalysisService
 {
-    private readonly ISourceCodeToJsonWalkerCreator _sourceCodeToXmlWalkerCreator;
+    private readonly IIdService _idService;
 
-    public CodeAnalysisService(ISourceCodeToJsonWalkerCreator sourceCodeToXmlWalkerCreator)
+    public ClassAnalysisService(IIdService idService)
     {
-        _sourceCodeToXmlWalkerCreator = sourceCodeToXmlWalkerCreator;
+        _idService = idService;
     }
 
     public JsonGraph AnalyzeCodeFiles(List<ContentFile> allFiles)
     {
+        var stopwatchOverall = Stopwatch.StartNew();
+
         var syntaxTrees = allFiles
             .Select(file => CSharpSyntaxTree.ParseText(file.Content))
             .ToList();
@@ -29,26 +32,24 @@ public class CodeAnalysisService
             .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
             .AddSyntaxTrees(syntaxTrees);
 
-        var stopwatchOverall = Stopwatch.StartNew();
-
         var nodes = new List<INode>();
         var edges = new List<JsonEdge>();
 
         foreach (var (tree, file) in syntaxTrees.Zip(allFiles, (tree, file) => (tree, file)))
         {
             var stopwatchTree = Stopwatch.StartNew();
-
-            var root = tree.GetRoot();
             var semanticModel = compilation.GetSemanticModel(tree);
+            var root = tree.GetRoot();
 
-            var sourceCodeWalker = _sourceCodeToXmlWalkerCreator.Create(
+            var classToJsonWalker = new ClassToJsonWalker(
+                nodes,
+                edges,
                 semanticModel,
                 root,
-                nodes,
-                edges
+                _idService
             );
 
-            sourceCodeWalker.Parse();
+            classToJsonWalker.Parse();
 
             stopwatchTree.Stop();
             Console.WriteLine(

@@ -12,8 +12,6 @@ namespace Business.Octokit
             new ProductHeaderValue("fast-snl-presentation")
         );
 
-        public GithubService() { }
-
         public GithubService(string pat)
         {
             var basicAuth = new Credentials(pat);

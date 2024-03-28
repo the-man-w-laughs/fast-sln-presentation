@@ -4,9 +4,9 @@ using FastSlnPresentation.BLL.Models.Project;
 
 namespace FastSlnPresentation.BLL.Services;
 
-public class CsprojParser : ICsprojParser
+public static class CsprojParser
 {
-    public CsprojInfo GetProjectInfo(string csproj)
+    public static CsprojInfo GetProjectInfo(string csproj)
     {
         if (string.IsNullOrWhiteSpace(csproj))
         {

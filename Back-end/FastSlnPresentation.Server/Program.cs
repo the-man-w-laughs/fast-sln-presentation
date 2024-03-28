@@ -7,7 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCustomControllers();
+builder.Services.AddKebabControllers();
+builder.Services.RegisterServices();
+builder.Services.AddDefaultCors();
 
 var app = builder.Build();
 
@@ -17,12 +19,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseRouting();
+app.UseCors();
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.UseRootRedirect("swagger");
 
 app.Run();

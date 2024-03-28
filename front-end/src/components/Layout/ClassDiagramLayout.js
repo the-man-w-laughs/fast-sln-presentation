@@ -149,7 +149,9 @@ function LayoutFlow() {
 const ClassDiagramLayout = () => {
   return (
     <ReactFlowProvider>
-      <LayoutFlow />
+      <div style={{ height: "100vh" }}>
+        <LayoutFlow />
+      </div>
     </ReactFlowProvider>
   );
 };

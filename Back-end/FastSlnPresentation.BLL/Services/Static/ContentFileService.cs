@@ -1,23 +1,13 @@
 using System.Text.RegularExpressions;
-using FastSlnPresentation.BLL.Contracts;
 using FastSlnPresentation.BLL.Models;
 using FastSlnPresentation.BLL.Models.SnlTree;
 using FastSlnPresentation.BLL.Exceptions;
 
 namespace FastSlnPresentation.BLL.Services
 {
-    public class ContentFileService : IContentFileService
+    public static class ContentFileService
     {
-        private readonly ISlnParser _slnParser;
-        private readonly ICsprojParser _csprojParser;
-
-        public ContentFileService(ISlnParser slnParser, ICsprojParser csprojParser)
-        {
-            _slnParser = slnParser;
-            _csprojParser = csprojParser;
-        }
-
-        public List<SlnTree> GetSnlTrees(IEnumerable<ContentFile> contentFiles)
+        public static List<SlnTree> GetSnlTrees(IEnumerable<ContentFile> contentFiles)
         {
             // Filter files to get only solution files
             var solutionFiles = contentFiles.Where(file => file.Path.EndsWith(".sln")).ToList();
@@ -34,7 +24,7 @@ namespace FastSlnPresentation.BLL.Services
                 };
 
                 // Parse information from the solution file content
-                var slnInfo = _slnParser.GetSlnInfo(solutionFile.Content);
+                var slnInfo = SlnParser.GetSlnInfo(solutionFile.Content);
 
                 foreach (var slnProjectInfo in slnInfo.SlnProjectInfos)
                 {
@@ -63,7 +53,7 @@ namespace FastSlnPresentation.BLL.Services
                     );
 
                     // parse csproj file
-                    var csprojInfo = _csprojParser.GetProjectInfo(projectFile.Content);
+                    var csprojInfo = CsprojParser.GetProjectInfo(projectFile.Content);
 
                     // update project references paths to absolute paths
                     csprojInfo.ProjectReferences.ForEach(
@@ -95,7 +85,7 @@ namespace FastSlnPresentation.BLL.Services
         }
 
         // Utility method to normalize paths (convert backslashes and multiple slashes to single forward slashes)
-        private string NormalizePath(string path)
+        private static string NormalizePath(string path)
         {
             return Regex.Replace(path, @"[\\/]+", "/");
         }

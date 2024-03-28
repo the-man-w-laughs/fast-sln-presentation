@@ -8,7 +8,7 @@ namespace FastSlnPresentation.Server.Extensions
 {
     public static class ControllerExtensions
     {
-        public static IServiceCollection AddCustomControllers(this IServiceCollection services)
+        public static IServiceCollection AddKebabControllers(this IServiceCollection services)
         {
             services.AddControllers(
                 opts =>

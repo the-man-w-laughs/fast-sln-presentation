@@ -18,20 +18,29 @@ import CycleEndNode from "../Nodes/Flowchart/CycleEndNode/CycleEndNode.js";
 import "../Nodes/Flowchart/FlowchartNodes.css";
 
 import "reactflow/dist/style.css";
-import { initialNodes, initialEdges } from "../initial-elements.js";
+
 import Markers from "../Markers/Markers.js";
 import ArrowEdge from "../Edges/ArrowEdge.js";
 
+const nodeTypes = {
+  blockNode: BlockNode,
+  terminalNode: TerminalNode,
+  conditionNode: ConditionNode,
+  cycleStartNode: CycleStartNode,
+  cycleEndNode: CycleEndNode,
+};
+
+const edgeTypes = {
+  arrow: ArrowEdge,
+};
+
 const minZoom = 0.1;
 const maxZoom = 1000;
-
-const initialNodesWithPosition = initialNodes.map((node) => ({
-  ...node,
-  position: { x: 0, y: 0 },
-}));
+const minimapStyle = {
+  height: 120,
+};
 
 const elk = new ELK();
-
 const elkOptions = {
   "elk.algorithm": "org.eclipse.elk.layered",
   "elk.direction": "DOWN",
@@ -62,30 +71,23 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
     .catch(console.error);
 };
 
-const nodeTypes = {
-  blockNode: BlockNode,
-  terminalNode: TerminalNode,
-  conditionNode: ConditionNode,
-  cycleStartNode: CycleStartNode,
-  cycleEndNode: CycleEndNode,
-};
-
-const edgeTypes = {
-  arrow: ArrowEdge,
-};
-
-const minimapStyle = {
-  height: 120,
-};
-
-function LayoutFlow() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(
-    initialNodesWithPosition
-  );
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+function LayoutFlow({ initialNodes, initialEdges }) {
   const { fitView } = useReactFlow();
+  const [nodes, setNodes, onNodesChange] = useNodesState();
+  const [edges, setEdges, onEdgesChange] = useEdgesState();
+
+  useState(() => {
+    setNodes(
+      initialNodes.map((node) => ({
+        ...node,
+        position: { x: 0, y: 0 },
+      }))
+    );
+    setEdges(initialEdges);
+  }, [initialNodes, initialEdges]);
 
   const onConnect = useCallback((params) => console.log("onConnect"), []);
+
   const onLayout = useCallback(() => {
     const opts = elkOptions;
     const ns = nodes;
@@ -140,10 +142,12 @@ function LayoutFlow() {
   );
 }
 
-const FlowchartLayout = () => {
+const FlowchartLayout = ({ initialNodes, initialEdges }) => {
   return (
     <ReactFlowProvider>
-      <LayoutFlow />
+      <div style={{ height: "100vh" }}>
+        <LayoutFlow initialEdges={initialEdges} initialNodes={initialNodes} />
+      </div>
     </ReactFlowProvider>
   );
 };

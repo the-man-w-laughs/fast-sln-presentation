@@ -1,12 +1,19 @@
 import logo from "./logo.svg";
 import "./App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import FlowchartLayout from "./components/Layout/FlowchartLayout";
+import ClassDiagramLayout from "./components/Layout/ClassDiagramLayout";
+import FlowchartPage from "./Pages/FlowchartPage";
 
 function App() {
   return (
-    <div style={{ height: "100vh" }}>
-      <FlowchartLayout></FlowchartLayout>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/class-diagram" element={<ClassDiagramLayout />} />
+        <Route path="/flowchart" element={<FlowchartLayout />} />
+        <Route path="/form" element={<FlowchartPage />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -36,10 +36,13 @@ public class CodeAnalysisService
 
         foreach (var (tree, file) in syntaxTrees.Zip(allFiles, (tree, file) => (tree, file)))
         {
-            var stopwatchTree = Stopwatch.StartNew();
-
             var root = tree.GetRoot();
+            var stopwatchTree = Stopwatch.StartNew();
             var semanticModel = compilation.GetSemanticModel(tree);
+            stopwatchTree.Stop();
+            Console.WriteLine(
+                $"Time taken for tree {file.Path}: {stopwatchTree.ElapsedMilliseconds} ms"
+            );
 
             var sourceCodeWalker = _sourceCodeToXmlWalkerCreator.Create(
                 semanticModel,
@@ -49,11 +52,6 @@ public class CodeAnalysisService
             );
 
             sourceCodeWalker.Parse();
-
-            stopwatchTree.Stop();
-            Console.WriteLine(
-                $"Time taken for tree {file.Path}: {stopwatchTree.ElapsedMilliseconds} ms"
-            );
         }
 
         stopwatchOverall.Stop();

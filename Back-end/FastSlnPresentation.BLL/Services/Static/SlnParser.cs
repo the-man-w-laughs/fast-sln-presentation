@@ -5,7 +5,7 @@ using FastSlnPresentation.BLL.Models.SnlInfo;
 
 namespace FastSlnPresentation.BLL.Services
 {
-    public partial class SlnParser : ISlnParser
+    public static partial class SlnParser
     {
         [GeneratedRegex(
             "Project\\(\"(?<typeGuid>.*?)\"\\)\\s*=\\s*\"(?<name>.*?)\".*?\"(?<path>.*?)\".*?\"(?<projectGuid>.*?)\"",
@@ -13,7 +13,7 @@ namespace FastSlnPresentation.BLL.Services
         )]
         private static partial Regex ProjectInfoRegex();
 
-        public SlnInfo GetSlnInfo(string sln)
+        public static SlnInfo GetSlnInfo(string sln)
         {
             var projectRegex = ProjectInfoRegex();
 
