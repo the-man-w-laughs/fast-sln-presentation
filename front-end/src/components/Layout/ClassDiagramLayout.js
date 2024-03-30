@@ -20,7 +20,6 @@ import ImplementationEdge from "../Edges/ImplementationEdge.js";
 import "../Nodes/ClassDiagram/ClassDiagramNodes.css";
 
 import "reactflow/dist/style.css";
-import { initialNodes, initialEdges } from "../initial-elements.js";
 import Markers from "../Markers/Markers.js";
 import InheritanceEdge from "../Edges/InheritanceEdge.js";
 import AggregationEdge from "../Edges/AggregationEdge.js";
@@ -28,11 +27,6 @@ import CompositonEdge from "../Edges/CompositonEdge.js";
 
 const minZoom = 0.1;
 const maxZoom = 1000;
-
-const initialNodesWithPosition = initialNodes.map((node) => ({
-  ...node,
-  position: { x: 0, y: 0 },
-}));
 
 const elk = new ELK();
 
@@ -84,41 +78,31 @@ const minimapStyle = {
   height: 120,
 };
 
-function LayoutFlow() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(
-    initialNodesWithPosition
-  );
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+function LayoutFlow({ initialNodes, initialEdges }) {
   const { fitView } = useReactFlow();
 
-  const onConnect = useCallback((params) => console.log("onConnect"), []);
-  const onLayout = useCallback(() => {
-    const opts = elkOptions;
-    const ns = nodes;
-    const es = edges;
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-    getLayoutedElements(ns, es, opts).then(
+  const onConnect = useCallback((params) => console.log("onConnect"), []);
+
+  const onLayout = useCallback(() => {
+    getLayoutedElements(nodes, edges, elkOptions).then(
       ({ nodes: layoutedNodes, edges: layoutedEdges }) => {
         setNodes(layoutedNodes);
         setEdges(layoutedEdges);
-        window.requestAnimationFrame(() => {
-          setTimeout(fitView);
-        });
       }
     );
   }, [nodes, edges]);
 
-  const [reactFlowInstance, setReactFlowInstance] = useState(null);
-
   useEffect(() => {
-    if (reactFlowInstance) {
-      onLayout();
-    }
-  }, [reactFlowInstance]);
-
-  const onInit = (rf) => {
-    setReactFlowInstance(rf);
-  };
+    var nodesWithPosition = initialNodes.map((node) => ({
+      ...node,
+      position: { x: 0, y: 0 },
+    }));
+    setNodes(nodesWithPosition);
+    setEdges(initialEdges);
+  }, [initialNodes, initialEdges]);
 
   return (
     <>
@@ -127,7 +111,6 @@ function LayoutFlow() {
         minZoom={minZoom}
         maxZoom={maxZoom}
         fitView
-        onInit={onInit}
         nodes={nodes}
         edges={edges}
         onConnect={onConnect}
@@ -146,11 +129,11 @@ function LayoutFlow() {
   );
 }
 
-const ClassDiagramLayout = () => {
+const ClassDiagramLayout = ({ initialNodes, initialEdges }) => {
   return (
     <ReactFlowProvider>
       <div style={{ height: "100vh" }}>
-        <LayoutFlow />
+        <LayoutFlow initialEdges={initialEdges} initialNodes={initialNodes} />
       </div>
     </ReactFlowProvider>
   );

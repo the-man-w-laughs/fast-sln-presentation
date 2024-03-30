@@ -1,17 +1,17 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import FlowchartLayout from "./components/Layout/FlowchartLayout";
-import ClassDiagramLayout from "./components/Layout/ClassDiagramLayout";
-import FlowchartPage from "./Pages/FlowchartPage";
+import FlowchartPage from "./Pages/FlowchartPage/FlowchartPage";
+import DefaultPage from "./Pages/DefultPage/DefaultPage";
+import ClassDiagramPage from "./Pages/ClassDiagramPage/ClassDiagramPage";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/class-diagram" element={<ClassDiagramLayout />} />
-        <Route path="/flowchart" element={<FlowchartLayout />} />
+        <Route path="/class-diagram-page" element={<ClassDiagramPage />} />
         <Route path="/flowchart-page" element={<FlowchartPage />} />
+        <Route path="*" element={<DefaultPage />} />
       </Routes>
     </Router>
   );

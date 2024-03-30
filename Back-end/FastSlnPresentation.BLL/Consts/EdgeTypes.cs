@@ -3,7 +3,7 @@ namespace FastSlnPresentation.BLL.Consts
     public class EdgeTypes
     {
         public const string Inheritance = "inheritance";
-        public const string Implementation = "impelementation";
+        public const string Implementation = "implementation";
         public const string Aggregation = "aggregation";
         public const string Composition = "composition";
         public const string Dependency = "dependency";

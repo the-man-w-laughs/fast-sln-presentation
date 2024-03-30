@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FlowchartLayout from "../components/Layout/FlowchartLayout";
+import FlowchartLayout from "../../components/Layout/FlowchartLayout";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import "./FlowchartPage.css"; // Import CSS file
 

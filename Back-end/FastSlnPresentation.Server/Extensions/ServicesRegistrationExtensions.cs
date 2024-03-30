@@ -16,6 +16,7 @@ namespace FastSlnPresentation.Server.Extensions
         {
             services.AddTransient<IIdService, IdService>();
             services.AddTransient<IMethodAnalysisService, MethodAnalysisService>();
+            services.AddTransient<IClassAnalysisService, ClassAnalysisService>();
 
             return services;
         }
