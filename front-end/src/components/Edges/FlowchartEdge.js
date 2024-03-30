@@ -87,8 +87,6 @@ function FlowchartEdge({
 
   const labelData = data?.label || [];
 
-  console.log(labelData);
-
   return (
     <>
       <BaseEdge

@@ -26,8 +26,8 @@ const nodeTypes = {
   blockNode: BlockNode,
   terminalNode: TerminalNode,
   conditionNode: ConditionNode,
-  cycleStartNode: CycleStartNode,
-  cycleEndNode: CycleEndNode,
+  openCycleNode: CycleStartNode,
+  closeCycleNode: CycleEndNode,
 };
 
 const edgeTypes = {
@@ -75,49 +75,29 @@ const getLayoutedElements = async (nodes, edges, options = {}) => {
 
 function LayoutFlow({ initialNodes, initialEdges }) {
   const { fitView } = useReactFlow();
-  const [nodes, setNodes, onNodesChange] = useNodesState();
-  const [edges, setEdges, onEdgesChange] = useEdgesState();
+
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   const onLayout = useCallback(() => {
-    const opts = elkOptions;
-    const ns = nodes;
-    const es = edges;
-
-    getLayoutedElements(ns, es, opts).then(
+    getLayoutedElements(nodes, edges, elkOptions).then(
       ({ nodes: layoutedNodes, edges: layoutedEdges }) => {
         setNodes(layoutedNodes);
         setEdges(layoutedEdges);
-        window.requestAnimationFrame(() => {
-          setTimeout(fitView);
-        });
       }
     );
   }, [nodes, edges]);
 
   useEffect(() => {
-    setNodes(
-      initialNodes.map((node) => ({
-        ...node,
-        position: { x: 0, y: 0 },
-      }))
-    );
+    var nodesWithPosition = initialNodes.map((node) => ({
+      ...node,
+      position: { x: 0, y: 0 },
+    }));
+    setNodes(nodesWithPosition);
     setEdges(initialEdges);
-    // onLayout();
   }, [initialNodes, initialEdges]);
 
   const onConnect = useCallback((params) => console.log("onConnect"), []);
-
-  const [reactFlowInstance, setReactFlowInstance] = useState(null);
-
-  useEffect(() => {
-    if (reactFlowInstance) {
-      onLayout();
-    }
-  }, [reactFlowInstance]);
-
-  const onInit = (rf) => {
-    setReactFlowInstance(rf);
-  };
 
   return (
     <>
@@ -126,7 +106,6 @@ function LayoutFlow({ initialNodes, initialEdges }) {
         minZoom={minZoom}
         maxZoom={maxZoom}
         fitView
-        onInit={onInit}
         nodes={nodes}
         edges={edges}
         onConnect={onConnect}

@@ -287,7 +287,7 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
             string arguments = string.Join(", ", node.ArgumentList.Arguments);
 
             string invocationString =
-                $"{containingTypeName}{(string.IsNullOrEmpty(containingTypeName) ? "" : ".")}{methodName}({arguments})";
+                $"{containingTypeName}{(string.IsNullOrEmpty(containingTypeName) ? "" : ".")}{methodName}({arguments});";
 
             AddNode<JsonBlock>(invocationString);
 
