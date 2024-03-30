@@ -230,8 +230,6 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
                     $"{variableType} {name}{(initializer != "" ? " = " + initializer : "")};";
                 AddNode<JsonBlock>(content);
             }
-
-            base.VisitLocalDeclarationStatement(node);
         }
 
         public override void VisitAssignmentExpression(AssignmentExpressionSyntax node)
@@ -245,8 +243,6 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
                 var content = $"{variableName} {operatorString} {assignedValue};";
                 AddNode<JsonBlock>(content);
             }
-
-            base.VisitAssignmentExpression(node);
         }
 
         public override void VisitPrefixUnaryExpression(PrefixUnaryExpressionSyntax node)
@@ -256,7 +252,6 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
 
             var content = $"{operatorString}{operand};";
             AddNode<JsonBlock>(content);
-            base.VisitPrefixUnaryExpression(node);
         }
 
         public override void VisitPostfixUnaryExpression(PostfixUnaryExpressionSyntax node)
@@ -266,7 +261,6 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
 
             var content = $"{operatorString}{operand};";
             AddNode<JsonBlock>(content);
-            base.VisitPostfixUnaryExpression(node);
         }
 
         public override void VisitInvocationExpression(InvocationExpressionSyntax node)
@@ -290,8 +284,6 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
                 $"{containingTypeName}{(string.IsNullOrEmpty(containingTypeName) ? "" : ".")}{methodName}({arguments});";
 
             AddNode<JsonBlock>(invocationString);
-
-            base.VisitInvocationExpression(node);
         }
 
         private void AddNode<Node>(string content)
@@ -327,7 +319,6 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
 
         private void AddConnection(string sourceNodeId, string targetNodeId)
         {
-            // var id = _idSerivice.GetNextId();
             var id = $"{sourceNodeId}-{targetNodeId}";
             var edge = new JsonEdge(
                 id,

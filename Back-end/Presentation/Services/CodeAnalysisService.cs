@@ -29,20 +29,14 @@ public class CodeAnalysisService
             .AddReferences(MetadataReference.CreateFromFile(typeof(object).Assembly.Location))
             .AddSyntaxTrees(syntaxTrees);
 
-        var stopwatchOverall = Stopwatch.StartNew();
-
         var nodes = new List<INode>();
         var edges = new List<JsonEdge>();
 
         foreach (var (tree, file) in syntaxTrees.Zip(allFiles, (tree, file) => (tree, file)))
         {
             var root = tree.GetRoot();
-            var stopwatchTree = Stopwatch.StartNew();
+
             var semanticModel = compilation.GetSemanticModel(tree);
-            stopwatchTree.Stop();
-            Console.WriteLine(
-                $"Time taken for tree {file.Path}: {stopwatchTree.ElapsedMilliseconds} ms"
-            );
 
             var sourceCodeWalker = _sourceCodeToXmlWalkerCreator.Create(
                 semanticModel,
@@ -53,9 +47,6 @@ public class CodeAnalysisService
 
             sourceCodeWalker.Parse();
         }
-
-        stopwatchOverall.Stop();
-        Console.WriteLine($"Total time taken: {stopwatchOverall.ElapsedMilliseconds} ms");
 
         return new JsonGraph(nodes.Cast<object>().ToList(), edges.Cast<object>().ToList());
     }

@@ -26,7 +26,7 @@ function FlowchartEdge({
     return null;
   }
 
-  var offset = 40;
+  var offset = 25;
   let sourcePos, targetPos, edgePath;
   let labelX, labelY;
 

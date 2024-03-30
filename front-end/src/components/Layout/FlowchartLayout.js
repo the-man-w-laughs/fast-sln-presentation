@@ -44,7 +44,7 @@ const elk = new ELK();
 const elkOptions = {
   "elk.algorithm": "org.eclipse.elk.layered",
   "elk.direction": "DOWN",
-  "org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers": 80,
+  "org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers": 40,
   "org.eclipse.elk.layered.spacing.edgeNodeBetweenLayers": 40,
   "org.eclipse.elk.direction": "DOWN",
   "org.eclipse.elk.layered.nodePlacement.strategy": "LINEAR_SEGMENTS",

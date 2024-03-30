@@ -21,8 +21,6 @@ public class ClassAnalysisService : IClassAnalysisService
 
     public JsonGraph AnalyzeCodeFiles(List<ContentFile> allFiles)
     {
-        var stopwatchOverall = Stopwatch.StartNew();
-
         var syntaxTrees = allFiles
             .Select(file => CSharpSyntaxTree.ParseText(file.Content))
             .ToList();
@@ -56,9 +54,6 @@ public class ClassAnalysisService : IClassAnalysisService
                 $"Time taken for tree {file.Path}: {stopwatchTree.ElapsedMilliseconds} ms"
             );
         }
-
-        stopwatchOverall.Stop();
-        Console.WriteLine($"Total time taken: {stopwatchOverall.ElapsedMilliseconds} ms");
 
         return new JsonGraph(nodes.Cast<object>().ToList(), edges.Cast<object>().ToList());
     }

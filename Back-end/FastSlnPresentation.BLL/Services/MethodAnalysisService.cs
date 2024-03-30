@@ -19,8 +19,6 @@ public class MethodAnalysisService : IMethodAnalysisService
 
     public JsonGraph AnalyzeStringAsync(string code)
     {
-        var stopwatchOverall = Stopwatch.StartNew();
-
         var syntaxTree = CSharpSyntaxTree.ParseText(code);
         var nodes = new List<INode>();
         var edges = new List<JsonEdge>();
@@ -30,8 +28,6 @@ public class MethodAnalysisService : IMethodAnalysisService
         var classToJsonWalker = new MethodToJsonWalker(nodes, edges, root, _idService);
 
         classToJsonWalker.Parse();
-
-        Console.WriteLine($"Total time taken: {stopwatchOverall.ElapsedMilliseconds} ms");
 
         return new JsonGraph(nodes.Cast<object>().ToList(), edges.Cast<object>().ToList());
     }

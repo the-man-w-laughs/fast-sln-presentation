@@ -3,17 +3,22 @@ import { Handle, Position } from "reactflow";
 import "./CycleEndNode.css";
 
 function CycleEndNode({ id, data }) {
+  const contentCycleEndRef = useRef(null);
   const figureRef = useRef(null);
   const cycleStartRef = useRef(null);
 
   useEffect(() => {
-    if (figureRef.current && cycleStartRef.current) {
-      const contentCondition = document.querySelector(".content-cycleEnd");
-      const contentRect = contentCondition.getBoundingClientRect();
-      figureRef.current.style.width = `${contentRect.width}px`;
-      figureRef.current.style.height = `${contentRect.height}px`;
-      cycleStartRef.current.style.width = `${contentRect.width}px`;
-      cycleStartRef.current.style.height = `${contentRect.height}px`;
+    if (
+      figureRef.current &&
+      cycleStartRef.current &&
+      contentCycleEndRef.current
+    ) {
+      const contentRect = contentCycleEndRef.current.getBoundingClientRect();
+      var maxValue = Math.max(contentRect.width, contentRect.height);
+      figureRef.current.style.width = `${maxValue}px`;
+      figureRef.current.style.height = `${maxValue}px`;
+      cycleStartRef.current.style.width = `${maxValue}px`;
+      cycleStartRef.current.style.height = `${maxValue}px`;
     }
   }, [data.content]);
 
@@ -22,7 +27,7 @@ function CycleEndNode({ id, data }) {
       <svg ref={figureRef} viewBox="0 0 100 100" className="cycleEnd">
         <polygon points="0,0 0,80 20,100 80,100 100,80 100,0" />
       </svg>
-      <div className="content-cycleEnd">
+      <div ref={contentCycleEndRef} className="content-cycleEnd">
         <table>
           <tbody>
             {data.content.map((member, index) => (

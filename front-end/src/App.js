@@ -11,7 +11,7 @@ function App() {
       <Routes>
         <Route path="/class-diagram" element={<ClassDiagramLayout />} />
         <Route path="/flowchart" element={<FlowchartLayout />} />
-        <Route path="/form" element={<FlowchartPage />} />
+        <Route path="/flowchart-page" element={<FlowchartPage />} />
       </Routes>
     </Router>
   );
