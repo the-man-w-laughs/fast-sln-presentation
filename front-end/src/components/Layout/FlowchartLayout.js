@@ -50,7 +50,7 @@ const elkOptions = {
   "org.eclipse.elk.layered.nodePlacement.strategy": "LINEAR_SEGMENTS",
 };
 
-const getLayoutedElements = (nodes, edges, options = {}) => {
+const getLayoutedElements = async (nodes, edges, options = {}) => {
   const graph = {
     id: "root",
     layoutOptions: options,
@@ -58,35 +58,25 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
     edges: edges,
   };
 
-  return elk
-    .layout(graph)
-    .then((layoutedGraph) => ({
+  try {
+    const layoutedGraph = await elk.layout(graph);
+    return {
       nodes: layoutedGraph.children.map((node) => ({
         ...node,
         position: { x: node.x, y: node.y },
       })),
-
       edges: layoutedGraph.edges,
-    }))
-    .catch(console.error);
+    };
+  } catch (error) {
+    console.warn("Error occurred while laying out elements:", error);
+    return { nodes: [], edges: [] };
+  }
 };
 
 function LayoutFlow({ initialNodes, initialEdges }) {
   const { fitView } = useReactFlow();
   const [nodes, setNodes, onNodesChange] = useNodesState();
   const [edges, setEdges, onEdgesChange] = useEdgesState();
-
-  useState(() => {
-    setNodes(
-      initialNodes.map((node) => ({
-        ...node,
-        position: { x: 0, y: 0 },
-      }))
-    );
-    setEdges(initialEdges);
-  }, [initialNodes, initialEdges]);
-
-  const onConnect = useCallback((params) => console.log("onConnect"), []);
 
   const onLayout = useCallback(() => {
     const opts = elkOptions;
@@ -103,6 +93,19 @@ function LayoutFlow({ initialNodes, initialEdges }) {
       }
     );
   }, [nodes, edges]);
+
+  useEffect(() => {
+    setNodes(
+      initialNodes.map((node) => ({
+        ...node,
+        position: { x: 0, y: 0 },
+      }))
+    );
+    setEdges(initialEdges);
+    // onLayout();
+  }, [initialNodes, initialEdges]);
+
+  const onConnect = useCallback((params) => console.log("onConnect"), []);
 
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
 

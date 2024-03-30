@@ -41,6 +41,27 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
             Visit(_root);
         }
 
+        public override void VisitGlobalStatement(GlobalStatementSyntax node)
+        {
+            foreach (var childNode in node.ChildNodes())
+            {
+                base.Visit(childNode);
+            }
+        }
+
+        public override void VisitLocalFunctionStatement(LocalFunctionStatementSyntax node)
+        {
+            var name = node.Identifier.ValueText;
+
+            var content = $"Начало {name}";
+            AddNode<JsonTerminal>(content);
+
+            base.VisitLocalFunctionStatement(node);
+
+            content = $"Конец {name}";
+            AddNode<JsonTerminal>(content);
+        }
+
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
             var name = node.Identifier.ValueText;
