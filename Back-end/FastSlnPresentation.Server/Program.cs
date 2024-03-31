@@ -1,4 +1,5 @@
 using FastSlnPresentation.Server.Extensions;
+using FastSlnPresentation.Server.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseRouting();
 app.UseCors();
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

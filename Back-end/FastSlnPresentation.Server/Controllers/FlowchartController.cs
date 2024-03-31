@@ -1,6 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using FastSlnPresentation.BLL.Contracts;
+using FastSlnPresentation.BLL.Services.Static;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastSlnPresentation.Server.Controllers
@@ -26,12 +27,7 @@ namespace FastSlnPresentation.Server.Controllers
         {
             var graph = _methodAnalysisService.AnalyzeStringAsync(methodStr);
 
-            var serializeOptions = new JsonSerializerOptions
-            {
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            };
-
-            var json = JsonSerializer.Serialize(graph, serializeOptions);
+            var json = JsonService.Serialize(graph);
 
             return Ok(json);
         }

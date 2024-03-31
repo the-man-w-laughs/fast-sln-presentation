@@ -3,31 +3,30 @@ import { Handle, Position } from "reactflow";
 import "./ConditionNode.css";
 
 function ConditionNode({ id, data }) {
-  const contentConditionRef = useRef(null);
-  const figureRef = useRef(null);
-  const conditionRef = useRef(null);
+  const rhombusRef = useRef(null);
+  const contentRef = useRef(null);
 
   useEffect(() => {
-    if (
-      figureRef.current &&
-      conditionRef.current &&
-      contentConditionRef.current
-    ) {
-      const contentRect = contentConditionRef.current.getBoundingClientRect();
-      const size = Math.max(contentRect.height, contentRect.width);
-      figureRef.current.style.width = `${size}px`;
-      figureRef.current.style.height = `${size}px`;
-      conditionRef.current.style.width = `${size}px`;
-      conditionRef.current.style.height = `${size}px`;
-    }
-  }, [data.content]);
+    if (rhombusRef.current && contentRef.current) {
+      const size = contentRef.current.getBoundingClientRect();
+      const maxSize = Math.max(size.width, size.height) + 5;
 
+      rhombusRef.current.style.width = `${maxSize}px`;
+      rhombusRef.current.style.height = `${maxSize}px`;
+    }
+  }, []);
   return (
-    <div ref={conditionRef} className="condition-node">
-      <svg ref={figureRef} viewBox="0 0 100 100" className="rhombus">
+    <div className="condition-node">
+      <svg
+        ref={rhombusRef}
+        viewBox="0 0 100 100"
+        className="rhombus"
+        width={100}
+        height={100}
+      >
         <polygon points="50,0 100,50 50,100 0,50" />
       </svg>
-      <div ref={contentConditionRef} className="content-condition">
+      <div ref={contentRef} className="content-condition">
         <table>
           <tbody>
             {data.content.map((member, index) => (

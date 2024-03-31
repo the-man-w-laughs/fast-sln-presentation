@@ -55,6 +55,12 @@ public class ClassAnalysisService : IClassAnalysisService
             );
         }
 
-        return new JsonGraph(nodes.Cast<object>().ToList(), edges.Cast<object>().ToList());
+        HashSet<string> nodeIds = new HashSet<string>(nodes.Select(node => node.Id));
+
+        var existingEdges = edges
+            .Where(edge => nodeIds.Contains(edge.Source) && nodeIds.Contains(edge.Target))
+            .ToList();
+
+        return new JsonGraph(nodes.Cast<object>().ToList(), existingEdges.Cast<object>().ToList());
     }
 }

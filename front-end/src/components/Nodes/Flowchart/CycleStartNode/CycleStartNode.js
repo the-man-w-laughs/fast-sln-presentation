@@ -5,21 +5,18 @@ import "./CycleStartNode.css";
 function CycleStartNode({ id, data }) {
   const contentCycleStartRef = useRef(null);
   const figureRef = useRef(null);
-  const cycleStartRef = useRef(null);
 
   useEffect(() => {
-    if (figureRef.current && cycleStartRef.current) {
+    if (figureRef.current && contentCycleStartRef.current) {
       const contentRect = contentCycleStartRef.current.getBoundingClientRect();
       var maxValue = Math.max(contentRect.width, contentRect.height);
       figureRef.current.style.width = `${maxValue}px`;
       figureRef.current.style.height = `${maxValue}px`;
-      cycleStartRef.current.style.width = `${maxValue}px`;
-      cycleStartRef.current.style.height = `${maxValue}px`;
     }
-  }, [data.content]);
+  }, []);
 
   return (
-    <div ref={cycleStartRef} className="cycleStart-node">
+    <div className="cycleStart-node">
       <svg ref={figureRef} viewBox="0 0 100 100" className="cycleStart">
         <polygon points="0,100 0,20 20,0 80,0 100,20 100,100" />
       </svg>

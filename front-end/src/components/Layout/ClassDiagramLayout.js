@@ -31,10 +31,9 @@ const maxZoom = 1000;
 const elk = new ELK();
 
 const elkOptions = {
-  "elk.algorithm": "org.eclipse.elk.disco",
-  "org.eclipse.elk.disco.componentCompaction.componentLayoutAlgorithm":
-    "radial",
-  "elk.direction": "DOWN",
+  "elk.algorithm": "org.eclipse.elk.force",
+  "org.eclipse.elk.disco.componentCompaction.componentLayoutAlgorithm": "box",
+  // "elk.direction": "DOWN",
 };
 
 const getLayoutedElements = (nodes, edges, options = {}) => {

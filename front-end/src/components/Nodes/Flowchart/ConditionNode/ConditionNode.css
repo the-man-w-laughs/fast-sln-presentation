@@ -1,6 +1,7 @@
 /* ConditionNode.css */
 
-.condition-node {}
+.condition-node {     
+}
 
 .rhombus {
     fill: #f0f0f0;
@@ -12,7 +13,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);    
+    transform: translate(-50%, -50%);
 }
 
 .content-condition td {

@@ -3,6 +3,7 @@ using System.Text.Json;
 using Business.Octokit;
 using FastSlnPresentation.BLL.Contracts;
 using FastSlnPresentation.BLL.Models;
+using FastSlnPresentation.BLL.Models.Graph.GraphData;
 using FastSlnPresentation.BLL.Services.Static;
 using FastSlnPresentation.Server.Dtos;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,7 @@ namespace FastSlnPresentation.Server.Controllers
         )
         {
             var githubService = new GithubService(gitRepoRequestModel.Pat);
+
             var allFiles = await githubService.GetAllFiles(
                 gitRepoRequestModel.Owner,
                 gitRepoRequestModel.RepoName
@@ -38,12 +40,7 @@ namespace FastSlnPresentation.Server.Controllers
 
             var graph = _classAnalysisService.AnalyzeCodeFiles(allCodeFiles);
 
-            var serializeOptions = new JsonSerializerOptions
-            {
-                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            };
-
-            var json = JsonSerializer.Serialize(graph, serializeOptions);
+            string json = JsonService.Serialize(graph);
 
             return Ok(json);
         }
@@ -56,33 +53,17 @@ namespace FastSlnPresentation.Server.Controllers
                 return BadRequest("No file uploaded.");
             }
 
-            try
+            using (var fileStream = file.OpenReadStream())
             {
-                using (var fileStream = file.OpenReadStream())
-                {
-                    var contents = ZipService.ExtractArchiveContents(fileStream);
+                var contents = ZipService.ExtractArchiveContents(fileStream);
 
-                    var allCodeFiles = contents.Where(file => file.Path.EndsWith(".cs")).ToList();
+                var allCodeFiles = contents.Where(file => file.Path.EndsWith(".cs")).ToList();
 
-                    var graph = _classAnalysisService.AnalyzeCodeFiles(allCodeFiles);
+                var graph = _classAnalysisService.AnalyzeCodeFiles(allCodeFiles);
 
-                    var serializeOptions = new JsonSerializerOptions
-                    {
-                        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                    };
+                var json = JsonService.Serialize(graph);
 
-                    var json = JsonSerializer.Serialize(graph, serializeOptions);
-
-                    return Ok(json);
-                }
-            }
-            catch (InvalidDataException ex)
-            {
-                return BadRequest("Invalid file format.");
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Internal server error.");
+                return Ok(json);
             }
         }
     }

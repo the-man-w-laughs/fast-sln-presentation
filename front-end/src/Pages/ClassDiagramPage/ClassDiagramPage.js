@@ -11,6 +11,7 @@ const ClassDiagramPage = () => {
   const [file, setFile] = useState(null);
   const [initialNodes, setInitialNodes] = useState([]);
   const [initialEdges, setInitialEdges] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (event) => {
     setInputType(event.target.value);
@@ -18,6 +19,7 @@ const ClassDiagramPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     let requestBody;
     let url;
@@ -55,6 +57,8 @@ const ClassDiagramPage = () => {
       }
     } catch (error) {
       console.error("Error submitting code:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -125,8 +129,9 @@ const ClassDiagramPage = () => {
           <button
             type="submit"
             className="btn btn-primary mt-3 align-self-stretch mx-5"
+            disabled={loading}
           >
-            Submit
+            {loading ? "Loading..." : "Submit"}
           </button>
         </form>
         <div className="col-md-10">
