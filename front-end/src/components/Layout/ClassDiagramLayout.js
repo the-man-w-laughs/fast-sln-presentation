@@ -9,21 +9,24 @@ import ReactFlow, {
   MiniMap,
   Controls,
 } from "reactflow";
+
+import "reactflow/dist/style.css";
 import "./overview.css";
+import "../Nodes/ClassDiagram/ClassDiagramNodes.css";
+
 import ClassNode from "../Nodes/ClassDiagram/ClassNode/ClassNode.js";
 import EnumNode from "../Nodes/ClassDiagram/EnumNode/EnumNode.js";
 import InterfaceNode from "../Nodes/ClassDiagram/InterfaceNode/InterfaceNode.js";
 import StructNode from "../Nodes/ClassDiagram/StructNode/StructNode.js";
 import RecordNode from "../Nodes/ClassDiagram/RecordNode/RecordNode.js";
 import DelegateNode from "../Nodes/ClassDiagram/DelegateNode/DelegateNode.js";
-import ImplementationEdge from "../Edges/ImplementationEdge.js";
-import "../Nodes/ClassDiagram/ClassDiagramNodes.css";
 
-import "reactflow/dist/style.css";
+import ImplementationEdge from "../Edges/ImplementationEdge.js";
 import Markers from "../Markers/Markers.js";
 import InheritanceEdge from "../Edges/InheritanceEdge.js";
 import AggregationEdge from "../Edges/AggregationEdge.js";
 import CompositonEdge from "../Edges/CompositonEdge.js";
+import AssociationEdge from "../Edges/AssociationEdge.js";
 
 const minZoom = 0.1;
 const maxZoom = 1000;
@@ -71,6 +74,7 @@ const edgeTypes = {
   inheritance: InheritanceEdge,
   aggregation: AggregationEdge,
   composition: CompositonEdge,
+  association: AssociationEdge,
 };
 
 const minimapStyle = {

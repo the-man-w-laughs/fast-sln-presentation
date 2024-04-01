@@ -22,13 +22,17 @@ namespace FastSlnPresentation.BLL.Models.JsonModels
         [JsonPropertyName("parameters")]
         public List<string> Parameters { get; set; } = new List<string>();
 
+        [JsonPropertyName("isPredefined")]
+        public bool IsPredefined { get; }
+
         public DelegateData(
             string name,
             string fullName,
             string modifiers,
             List<string> genericInfo,
             string returnType,
-            List<string> parameters
+            List<string> parameters,
+            bool isPredefined = false
         )
         {
             Name = name;
@@ -37,6 +41,7 @@ namespace FastSlnPresentation.BLL.Models.JsonModels
             GenericInfo = genericInfo;
             ReturnType = returnType;
             Parameters = parameters;
+            IsPredefined = isPredefined;
         }
     }
 }

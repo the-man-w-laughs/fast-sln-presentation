@@ -285,8 +285,6 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
 
             var resultString = $"{modifiersStr} {methodName} ({parametersListStr}): {returnType}";
             _innerMembers[MemberTypes.Methods].Add(resultString);
-
-            base.VisitMethodDeclaration(node);
         }
 
         public void AddInheritanceFrom(TypeDeclarationSyntax type)
@@ -316,7 +314,7 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
                         : EdgeTypes.Inheritance;
 
                 var id = _idSerivice.GetNextId();
-                var targetFullName = baseType.ToDisplayString();
+                var targetFullName = baseType.ConstructedFrom.ToDisplayString();
                 var sourceFullName = symbol.ToDisplayString();
                 var edge = new JsonEdge(id, targetFullName, sourceFullName, edgeType);
                 _resultEdges.Add(edge);
@@ -328,6 +326,12 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
             var fieldTypeSyntax = node.Declaration.Type;
             var isNullable = fieldTypeSyntax is NullableTypeSyntax;
             var isPredefinedType = fieldTypeSyntax is PredefinedTypeSyntax;
+
+            if (isPredefinedType)
+            {
+                CreatePredefinedNode(fieldTypeSyntax);
+            }
+
             var fieldModifiers = ExtractModifiers(node);
             var fieldType = _semanticModel.GetTypeInfo(fieldTypeSyntax).Type!;
             var typeFullName = fieldType.ToDisplayString();
@@ -349,9 +353,23 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
                 _innerMembers[MemberTypes.Members].Add(resultString);
             }
 
-            CreateEdge(isPredefinedType, typeFullName, isReferenceType);
+            if (fieldTypeSyntax is GenericNameSyntax genericTypeSyntax)
+            {
+                foreach (var argument in genericTypeSyntax.TypeArgumentList.Arguments)
+                {
+                    var innerTypeInfo = _semanticModel.GetTypeInfo(argument).Type!;
+                    var innerTypeName = innerTypeInfo.ToDisplayString();
 
-            base.VisitFieldDeclaration(node);
+                    CreateEdge(innerTypeName.TrimEnd('?'), EdgeTypes.Association);
+                }
+            }
+            else
+            {
+                CreateEdge(
+                    typeFullName.TrimEnd('?'),
+                    isReferenceType ? EdgeTypes.Aggregation : EdgeTypes.Composition
+                );
+            }
         }
 
         public override void VisitPropertyDeclaration(PropertyDeclarationSyntax node)
@@ -359,6 +377,11 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
             var propertyTypeSyntax = node.Type;
             var isNullable = propertyTypeSyntax is NullableTypeSyntax;
             var isPredefinedType = propertyTypeSyntax is PredefinedTypeSyntax;
+
+            if (isPredefinedType)
+            {
+                CreatePredefinedNode(propertyTypeSyntax);
+            }
 
             var propertyModifiers = ExtractModifiers(node);
             var propertyName = node.Identifier.Text;
@@ -418,7 +441,23 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
 
             _innerMembers[MemberTypes.Members].Add(resultString);
 
-            CreateEdge(isPredefinedType, typeFullName, isReferenceType);
+            if (propertyTypeSyntax is GenericNameSyntax genericTypeSyntax)
+            {
+                foreach (var argument in genericTypeSyntax.TypeArgumentList.Arguments)
+                {
+                    var innerTypeInfo = _semanticModel.GetTypeInfo(argument).Type!;
+                    var innerTypeName = innerTypeInfo.ToDisplayString();
+
+                    CreateEdge(innerTypeName.TrimEnd('?'), EdgeTypes.Association);
+                }
+            }
+            else
+            {
+                CreateEdge(
+                    typeFullName.TrimEnd('?'),
+                    isReferenceType ? EdgeTypes.Aggregation : EdgeTypes.Composition
+                );
+            }
 
             base.VisitPropertyDeclaration(node);
         }
@@ -446,25 +485,108 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
                 }
                 _innerMembers[MemberTypes.Members].Add(resultString);
 
-                CreateEdge(isPredefinedType, typeFullName, isReferenceType);
+                CreateEdge(
+                    typeFullName,
+                    isReferenceType ? EdgeTypes.Aggregation : EdgeTypes.Composition
+                );
             }
 
             base.VisitEventFieldDeclaration(node);
         }
 
-        private void CreateEdge(bool isPredefinedType, string typeFullName, bool isReferenceType)
+        private void CreatePredefinedNode(TypeSyntax typeSyntax)
         {
-            if (!isPredefinedType)
+            var typeSymbol = _semanticModel.GetSymbolInfo(typeSyntax).Symbol as INamedTypeSymbol;
+
+            if (typeSymbol != null)
             {
-                var id = _idSerivice.GetNextId();
-                var edge = new JsonEdge(
-                    id,
-                    typeFullName,
-                    _currentTypeFullName!,
-                    isReferenceType ? EdgeTypes.Aggregation : EdgeTypes.Composition
-                );
-                _resultEdges.Add(edge);
+                string typeName = typeSymbol.Name;
+                string fullTypeName = typeSymbol.ToDisplayString();
+
+                if (!_resultNodes.Any(node => node.Id == fullTypeName))
+                {
+                    INode? typeNode = null;
+                    var namedTypeSymbol = GetNamedTypeSymbol(typeSymbol);
+
+                    if (namedTypeSymbol != null)
+                    {
+                        var kind = namedTypeSymbol.TypeKind;
+                        switch (kind)
+                        {
+                            case TypeKind.Class:
+                                typeNode = new JsonClass(
+                                    fullTypeName,
+                                    typeName,
+                                    fullTypeName,
+                                    isPredefined: true
+                                );
+                                break;
+                            case TypeKind.Interface:
+                                typeNode = new JsonInterface(
+                                    fullTypeName,
+                                    typeName,
+                                    fullTypeName,
+                                    isPredefined: true
+                                );
+                                break;
+                            case TypeKind.Delegate:
+                                typeNode = new JsonDelegate(
+                                    fullTypeName,
+                                    typeName,
+                                    fullTypeName,
+                                    isPredefined: true
+                                );
+                                break;
+                            case TypeKind.Struct:
+                                typeNode = new JsonStruct(
+                                    fullTypeName,
+                                    typeName,
+                                    fullTypeName,
+                                    isPredefined: true
+                                );
+                                break;
+                            case TypeKind.Enum:
+                                typeNode = new JsonEnum(
+                                    fullTypeName,
+                                    typeName,
+                                    fullTypeName,
+                                    isPredefined: true
+                                );
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+                    if (typeNode != null)
+                    {
+                        _resultNodes.Add(typeNode);
+                    }
+                }
             }
+        }
+
+        private INamedTypeSymbol? GetNamedTypeSymbol(INamedTypeSymbol symbol)
+        {
+            if (symbol.TypeKind != TypeKind.Error)
+            {
+                return symbol;
+            }
+            else if (symbol.BaseType != null)
+            {
+                return GetNamedTypeSymbol(symbol.BaseType);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private void CreateEdge(string typeFullName, string edgeType)
+        {
+            var id = _idSerivice.GetNextId();
+            var edge = new JsonEdge(id, typeFullName, _currentTypeFullName!, edgeType);
+            _resultEdges.Add(edge);
         }
 
         private bool SkipInnerTypeDeclaration(SyntaxNode node)

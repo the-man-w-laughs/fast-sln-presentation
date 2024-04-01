@@ -61,6 +61,17 @@ public class ClassAnalysisService : IClassAnalysisService
             .Where(edge => nodeIds.Contains(edge.Source) && nodeIds.Contains(edge.Target))
             .ToList();
 
+        var nonExistingSources = edges.Select(edge => edge.Source).Except(nodeIds).ToList();
+
+        var nonExistingTargets = edges.Select(edge => edge.Target).Except(nodeIds).ToList();
+
+        var nonExistingSourcesAndTargets = nonExistingSources.Concat(nonExistingTargets).ToList();
+
+        string filePath = "/home/nazar/Documents/zalupa0-1.txt";
+
+        // Write the strings to the file
+        File.WriteAllLines(filePath, nonExistingSourcesAndTargets);
+
         return new JsonGraph(nodes.Cast<object>().ToList(), existingEdges.Cast<object>().ToList());
     }
 }

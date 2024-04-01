@@ -14,7 +14,10 @@ namespace FastSlnPresentation.BLL.Models.JsonModels.Nodes.Data
         public string Modifiers { get; }
 
         [JsonPropertyName("genericInfo")]
-        public List<string> GenericInfo { get; }
+        public List<string> GenericInfo { get; } = new List<string>();
+
+        [JsonPropertyName("isPredefined")]
+        public bool IsPredefined { get; }
 
         [JsonPropertyName("methods")]
         public List<string> Methods { get; set; } = new List<string>();
@@ -22,12 +25,19 @@ namespace FastSlnPresentation.BLL.Models.JsonModels.Nodes.Data
         [JsonPropertyName("members")]
         public List<string> Members { get; set; } = new List<string>();
 
-        public ClassData(string name, string fullName, string modifiers, List<string> genericInfo)
+        public ClassData(
+            string name,
+            string fullName,
+            string modifiers,
+            List<string> genericInfo,
+            bool isPredefined = false
+        )
         {
             Name = name;
             FullName = fullName;
             Modifiers = modifiers;
             GenericInfo = genericInfo;
+            IsPredefined = isPredefined;
         }
     }
 }

@@ -1,0 +1,50 @@
+ThreadLocal<Random>
+Profile
+List<B1TestTask.BLLTask2.Dtos.RowContentDto>
+ICollection<B1TestTask.BLLTask2.Dtos.AccountGroupModelDto>
+DateTime
+List<B1TestTask.BLLTask2.Dtos.ClassModelDto>
+IMapper
+bool[*,*]
+bool[]
+DbContext
+DbSet<B1TestTask.DALTask1.Models.GeneratedDataModel>
+DbSet<B1TestTask.DALTask1.Models.CalculateSumAndMedianResult>
+IConfiguration
+IEntityTypeConfiguration<B1TestTask.DALTask1.Models.GeneratedDataModel>
+B1TestTask.Shared.Repository.IBaseRepository<B1TestTask.DALTask1.Models.GeneratedDataModel>
+decimal?
+B1TestTask.Shared.Repository.BaseRepository<B1TestTask.DALTask1.B1TestTask1DBContext, B1TestTask.DALTask1.Models.GeneratedDataModel>
+DbSet<B1TestTask.DALTask2.Models.AccountGroupModel>
+DbSet<B1TestTask.DALTask2.Models.AccountModel>
+DbSet<B1TestTask.DALTask2.Models.ClassModel>
+DbSet<B1TestTask.DALTask2.Models.FileModel>
+DbSet<B1TestTask.DALTask2.Models.RowModel>
+IEntityTypeConfiguration<B1TestTask.DALTask2.Models.AccountGroupModel>
+IEntityTypeConfiguration<B1TestTask.DALTask2.Models.AccountModel>
+IEntityTypeConfiguration<B1TestTask.DALTask2.Models.ClassModel>
+IEntityTypeConfiguration<B1TestTask.DALTask2.Models.FileModel>
+IEntityTypeConfiguration<B1TestTask.DALTask2.Models.RowModel>
+B1TestTask.Shared.Repository.IBaseRepository<B1TestTask.DALTask2.Models.AccountGroupModel>
+B1TestTask.Shared.Repository.IBaseRepository<B1TestTask.DALTask2.Models.AccountModel>
+B1TestTask.Shared.Repository.IBaseRepository<B1TestTask.DALTask2.Models.ClassModel>
+B1TestTask.Shared.Repository.IBaseRepository<B1TestTask.DALTask2.Models.FileModel>
+ICollection<B1TestTask.DALTask2.Models.AccountModel>
+ICollection<B1TestTask.DALTask2.Models.RowModel>
+ICollection<B1TestTask.DALTask2.Models.AccountGroupModel>
+B1TestTask.Shared.Repository.BaseRepository<B1TestTask.DALTask2.B1TestTask2DBContext, B1TestTask.DALTask2.Models.AccountGroupModel>
+B1TestTask.Shared.Repository.BaseRepository<B1TestTask.DALTask2.B1TestTask2DBContext, B1TestTask.DALTask2.Models.AccountModel>
+B1TestTask.Shared.Repository.BaseRepository<B1TestTask.DALTask2.B1TestTask2DBContext, B1TestTask.DALTask2.Models.ClassModel>
+B1TestTask.Shared.Repository.BaseRepository<B1TestTask.DALTask2.B1TestTask2DBContext, B1TestTask.DALTask2.Models.FileModel>
+TDbContext
+DbSet<TEntity>
+Application
+INotifyPropertyChanged
+PropertyChangedEventHandler
+ObservableCollection<B1TestTask.BLLTask2.Dtos.FileModelDto>
+ObservableCollection<B1TestTask.BLLTask2.Dtos.ClassModelDto>
+ICommand
+System.Action<object>
+System.Func<object, bool>
+Window
+IServiceProvider?

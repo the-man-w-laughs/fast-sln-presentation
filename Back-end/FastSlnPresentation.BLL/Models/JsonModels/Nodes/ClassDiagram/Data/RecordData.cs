@@ -22,12 +22,22 @@ namespace FastSlnPresentation.BLL.Models.JsonModels
         [JsonPropertyName("members")]
         public List<string> Members { get; set; } = new List<string>();
 
-        public RecordData(string name, string fullName, string modifiers, List<string> genericInfo)
+        [JsonPropertyName("isPredefined")]
+        public bool IsPredefined { get; }
+
+        public RecordData(
+            string name,
+            string fullName,
+            string modifiers,
+            List<string> genericInfo,
+            bool isPredefined = false
+        )
         {
             Name = name;
             FullName = fullName;
             Modifiers = modifiers;
             GenericInfo = genericInfo;
+            IsPredefined = isPredefined;
         }
     }
 }

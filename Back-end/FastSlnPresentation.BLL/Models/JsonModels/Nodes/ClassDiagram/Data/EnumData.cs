@@ -16,12 +16,22 @@ namespace FastSlnPresentation.BLL.Models.JsonModels
         [JsonPropertyName("members")]
         public List<string> Members { get; set; } = new List<string>();
 
-        public EnumData(string name, string fullName, string modifiers, List<string> members)
+        [JsonPropertyName("isPredefined")]
+        public bool IsPredefined { get; }
+
+        public EnumData(
+            string name,
+            string fullName,
+            string modifiers,
+            List<string> members,
+            bool isPredefined = false
+        )
         {
             Name = name;
             FullName = fullName;
             Modifiers = modifiers;
             Members = members;
+            IsPredefined = isPredefined;
         }
     }
 }

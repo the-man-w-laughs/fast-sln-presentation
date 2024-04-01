@@ -18,14 +18,23 @@ namespace FastSlnPresentation.BLL.Models.JsonModels
             string id,
             string name,
             string fullName,
-            string modifiers,
-            List<string> genericInfo,
-            string returnType,
-            List<string> parameters
+            string? modifiers = null,
+            List<string>? genericInfo = null,
+            string? returnType = null,
+            List<string>? parameters = null,
+            bool isPredefined = false
         )
         {
             Id = id;
-            Data = new DelegateData(name, fullName, modifiers, genericInfo, returnType, parameters);
+            Data = new DelegateData(
+                name,
+                fullName,
+                modifiers,
+                genericInfo,
+                returnType,
+                parameters,
+                isPredefined
+            );
         }
     }
 }

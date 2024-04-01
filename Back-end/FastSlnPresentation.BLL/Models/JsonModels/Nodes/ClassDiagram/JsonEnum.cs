@@ -18,12 +18,13 @@ namespace FastSlnPresentation.BLL.Models.JsonModels
             string id,
             string name,
             string fullName,
-            string modifiers,
-            List<string> members
+            string? modifiers = null,
+            List<string>? members = null,
+            bool isPredefined = false
         )
         {
             Id = id;
-            Data = new EnumData(name, fullName, modifiers, members);
+            Data = new EnumData(name, fullName, modifiers, members, isPredefined);
         }
     }
 }

@@ -25,14 +25,16 @@ namespace FastSlnPresentation.BLL.Models.JsonModels.Edges
             string target,
             string source,
             string type,
-            List<string>? label = null
+            List<string>? label = null,
+            List<string>? targetLabel = null,
+            List<string>? sourceLabel = null
         )
         {
             Id = id;
             Target = target;
             Source = source;
             Type = type;
-            Data = new EdgeData(label);
+            Data = new EdgeData(label, targetLabel, sourceLabel);
         }
     }
 }

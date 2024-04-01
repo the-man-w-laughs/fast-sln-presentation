@@ -18,12 +18,13 @@ namespace FastSlnPresentation.BLL.Models.JsonModels
             string id,
             string name,
             string fullName,
-            string modifiers,
-            List<string> genericInfo
+            string? modifiers = null,
+            List<string>? genericInfo = null,
+            bool isPredefined = false
         )
         {
             Id = id;
-            Data = new StructData(name, fullName, modifiers, genericInfo);
+            Data = new StructData(name, fullName, modifiers, genericInfo, isPredefined);
         }
     }
 }

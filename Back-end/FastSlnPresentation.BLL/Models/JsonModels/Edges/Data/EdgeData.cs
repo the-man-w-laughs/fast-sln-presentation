@@ -7,9 +7,17 @@ namespace FastSlnPresentation.BLL.Models.JsonModels.Edges.Data
         [JsonPropertyName("label")]
         public List<string> Label { get; }
 
-        public EdgeData(List<string>? label)
+        [JsonPropertyName("targetLabel")]
+        public List<string>? TargetLabel { get; }
+
+        [JsonPropertyName("sourceLabel")]
+        public List<string>? SourceLabel { get; }
+
+        public EdgeData(List<string>? label, List<string>? targetLabel, List<string>? sourceLabel)
         {
             Label = label ?? new List<string>();
+            TargetLabel = targetLabel ?? new List<string>();
+            SourceLabel = sourceLabel ?? new List<string>();
         }
     }
 }
