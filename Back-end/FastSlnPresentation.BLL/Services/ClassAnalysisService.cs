@@ -35,7 +35,6 @@ public class ClassAnalysisService : IClassAnalysisService
 
         foreach (var (tree, file) in syntaxTrees.Zip(allFiles, (tree, file) => (tree, file)))
         {
-            var stopwatchTree = Stopwatch.StartNew();
             var semanticModel = compilation.GetSemanticModel(tree);
             var root = tree.GetRoot();
 
@@ -48,11 +47,6 @@ public class ClassAnalysisService : IClassAnalysisService
             );
 
             classToJsonWalker.Parse();
-
-            stopwatchTree.Stop();
-            Console.WriteLine(
-                $"Time taken for tree {file.Path}: {stopwatchTree.ElapsedMilliseconds} ms"
-            );
         }
 
         HashSet<string> nodeIds = new HashSet<string>(nodes.Select(node => node.Id));

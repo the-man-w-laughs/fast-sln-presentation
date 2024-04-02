@@ -14,16 +14,11 @@ function FloatingEdge({ id, source, target, markerEnd, style, ...props }) {
     return null;
   }
 
-  const { sx, sy, tx, ty, sourcePos, targetPos } = getEdgeParams(
-    sourceNode,
-    targetNode
-  );
+  const { sx, sy, tx, ty } = getEdgeParams(sourceNode, targetNode);
 
   const [edgePath] = getStraightPath({
     sourceX: sx,
     sourceY: sy,
-    sourcePosition: sourcePos,
-    targetPosition: targetPos,
     targetX: tx,
     targetY: ty,
   });

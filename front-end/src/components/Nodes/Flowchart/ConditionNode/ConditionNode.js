@@ -1,32 +1,30 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Handle, Position } from "reactflow";
 import "./ConditionNode.css";
 
 function ConditionNode({ id, data }) {
-  const rhombusRef = useRef(null);
-  const contentRef = useRef(null);
+  const [contentSize, setContentSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    if (rhombusRef.current && contentRef.current) {
-      const size = contentRef.current.getBoundingClientRect();
-      const maxSize = Math.max(size.width, size.height) + 5;
-
-      rhombusRef.current.style.width = `${maxSize}px`;
-      rhombusRef.current.style.height = `${maxSize}px`;
+    const contentElement = document.getElementById(`content-condition-${id}`);
+    if (contentElement) {
+      const { offsetWidth, offsetHeight } = contentElement;
+      const maxSize = Math.max(offsetHeight, offsetWidth);
+      setContentSize({ width: maxSize, height: maxSize });
     }
-  }, []);
+  }, [id, data]);
   return (
     <div className="condition-node">
       <svg
-        ref={rhombusRef}
+        id={`rhombus-${id}`}
         viewBox="0 0 100 100"
         className="rhombus"
-        width={100}
-        height={100}
+        width={contentSize.width}
+        height={contentSize.height}
       >
         <polygon points="50,0 100,50 50,100 0,50" />
       </svg>
-      <div ref={contentRef} className="content-condition">
+      <div id={`content-condition-${id}`} className="content-condition">
         <table>
           <tbody>
             {data.content.map((member, index) => (

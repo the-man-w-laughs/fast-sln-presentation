@@ -334,8 +334,6 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
 
             var fieldModifiers = ExtractModifiers(node);
             var fieldType = _semanticModel.GetTypeInfo(fieldTypeSyntax).Type!;
-            var typeFullName = fieldType.ToDisplayString();
-            var isReferenceType = fieldType.IsReferenceType;
 
             // Iterate over each variable in the field declaration
             foreach (var variable in node.Declaration.Variables)
@@ -353,23 +351,7 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
                 _innerMembers[MemberTypes.Members].Add(resultString);
             }
 
-            if (fieldTypeSyntax is GenericNameSyntax genericTypeSyntax)
-            {
-                foreach (var argument in genericTypeSyntax.TypeArgumentList.Arguments)
-                {
-                    var innerTypeInfo = _semanticModel.GetTypeInfo(argument).Type!;
-                    var innerTypeName = innerTypeInfo.ToDisplayString();
-
-                    CreateEdge(innerTypeName.TrimEnd('?'), EdgeTypes.Association);
-                }
-            }
-            else
-            {
-                CreateEdge(
-                    typeFullName.TrimEnd('?'),
-                    isReferenceType ? EdgeTypes.Aggregation : EdgeTypes.Composition
-                );
-            }
+            CreateEdge(fieldTypeSyntax);
         }
 
         public override void VisitPropertyDeclaration(PropertyDeclarationSyntax node)
@@ -385,10 +367,8 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
 
             var propertyModifiers = ExtractModifiers(node);
             var propertyName = node.Identifier.Text;
-            var propertyType = _semanticModel.GetTypeInfo(node.Type).Type!;
+            var propertyType = _semanticModel.GetTypeInfo(propertyTypeSyntax).Type!;
             var accessorList = node.AccessorList;
-            var typeFullName = propertyType.ToDisplayString();
-            var isReferenceType = propertyType.IsReferenceType;
             var initializationValue = node.Initializer?.Value?.ToString();
 
             var hasGetter =
@@ -441,11 +421,37 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
 
             _innerMembers[MemberTypes.Members].Add(resultString);
 
+            CreateEdge(propertyTypeSyntax);
+        }
+
+        private void CreateEdge(TypeSyntax propertyTypeSyntax)
+        {
+            var propertyType = _semanticModel.GetTypeInfo(propertyTypeSyntax).Type!;
+            var typeFullName = propertyType.ToDisplayString();
+            var isReferenceType = propertyType.IsReferenceType;
+
             if (propertyTypeSyntax is GenericNameSyntax genericTypeSyntax)
             {
                 foreach (var argument in genericTypeSyntax.TypeArgumentList.Arguments)
                 {
                     var innerTypeInfo = _semanticModel.GetTypeInfo(argument).Type!;
+                    var innerTypeName = innerTypeInfo.ToDisplayString();
+
+                    CreateEdge(innerTypeName.TrimEnd('?'), EdgeTypes.Association);
+                }
+            }
+            else if (propertyTypeSyntax is ArrayTypeSyntax arrayTypeSyntax)
+            {
+                var innerTypeInfo = _semanticModel.GetTypeInfo(arrayTypeSyntax.ElementType).Type!;
+                var innerTypeName = innerTypeInfo.ToDisplayString();
+
+                CreateEdge(innerTypeName.TrimEnd('?'), EdgeTypes.Association);
+            }
+            else if (propertyTypeSyntax is TupleTypeSyntax tupleTypeSyntax)
+            {
+                foreach (var element in tupleTypeSyntax.Elements)
+                {
+                    var innerTypeInfo = _semanticModel.GetTypeInfo(element.Type).Type!;
                     var innerTypeName = innerTypeInfo.ToDisplayString();
 
                     CreateEdge(innerTypeName.TrimEnd('?'), EdgeTypes.Association);
@@ -458,8 +464,6 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
                     isReferenceType ? EdgeTypes.Aggregation : EdgeTypes.Composition
                 );
             }
-
-            base.VisitPropertyDeclaration(node);
         }
 
         public override void VisitEventFieldDeclaration(EventFieldDeclarationSyntax node)

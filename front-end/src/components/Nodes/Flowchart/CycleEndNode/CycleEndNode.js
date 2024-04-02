@@ -1,26 +1,31 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Handle, Position } from "reactflow";
 import "./CycleEndNode.css";
 
 function CycleEndNode({ id, data }) {
-  const contentCycleEndRef = useRef(null);
-  const figureRef = useRef(null);
+  const [contentSize, setContentSize] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    if (contentCycleEndRef.current && figureRef.current) {
-      const contentRect = contentCycleEndRef.current.getBoundingClientRect();
-      var maxValue = Math.max(contentRect.width, contentRect.height);
-      figureRef.current.style.width = `${maxValue}px`;
-      figureRef.current.style.height = `${maxValue}px`;
+    const contentElement = document.getElementById(`content-cycleEnd-${id}`);
+    if (contentElement) {
+      const { offsetWidth, offsetHeight } = contentElement;
+      const maxSize = Math.max(offsetHeight, offsetWidth);
+      setContentSize({ width: maxSize, height: maxSize });
     }
-  }, []);
+  }, [id, data]);
 
   return (
     <div className="cycleEnd-node">
-      <svg ref={figureRef} viewBox="0 0 100 100" className="cycleEnd">
+      <svg
+        id={`cycleEnd-${id}`}
+        viewBox="0 0 100 100"
+        className="cycleEnd"
+        width={contentSize.width}
+        height={contentSize.height}
+      >
         <polygon points="0,0 0,80 20,100 80,100 100,80 100,0" />
       </svg>
-      <div ref={contentCycleEndRef} className="content-cycleEnd">
+      <div id={`content-cycleEnd-${id}`} className="content-cycleEnd">
         <table>
           <tbody>
             {data.content.map((member, index) => (
