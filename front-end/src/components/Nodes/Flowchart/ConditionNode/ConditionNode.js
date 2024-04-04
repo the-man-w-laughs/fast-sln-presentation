@@ -9,7 +9,7 @@ function ConditionNode({ id, data }) {
     const contentElement = document.getElementById(`content-condition-${id}`);
     if (contentElement) {
       const { offsetWidth, offsetHeight } = contentElement;
-      const maxSize = Math.max(offsetHeight, offsetWidth);
+      const maxSize = Math.max(offsetHeight, offsetWidth) + 10;
       setContentSize({ width: maxSize, height: maxSize });
     }
   }, [id, data]);

@@ -175,12 +175,12 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
             var lastNodes = _lastElementIds.ToList();
             _lastElementIds = conditionId;
             // Handle the "else" block if present
+            _label.Add("Нет");
             if (node.Else != null)
             {
-                _label.Add("Нет");
                 base.Visit(node.Else.Statement);
-                _lastElementIds.AddRange(lastNodes);
             }
+            _lastElementIds.AddRange(lastNodes);
         }
 
         public override void VisitSwitchStatement(SwitchStatementSyntax node)
@@ -261,6 +261,12 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
 
             var content = $"{operatorString}{operand};";
             AddNode<JsonBlock>(content);
+        }
+
+        public override void VisitThrowStatement(ThrowStatementSyntax node)
+        {
+            var exception = node.Expression.ToString();
+            AddNode<JsonBlock>($"throw {exception};");
         }
 
         public override void VisitInvocationExpression(InvocationExpressionSyntax node)

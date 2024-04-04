@@ -114,8 +114,13 @@ function LayoutFlow({ initialNodes, initialEdges }) {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
       >
-        <Panel position="top-right">
-          <button onClick={() => onLayout()}>Use layout</button>
+        <Panel
+          className="position-absolute bottom-0 start-0"
+          style={{ paddingLeft: "2rem" }}
+        >
+          <button className="btn btn-primary" onClick={() => onLayout()}>
+            Use layout
+          </button>
         </Panel>
         <MiniMap style={minimapStyle} zoomable pannable />
         <Controls />
