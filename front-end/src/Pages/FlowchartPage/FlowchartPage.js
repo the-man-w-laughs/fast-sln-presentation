@@ -106,7 +106,7 @@ const FlowchartPage = () => {
           className="form-content col-md-4 bg-light d-flex flex-column justify-content-center"
           onSubmit={handleSubmit}
         >
-          <label htmlFor="codeTextArea">Paste code</label>
+          <label htmlFor="codeTextArea">Введите код:</label>
           <textarea
             className="form-control"
             id="codeTextArea"
@@ -119,7 +119,7 @@ const FlowchartPage = () => {
             className="btn btn-primary mt-3 align-self-stretch mx-5"
             disabled={loading}
           >
-            {loading ? "Loading..." : "Submit"}
+            {loading ? "Загрузка..." : "Подтвердить"}
           </button>
         </form>
         <div className="col-md-8">

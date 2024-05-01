@@ -11,8 +11,8 @@ import ReactFlow, {
 } from "reactflow";
 
 import "reactflow/dist/style.css";
-import "./overview.css";
 import "../Nodes/ClassDiagram/ClassDiagramNodes.css";
+import "./overview.css";
 
 import ClassNode from "../Nodes/ClassDiagram/ClassNode/ClassNode.js";
 import EnumNode from "../Nodes/ClassDiagram/EnumNode/EnumNode.js";
@@ -123,7 +123,7 @@ function LayoutFlow({ initialNodes, initialEdges }) {
         edgeTypes={edgeTypes}
       >
         <Panel position="top-right">
-          <button onClick={() => onLayout()}>Use layout</button>
+          <button onClick={() => onLayout()}>Группировать</button>
         </Panel>
         <MiniMap style={minimapStyle} zoomable pannable />
         <Controls />
@@ -135,7 +135,7 @@ function LayoutFlow({ initialNodes, initialEdges }) {
 const ClassDiagramLayout = ({ initialNodes, initialEdges }) => {
   return (
     <ReactFlowProvider>
-      <div style={{ height: "100vh" }}>
+      <div className="flowchart-layout">
         <LayoutFlow initialEdges={initialEdges} initialNodes={initialNodes} />
       </div>
     </ReactFlowProvider>

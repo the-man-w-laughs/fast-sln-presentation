@@ -36,7 +36,7 @@ namespace FastSlnPresentation.Server.Middlewares
                 default:
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    await context.Response.WriteAsync("Internal server error");
+                    await context.Response.WriteAsync(exception.Message);
                     break;
                 }
             }

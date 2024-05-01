@@ -70,21 +70,23 @@ const ClassDiagramPage = () => {
           onSubmit={handleSubmit}
         >
           <div className="form-group">
-            <label htmlFor="inputTypeSelect">Choose input type:</label>
+            <label htmlFor="inputTypeSelect">Выберите способ ввода:</label>
             <select
               className="form-control"
               id="inputTypeSelect"
               value={inputType}
               onChange={handleInputChange}
             >
-              <option value="pat_author_repo">Github repository</option>
-              <option value="file">Upload Archive</option>
+              <option value="pat_author_repo">Github репозиторий</option>
+              <option value="file">Загрузить архив</option>
             </select>
           </div>
           {inputType === "pat_author_repo" && (
             <>
               <div className="form-group">
-                <label htmlFor="patInput">PAT (Personal Access Token):</label>
+                <label htmlFor="patInput">
+                  PAT (Персональный ключ доступа):
+                </label>
                 <input
                   type="text"
                   className="form-control"
@@ -94,7 +96,7 @@ const ClassDiagramPage = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="authorInput">Author:</label>
+                <label htmlFor="authorInput">Автор:</label>
                 <input
                   type="text"
                   className="form-control"
@@ -104,7 +106,7 @@ const ClassDiagramPage = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="repoNameInput">Repository Name:</label>
+                <label htmlFor="repoNameInput">Название репозитория:</label>
                 <input
                   type="text"
                   className="form-control"
@@ -117,7 +119,7 @@ const ClassDiagramPage = () => {
           )}
           {inputType === "file" && (
             <div className="form-group">
-              <label htmlFor="codeFileInput">Upload Archive:</label>
+              <label htmlFor="codeFileInput">Загрузить архив:</label>
               <input
                 type="file"
                 className="form-control-file"
@@ -131,7 +133,7 @@ const ClassDiagramPage = () => {
             className="btn btn-primary mt-3 align-self-stretch mx-5"
             disabled={loading}
           >
-            {loading ? "Loading..." : "Submit"}
+            {loading ? "Загрузка..." : "Подтвердить"}
           </button>
         </form>
         <div className="col-md-10">

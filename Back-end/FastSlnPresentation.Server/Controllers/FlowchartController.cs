@@ -1,5 +1,3 @@
-using System.Text.Encodings.Web;
-using System.Text.Json;
 using FastSlnPresentation.BLL.Contracts;
 using FastSlnPresentation.BLL.Services.Static;
 using Microsoft.AspNetCore.Mvc;

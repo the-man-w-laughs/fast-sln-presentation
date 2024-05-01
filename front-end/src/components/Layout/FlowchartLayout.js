@@ -9,7 +9,6 @@ import ReactFlow, {
   MiniMap,
   Controls,
 } from "reactflow";
-import "./overview.css";
 import BlockNode from "../Nodes/Flowchart/BlockNode/BlockNode.js";
 import TerminalNode from "../Nodes/Flowchart/TerminalNode/TerminalNode.js";
 import ConditionNode from "../Nodes/Flowchart/ConditionNode/ConditionNode.js";
@@ -18,6 +17,7 @@ import CycleEndNode from "../Nodes/Flowchart/CycleEndNode/CycleEndNode.js";
 import "../Nodes/Flowchart/FlowchartNodes.css";
 
 import "reactflow/dist/style.css";
+import "./overview.css";
 
 import Markers from "../Markers/Markers.js";
 import ArrowEdge from "../Edges/ArrowEdge.js";
@@ -119,7 +119,7 @@ function LayoutFlow({ initialNodes, initialEdges }) {
           style={{ paddingLeft: "2rem" }}
         >
           <button className="btn btn-primary" onClick={() => onLayout()}>
-            Use layout
+            Группировать
           </button>
         </Panel>
         <MiniMap style={minimapStyle} zoomable pannable />
@@ -132,7 +132,7 @@ function LayoutFlow({ initialNodes, initialEdges }) {
 const FlowchartLayout = ({ initialNodes, initialEdges }) => {
   return (
     <ReactFlowProvider>
-      <div style={{ height: "100vh" }}>
+      <div className="flowchart-layout">
         <LayoutFlow initialEdges={initialEdges} initialNodes={initialNodes} />
       </div>
     </ReactFlowProvider>
