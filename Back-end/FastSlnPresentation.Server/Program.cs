@@ -1,7 +1,6 @@
 using FastSlnPresentation.Server.Extensions;
 using FastSlnPresentation.BLL.Extensions;
 using FastSlnPresentation.Server.Middlewares;
-using Microsoft.IdentityModel.Tokens;
 using FastSlnPresentation.Server.Security;
 
 var builder = WebApplication.CreateBuilder(args);

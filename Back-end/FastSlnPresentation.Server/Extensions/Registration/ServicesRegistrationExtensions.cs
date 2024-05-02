@@ -15,6 +15,8 @@ namespace FastSlnPresentation.Server.Extensions
 
             // register DB services
             services.AddTransient<UserService>();
+            services.AddTransient<SubscriptionService>();
+            services.AddTransient<PlanService>();
 
             return services;
         }

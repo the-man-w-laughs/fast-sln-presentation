@@ -18,7 +18,7 @@ namespace FastSlnPresentation.BLL.DBConfiguration
                 PasswordHash = passwordHash,
                 Salt = salt,
                 RoleId = 1,
-                CreatedAt = DateTime.Now,
+                CreatedAt = DateTime.UtcNow.ToLocalTime(),
             };
 
             builder.HasData(admin);

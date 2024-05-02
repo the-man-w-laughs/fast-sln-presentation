@@ -6,7 +6,7 @@ namespace FastSlnPresentation.DAL.DBContext
 {
     public partial class FastSlnPresentationDbContext : DbContext
     {
-        public DbSet<Plan> Planss { get; set; }
+        public DbSet<Plan> Plans { get; set; }
 
         public DbSet<Role> Roles { get; set; }
 

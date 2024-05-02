@@ -10,6 +10,11 @@ namespace FastSlnPresentation.Server.Extensions
         {
             services.AddSwaggerGen(option =>
             {
+                var assemblyName = Assembly.GetExecutingAssembly().GetName().Name!;
+                var xmlFile = $"{assemblyName}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                option.IncludeXmlComments(xmlPath);
+
                 option.SwaggerDoc(
                     "v1",
                     new OpenApiInfo { Title = "fast-sln-presentation API", Version = "v1" }

@@ -20,7 +20,6 @@ namespace FastSlnPresentation.DAL.ModelsConfiguration
                 .HasColumnType("timestamp")
                 .HasColumnName("start_date");
             entity.Property(e => e.EndDate).HasColumnType("timestamp").HasColumnName("end_date");
-            entity.Property(e => e.IsActive).HasColumnName("is_active");
             entity
                 .Property(e => e.CreatedAt)
                 .HasColumnType("timestamp")
