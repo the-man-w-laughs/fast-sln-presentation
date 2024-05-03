@@ -1,4 +1,6 @@
 using System.Net;
+using FastSlnPresentation.BLL.Exceptions;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace FastSlnPresentation.Server.Middlewares
 {
@@ -33,6 +35,10 @@ namespace FastSlnPresentation.Server.Middlewares
 
             switch (exception)
             {
+                case NotFoundException:
+                    context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                    await context.Response.WriteAsync(exception.Message);
+                    break;
                 default:
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;

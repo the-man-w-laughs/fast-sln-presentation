@@ -1,9 +1,11 @@
 using FastSlnPresentation.BLL.Contracts;
 using FastSlnPresentation.BLL.Services.Static;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastSlnPresentation.Server.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class FlowchartController : Controller
@@ -20,6 +22,9 @@ namespace FastSlnPresentation.Server.Controllers
             _methodAnalysisService = methodAnalysisService;
         }
 
+        /// <summary>
+        /// Получить блок-схему из кода метода.
+        /// </summary>
         [HttpPost("")]
         public IActionResult GetFlowchart([FromBody] string methodStr)
         {

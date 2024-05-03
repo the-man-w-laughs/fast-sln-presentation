@@ -3,6 +3,7 @@ using FastSlnPresentation.BLL.Services.DBServices;
 using FastSlnPresentation.Server.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -14,13 +15,27 @@ namespace FastSlnPresentation.Server.Controllers
         private const int TokenExpiresTime = 120;
         private readonly ILogger<UsersController> _logger;
         private readonly UserService _userService;
+        private readonly SubscriptionService _subscriptionService;
 
-        public AuthenticationController(ILogger<UsersController> logger, UserService userService)
+        public AuthenticationController(
+            ILogger<UsersController> logger,
+            UserService userService,
+            SubscriptionService subscriptionService
+        )
         {
             _logger = logger;
             _userService = userService;
+            _subscriptionService = subscriptionService;
         }
 
+        /// <summary>
+        /// Войти в систему.
+        /// </summary>
+        /// <param name="userLoginDto">Данные для входа пользователя (email и пароль).</param>
+        /// <returns>
+        /// HTTP ответ, содержащий JWT-токен и информацию о пользователе,
+        /// если вход выполнен успешно; 401 Unauthorized, если учетные данные неверны.
+        /// </returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserLoginDto userLoginDto)
         {
@@ -46,6 +61,15 @@ namespace FastSlnPresentation.Server.Controllers
                 default:
                     // Return 400 Bad Request if the role is invalid
                     return BadRequest("Invalid role.");
+            }
+
+            switch (role)
+            {
+                case Roles.Admin:
+                    break;
+                case Roles.User:
+                    await _subscriptionService.GetActiveSubscription(user.Id);
+                    break;
             }
 
             // Create claims for the user's email, role, and other relevant user information

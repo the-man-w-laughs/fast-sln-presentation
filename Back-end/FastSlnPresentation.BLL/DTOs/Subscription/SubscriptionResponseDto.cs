@@ -8,6 +8,5 @@ namespace FastSlnPresentation.BLL.DTOs
         public int PlanId { get; set; } // Идентификатор плана (внешний ключ, ссылается на PlanId в Plans)
         public DateTime StartDate { get; set; } // Дата начала подписки
         public DateTime EndDate { get; set; } // Дата окончания подписки
-        public bool IsActive { get; set; } // Активна ли подписка (логическое значение, по умолчанию true)
     }
 }

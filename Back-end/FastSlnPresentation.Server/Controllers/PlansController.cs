@@ -1,5 +1,7 @@
 using FastSlnPresentation.BLL.DTOs;
 using FastSlnPresentation.BLL.Services.DBServices;
+using FastSlnPresentation.Server.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastSlnPresentation.Server.Controllers
@@ -16,7 +18,9 @@ namespace FastSlnPresentation.Server.Controllers
             _planService = userService;
         }
 
-        // Получение всех планов
+        /// <summary>
+        /// Получить все планы.
+        /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetAllPlans()
         {
@@ -24,7 +28,10 @@ namespace FastSlnPresentation.Server.Controllers
             return Ok(plans);
         }
 
-        // Создание нового плана
+        /// <summary>
+        /// Создать новый план.
+        /// </summary>
+        [Authorize(Roles = Roles.Admin)]
         [HttpPost]
         public async Task<IActionResult> CreatePlan(PlanRequestDto planRequestDto)
         {
@@ -32,7 +39,9 @@ namespace FastSlnPresentation.Server.Controllers
             return Ok(createdPlan);
         }
 
-        // Удаление плана, если у него нет активных или будущих подписок
+        /// <summary>
+        /// Удалить план, если у него нет активных или будущих подписок.
+        [Authorize(Roles = Roles.Admin)]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeletePlanIfNoActiveOrFutureSubscriptions(int id)
         {

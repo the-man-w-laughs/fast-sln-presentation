@@ -1,5 +1,6 @@
 using AutoMapper;
 using FastSlnPresentation.BLL.DTOs;
+using FastSlnPresentation.BLL.Exceptions;
 using FastSlnPresentation.BLL.Services.HardServices.Static;
 using FastSlnPresentation.DAL.DBContext;
 using FastSlnPresentation.DAL.Models;
@@ -57,10 +58,12 @@ namespace FastSlnPresentation.BLL.Services.DBServices
 
             var user = new User
             {
+                Name = userRequestDto.Name,
                 Email = userRequestDto.Email,
                 PasswordHash = passwordHash,
                 Salt = salt,
                 RoleId = userRequestDto.RoleId,
+                CreatedAt = DateTime.UtcNow,
             };
 
             _context.Users.Add(user);
@@ -76,7 +79,7 @@ namespace FastSlnPresentation.BLL.Services.DBServices
 
             if (user == null)
             {
-                throw new ArgumentException($"Пользователь с id {id} не найден.");
+                throw new NotFoundException($"Пользователь с id {id} не найден.");
             }
 
             bool hasActiveSubscriptions = user.Subscriptions.Any(
@@ -124,7 +127,7 @@ namespace FastSlnPresentation.BLL.Services.DBServices
 
             if (user == null)
             {
-                throw new ArgumentException($"Пользователь с id {id} не найден.");
+                throw new NotFoundException($"Пользователь с id {id} не найден.");
             }
 
             var userResponseDto = _mapper.Map<UserResponseDto>(user);

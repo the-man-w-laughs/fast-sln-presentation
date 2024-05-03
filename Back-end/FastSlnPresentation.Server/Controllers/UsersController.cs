@@ -18,6 +18,10 @@ namespace FastSlnPresentation.Server.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Получить всех пользователей.
+        /// </summary>
+        /// <returns>Список всех пользователей.</returns>
         [Authorize(Roles = Roles.Admin)]
         [HttpGet("")]
         public async Task<IActionResult> GetAllUsers()
@@ -27,7 +31,12 @@ namespace FastSlnPresentation.Server.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = Roles.Admin)]
+        /// <summary>
+        /// Получить пользователя по его идентификатору.
+        /// </summary>
+        /// <param name="id">Идентификатор пользователя.</param>
+        /// <returns>Данные пользователя.</returns>
+        [Authorize]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetUser(int id)
         {
@@ -36,6 +45,11 @@ namespace FastSlnPresentation.Server.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Создать нового пользователя.
+        /// </summary>
+        /// <param name="userRequestDto">DTO запроса, содержащая данные о новом пользователе.</param>
+        /// <returns>Созданный пользователь.</returns>
         [Authorize(Roles = Roles.Admin)]
         [HttpPost("")]
         public async Task<IActionResult> CreateUser(UserRequestDto userRequestDto)
@@ -45,6 +59,11 @@ namespace FastSlnPresentation.Server.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Удалить пользователя по его идентификатору.
+        /// </summary>
+        /// <param name="id">Идентификатор пользователя.</param>
+        /// <returns>Удаленный пользователь.</returns>
         [Authorize(Roles = Roles.Admin)]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteUser(int id)

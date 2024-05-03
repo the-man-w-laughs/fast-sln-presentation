@@ -20,7 +20,10 @@ namespace FastSlnPresentation.Server.Extensions
                 }
 
                 builder.UseLazyLoadingProxies();
-                builder.UseNpgsql(connectionString);
+                builder.UseNpgsql(
+                    connectionString,
+                    options => options.MigrationsAssembly("FastSlnPresentation.Server")
+                );
             });
         }
     }

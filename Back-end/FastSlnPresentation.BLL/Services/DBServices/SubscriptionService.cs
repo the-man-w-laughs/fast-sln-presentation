@@ -1,5 +1,6 @@
 using AutoMapper;
 using FastSlnPresentation.BLL.DTOs;
+using FastSlnPresentation.BLL.Exceptions;
 using FastSlnPresentation.DAL.DBContext;
 using FastSlnPresentation.DAL.Models;
 using Microsoft.EntityFrameworkCore;
@@ -26,8 +27,8 @@ namespace FastSlnPresentation.BLL.Services.DBServices
 
             if (user == null)
             {
-                throw new ArgumentException(
-                    $"User with ID {subscriptionRequestDto.UserId} not found."
+                throw new NotFoundException(
+                    $"Пользователь с id {subscriptionRequestDto.UserId} не найден."
                 );
             }
 
@@ -36,13 +37,14 @@ namespace FastSlnPresentation.BLL.Services.DBServices
 
             if (plan == null)
             {
-                throw new ArgumentException(
-                    $"Plan with ID {subscriptionRequestDto.PlanId} not found."
+                throw new NotFoundException(
+                    $"План с id {subscriptionRequestDto.PlanId} не найден."
                 );
             }
 
             var subscription = _mapper.Map<Subscription>(subscriptionRequestDto);
             subscription.EndDate = subscription.StartDate.AddDays(plan.Duration);
+            subscription.CreatedAt = DateTime.UtcNow;
 
             _context.Subscriptions.Add(subscription);
             await _context.SaveChangesAsync();
@@ -57,7 +59,7 @@ namespace FastSlnPresentation.BLL.Services.DBServices
 
             if (user == null)
             {
-                throw new ArgumentException($"Пользователь с id {userId} не найден.");
+                throw new NotFoundException($"Пользователь с id {userId} не найден.");
             }
 
             var subscriptions = await _context.Subscriptions
@@ -77,22 +79,22 @@ namespace FastSlnPresentation.BLL.Services.DBServices
 
             if (user == null)
             {
-                throw new ArgumentException($"Пользователь с id {userId} не найден.");
+                throw new NotFoundException($"Пользователь с id {userId} не найден.");
             }
 
             var oldestActiveSubscription = await _context.Subscriptions
                 .Where(
                     s =>
                         s.UserId == userId
-                        && s.StartDate.Date <= DateTime.UtcNow.Date
-                        && s.EndDate.Date >= DateTime.UtcNow.Date
+                        && s.StartDate <= DateTimeOffset.UtcNow
+                        && s.EndDate >= DateTimeOffset.UtcNow
                 )
                 .OrderBy(s => s.StartDate)
                 .FirstOrDefaultAsync();
 
             if (oldestActiveSubscription == null)
             {
-                return null;
+                throw new NotFoundException($"У пользователя с id {userId} нет активных подписок.");
             }
 
             var subscriptionResponseDto = _mapper.Map<SubscriptionResponseDto>(
@@ -108,7 +110,7 @@ namespace FastSlnPresentation.BLL.Services.DBServices
 
             if (subscription == null)
             {
-                throw new ArgumentException($"Подписка с id {subscriptionId} не найдена.");
+                throw new NotFoundException($"Подписка с id {subscriptionId} не найдена.");
             }
 
             var subscriptionResponseDto = _mapper.Map<SubscriptionResponseDto>(subscription);

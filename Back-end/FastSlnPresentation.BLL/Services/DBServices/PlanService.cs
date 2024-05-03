@@ -1,5 +1,6 @@
 using AutoMapper;
 using FastSlnPresentation.BLL.DTOs;
+using FastSlnPresentation.BLL.Exceptions;
 using FastSlnPresentation.DAL.DBContext;
 using FastSlnPresentation.DAL.Models;
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +34,7 @@ namespace FastSlnPresentation.BLL.Services.DBServices
 
             if (plan == null)
             {
-                throw new ArgumentException($"План с id {planId} не найден.");
+                throw new NotFoundException($"План с id {planId} не найден.");
             }
 
             // Проверить наличие активных или будущих подписок на этот план

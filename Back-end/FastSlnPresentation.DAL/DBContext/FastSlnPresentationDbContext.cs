@@ -14,10 +14,10 @@ namespace FastSlnPresentation.DAL.DBContext
 
         public DbSet<User> Users { get; set; }
 
-        public FastSlnPresentationDbContext(DbContextOptions options)
+        public FastSlnPresentationDbContext(DbContextOptions<FastSlnPresentationDbContext> options)
             : base(options)
         {
-            Database.EnsureDeleted();
+            // Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 

@@ -2,10 +2,12 @@ using Business.Octokit;
 using FastSlnPresentation.BLL.Contracts;
 using FastSlnPresentation.BLL.Services.Static;
 using FastSlnPresentation.Server.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastSlnPresentation.Server.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     public class ClassDiagramController : Controller
     {
@@ -21,6 +23,9 @@ namespace FastSlnPresentation.Server.Controllers
             _classAnalysisService = classAnalysisService;
         }
 
+        /// <summary>
+        /// Получить диаграмму классов из репозитория GitHub.
+        /// </summary>
         [HttpPost("github")]
         public async Task<IActionResult> GetClassDiagramFromGitRepoAsync(
             [FromBody] GitRepoRequestModel gitRepoRequestModel
@@ -41,6 +46,9 @@ namespace FastSlnPresentation.Server.Controllers
             return Ok(json);
         }
 
+        /// <summary>
+        /// Получить диаграмму классов из zip-архива.
+        /// </summary>
         [HttpPost("zip-file")]
         public IActionResult GetClassDiagramFromArchiveAsync([FromForm] IFormFile file)
         {
