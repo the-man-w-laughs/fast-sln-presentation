@@ -10,6 +10,9 @@ import ReactFlow, {
   Controls,
 } from "reactflow";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCompressArrowsAlt } from "@fortawesome/free-solid-svg-icons";
+
 import "reactflow/dist/style.css";
 import "../Nodes/ClassDiagram/ClassDiagramNodes.css";
 import "./overview.css";
@@ -122,8 +125,14 @@ function LayoutFlow({ initialNodes, initialEdges }) {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
       >
-        <Panel position="top-right">
-          <button onClick={() => onLayout()}>Группировать</button>
+        <Panel
+          className="position-absolute bottom-0 start-0"
+          style={{ paddingLeft: "2rem" }}
+        >
+          <button className="btn btn-primary" onClick={() => onLayout()}>
+            <FontAwesomeIcon icon={faCompressArrowsAlt} className="me-2" />
+            Группировать
+          </button>
         </Panel>
         <MiniMap style={minimapStyle} zoomable pannable />
         <Controls />

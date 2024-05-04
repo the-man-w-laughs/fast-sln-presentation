@@ -12,7 +12,6 @@ namespace FastSlnPresentation.Server.Controllers
     [Route("/")]
     public class AuthenticationController : Controller
     {
-        private const int TokenExpiresTime = 120;
         private readonly ILogger<UsersController> _logger;
         private readonly UserService _userService;
         private readonly SubscriptionService _subscriptionService;
@@ -37,7 +36,7 @@ namespace FastSlnPresentation.Server.Controllers
         /// если вход выполнен успешно; 401 Unauthorized, если учетные данные неверны.
         /// </returns>
         [HttpPost("login")]
-        public async Task<IActionResult> Login(UserLoginDto userLoginDto)
+        public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
         {
             // Check if the user exists and the password is correct
             var user = await _userService.CheckPassword(userLoginDto.Email, userLoginDto.Password);
@@ -45,7 +44,7 @@ namespace FastSlnPresentation.Server.Controllers
             if (user == null)
             {
                 // Return 401 Unauthorized if the user is not found or password is incorrect
-                return Unauthorized("Invalid email or password.");
+                return Unauthorized("Неправильный email или пароль.");
             }
 
             // Determine the user's role based on their RoleId
@@ -59,8 +58,7 @@ namespace FastSlnPresentation.Server.Controllers
                     role = Roles.User;
                     break;
                 default:
-                    // Return 400 Bad Request if the role is invalid
-                    return BadRequest("Invalid role.");
+                    throw new Exception("Внутренняя ошибка сервера.");
             }
 
             switch (role)
@@ -75,8 +73,8 @@ namespace FastSlnPresentation.Server.Controllers
             // Create claims for the user's email, role, and other relevant user information
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // Example: Add user ID as a claim
-                new Claim(ClaimTypes.Name, user.Email), // Example: Add user email as a claim
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, role)
             };
 
@@ -85,7 +83,7 @@ namespace FastSlnPresentation.Server.Controllers
                 issuer: AuthOptions.ISSUER,
                 audience: AuthOptions.AUDIENCE,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(TokenExpiresTime),
+                expires: DateTime.UtcNow.AddMinutes(AuthOptions.TokenExpiresTime),
                 signingCredentials: new SigningCredentials(
                     AuthOptions.GetSymmetricSecurityKey(),
                     SecurityAlgorithms.HmacSha256

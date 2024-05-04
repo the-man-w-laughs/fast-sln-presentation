@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using FastSlnPresentation.BLL.DTOs;
 using FastSlnPresentation.BLL.Exceptions;
 using FastSlnPresentation.BLL.Services.DBServices;
@@ -39,13 +40,26 @@ namespace FastSlnPresentation.Server.Controllers
         }
 
         /// <summary>
+        /// Получить все подписки пользователя по jwt.
+        /// </summary>
+        [Authorize]
+        [HttpGet("token")]
+        public async Task<IActionResult> GetUserSubscriptionsByJwt()
+        {
+            int userId = User.GetUserId();
+            var subscriptions = await _subscriptionService.GetUserSubscriptions(userId);
+
+            return Ok(subscriptions);
+        }
+
+        /// <summary>
         /// Получить все подписки пользователя по его идентификатору.
         /// </summary>
         /// <param name="userId">Идентификатор пользователя.</param>
         /// <returns>Список подписок пользователя.</returns>
-        [Authorize]
+        [Authorize(Roles = Roles.Admin)]
         [HttpGet("{userId:int}")]
-        public async Task<IActionResult> GetUserSubscriptions(int userId)
+        public async Task<IActionResult> GetUserSubscriptionsById(int userId)
         {
             var subscriptions = await _subscriptionService.GetUserSubscriptions(userId);
 
@@ -53,13 +67,27 @@ namespace FastSlnPresentation.Server.Controllers
         }
 
         /// <summary>
+        /// Получить активную подписку пользователя по jwt.
+        /// </summary>
+        /// <returns>Активная подписка пользователя или сообщение об отсутствии.</returns>
+        [Authorize]
+        [HttpGet("active/token")]
+        public async Task<IActionResult> GetActiveSubscriptionByJwt()
+        {
+            int userId = User.GetUserId();
+            var activeSubscription = await _subscriptionService.GetActiveSubscription(userId);
+
+            return Ok(activeSubscription);
+        }
+
+        /// <summary>
         /// Получить активную подписку пользователя по его идентификатору.
         /// </summary>
         /// <param name="userId">Идентификатор пользователя.</param>
         /// <returns>Активная подписка пользователя или сообщение об отсутствии.</returns>
-        [Authorize]
+        [Authorize(Roles = Roles.Admin)]
         [HttpGet("active/{userId:int}")]
-        public async Task<IActionResult> GetActiveSubscription(int userId)
+        public async Task<IActionResult> GetActiveSubscriptionById(int userId)
         {
             var activeSubscription = await _subscriptionService.GetActiveSubscription(userId);
 

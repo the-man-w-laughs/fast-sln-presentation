@@ -32,13 +32,27 @@ namespace FastSlnPresentation.Server.Controllers
         }
 
         /// <summary>
+        /// Получить пользователя по jwt.
+        /// </summary>
+        /// <returns>Данные пользователя.</returns>
+        [Authorize]
+        [HttpGet("token")]
+        public async Task<IActionResult> GetUserByJwt()
+        {
+            var id = User.GetUserId();
+            var result = await _userService.GetUserById(id);
+
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Получить пользователя по его идентификатору.
         /// </summary>
         /// <param name="id">Идентификатор пользователя.</param>
         /// <returns>Данные пользователя.</returns>
-        [Authorize]
+        [Authorize(Roles = Roles.Admin)]
         [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetUser(int id)
+        public async Task<IActionResult> GetUserById(int id)
         {
             var result = await _userService.GetUserById(id);
 

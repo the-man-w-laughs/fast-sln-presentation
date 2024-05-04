@@ -48,3 +48,76 @@
   z-index: 1000;
   background-color: #f8f9fa;  
 }
+
+.margin-right-5 {
+  margin-right: 5px;  
+}
+
+/* Основная палитра */
+:root {
+  --primary-color: #6d7a83;
+  /* Основной цвет */
+  --secondary-color: #2ecc71;
+  /* Второстепенный цвет */  
+  --text-color: #333;
+  /* Цвет текста */
+  --accent-color: #e74c3c;
+  /* Акцентный цвет */
+}
+
+/* Контейнер */
+.container {
+  background-color: var(--background-color);
+}
+
+/* Карточка */
+.card {
+  background-color: white;
+  border: 1px solid var(--primary-color);
+}
+
+/* Карточка - Заголовок */
+.card-header {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Карточка - Тело */
+.card-body {
+  color: var(--text-color);
+}
+
+/* Карточка - Список элементов */
+.list-group-item {
+  background-color: white;
+  border-color: var(--primary-color);
+}
+
+/* Кнопка выхода */
+.btn-danger {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.btn-danger:hover {
+  background-color: darken(var(--accent-color), 10%);
+  border-color: darken(var(--accent-color), 10%);
+}
+
+/* Уведомления */
+.alert-warning {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.alert-info {
+  background-color: lighten(var(--primary-color), 20%);
+  color: var(--text-color);
+}
+
+.header {
+  font-size: 20px;
+  /* Увеличение размера шрифта */
+  font-weight: bold;
+  /* Делает текст жирным */
+}

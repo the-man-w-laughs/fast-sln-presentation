@@ -5,6 +5,7 @@ namespace FastSlnPresentation.Server.Security
 {
     public class AuthOptions
     {
+        public const int TokenExpiresTime = 120;
         public const string AuthenticationScheme = "Bearer";
         public const string ISSUER = "fast-sln-presentation-server"; // издатель токена
         public const string AUDIENCE = "fast-sln-presentation-client"; // потребитель токена

@@ -63,7 +63,7 @@ namespace FastSlnPresentation.BLL.Services.DBServices
                 PasswordHash = passwordHash,
                 Salt = salt,
                 RoleId = userRequestDto.RoleId,
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow.ToLocalTime(),
             };
 
             _context.Users.Add(user);

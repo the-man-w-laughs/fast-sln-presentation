@@ -1,0 +1,18 @@
+.subscription-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    /* Более темный цвет кнопки при наведении */
+}
+
+.profile-header {
+    font-size: 30px;
+    /* Увеличивает размер текста */
+    font-weight: bold;
+    /* Делает текст жирным */
+}

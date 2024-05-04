@@ -44,7 +44,7 @@ namespace FastSlnPresentation.BLL.Services.DBServices
 
             var subscription = _mapper.Map<Subscription>(subscriptionRequestDto);
             subscription.EndDate = subscription.StartDate.AddDays(plan.Duration);
-            subscription.CreatedAt = DateTime.UtcNow;
+            subscription.CreatedAt = DateTime.UtcNow.ToLocalTime();
 
             _context.Subscriptions.Add(subscription);
             await _context.SaveChangesAsync();
@@ -82,15 +82,36 @@ namespace FastSlnPresentation.BLL.Services.DBServices
                 throw new NotFoundException($"Пользователь с id {userId} не найден.");
             }
 
-            var oldestActiveSubscription = await _context.Subscriptions
-                .Where(
-                    s =>
-                        s.UserId == userId
-                        && s.StartDate <= DateTimeOffset.UtcNow
-                        && s.EndDate >= DateTimeOffset.UtcNow
+            Subscription oldestActiveSubscription = null;
+            var currentTime = DateTime.UtcNow.ToLocalTime();
+
+            foreach (var subscription in _context.Subscriptions)
+            {
+                if (
+                    subscription.UserId == userId
+                    && subscription.StartDate <= currentTime
+                    && subscription.EndDate >= currentTime
                 )
-                .OrderBy(s => s.StartDate)
-                .FirstOrDefaultAsync();
+                {
+                    if (
+                        oldestActiveSubscription == null
+                        || subscription.StartDate < oldestActiveSubscription.StartDate
+                    )
+                    {
+                        oldestActiveSubscription = subscription;
+                    }
+                }
+            }
+
+            // var oldestActiveSubscription = await _context.Subscriptions
+            //     .Where(
+            //         s =>
+            //             s.UserId == userId
+            //             && s.StartDate <= DateTime.UtcNow.ToLocalTime()
+            //             && s.EndDate >= DateTime.UtcNow.ToLocalTime()
+            //     )
+            //     .OrderBy(s => s.StartDate)
+            //     .FirstOrDefaultAsync();
 
             if (oldestActiveSubscription == null)
             {

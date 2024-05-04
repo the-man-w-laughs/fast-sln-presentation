@@ -39,7 +39,7 @@ namespace FastSlnPresentation.BLL.Services.DBServices
 
             // Проверить наличие активных или будущих подписок на этот план
             bool hasActiveOrFutureSubscriptions = await _context.Subscriptions.AnyAsync(
-                s => s.PlanId == planId && s.EndDate >= DateTime.UtcNow
+                s => s.PlanId == planId && s.EndDate >= DateTime.UtcNow.ToLocalTime()
             );
 
             if (hasActiveOrFutureSubscriptions)

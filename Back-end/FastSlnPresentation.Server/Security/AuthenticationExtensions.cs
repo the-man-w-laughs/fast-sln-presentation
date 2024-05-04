@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 
 namespace FastSlnPresentation.Server.Security
@@ -39,6 +40,13 @@ namespace FastSlnPresentation.Server.Security
                 });
 
             return services;
+        }
+
+        public static int GetUserId(this ClaimsPrincipal user)
+        {
+            var userIdStr = user.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+            int.TryParse(userIdStr, out int userId);
+            return userId;
         }
     }
 }

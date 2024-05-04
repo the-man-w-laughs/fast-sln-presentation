@@ -1,5 +1,7 @@
 import ELK from "elkjs/lib/elk.bundled.js";
 import React, { useCallback, useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCompressArrowsAlt } from "@fortawesome/free-solid-svg-icons";
 import ReactFlow, {
   ReactFlowProvider,
   Panel,
@@ -119,6 +121,7 @@ function LayoutFlow({ initialNodes, initialEdges }) {
           style={{ paddingLeft: "2rem" }}
         >
           <button className="btn btn-primary" onClick={() => onLayout()}>
+            <FontAwesomeIcon icon={faCompressArrowsAlt} className="me-2" />
             Группировать
           </button>
         </Panel>

@@ -1,0 +1,38 @@
+/* Plans.css */
+
+.plans-container {
+    text-align: center;
+}
+
+.plans-row {
+    display: flex;
+    justify-content: center;
+    /* Center content horizontally */
+    flex-wrap: wrap;
+    gap: 20px;
+    /* Add spacing between plan boxes */
+}
+
+.plan-box {
+    flex: 1;
+    max-width: 300px;
+    /* Adjust the max-width as needed */
+    display: flex;
+    align-items: stretch;
+    /* Make boxes the same height */
+}
+
+.card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* Ensure card content fills height */
+}
+
+.price {
+    vertical-align: bottom;
+    font-size: 1.25rem;
+    /* Увеличьте значение на свое усмотрение */
+    font-weight: bold;
+    /* Добавим полужирный шрифт */
+}

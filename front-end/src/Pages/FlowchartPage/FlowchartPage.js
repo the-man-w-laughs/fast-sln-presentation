@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from "react";
-import FlowchartLayout from "../../components/Layout/FlowchartLayout";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Swal from "sweetalert2";
+import {
+  faPlay,
+  faKeyboard,
+  faFileCode,
+} from "@fortawesome/free-solid-svg-icons";
+
+import { generateFlowChartByCode } from "../../Utils/ApiService";
+
+import FlowchartLayout from "../../components/HardComponents/Layout/FlowchartLayout";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./FlowchartPage.css";
 
@@ -24,24 +34,19 @@ const FlowchartPage = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5137/flowchart", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(code),
-      });
+      const response = await generateFlowChartByCode(code);
 
-      if (response.ok) {
-        const { initialNodes, initialEdges } = await response.json();
-        setInitialNodes(initialNodes);
-        setInitialEdges(initialEdges);
-        console.log("Successfully updated initial nodes and edges");
-      } else {
-        console.log("Error occurred while fetching data");
-      }
+      const { initialNodes, initialEdges } = response;
+      setInitialNodes(initialNodes);
+      setInitialEdges(initialEdges);
+      console.log("Successfully updated initial nodes and edges");
     } catch (error) {
       console.error("Error submitting code:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Ошибка",
+        text: "Ошибка при генерации: " + error.message,
+      });
     } finally {
       setLoading(false);
     }
@@ -106,20 +111,31 @@ const FlowchartPage = () => {
           className="form-content col-md-4 bg-light d-flex flex-column justify-content-center"
           onSubmit={handleSubmit}
         >
-          <label htmlFor="codeTextArea">Введите код:</label>
+          <label htmlFor="codeTextArea">
+            <FontAwesomeIcon icon={faFileCode} className="me-2" />
+            Введите код:
+          </label>
           <textarea
             className="form-control"
             id="codeTextArea"
             value={code}
             onChange={(e) => setCode(e.target.value)}
             onKeyDown={handleTabKeyPress}
+            required
           ></textarea>
           <button
             type="submit"
             className="btn btn-primary mt-3 align-self-stretch mx-5"
             disabled={loading}
           >
-            {loading ? "Загрузка..." : "Подтвердить"}
+            {loading ? (
+              "Загрузка..."
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faPlay} className="me-2" />
+                Генерировать
+              </>
+            )}
           </button>
         </form>
         <div className="col-md-8">
