@@ -1,0 +1,10 @@
+.form-content {
+    box-sizing: border-box;    
+    height: 100vh;
+}
+
+textarea { 
+    height: 90vh;
+    overflow-x: auto;
+    resize: none;    
+}
