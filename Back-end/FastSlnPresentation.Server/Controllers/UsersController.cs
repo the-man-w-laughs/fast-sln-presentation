@@ -66,7 +66,7 @@ namespace FastSlnPresentation.Server.Controllers
         /// <returns>Созданный пользователь.</returns>
         [Authorize(Roles = Roles.Admin)]
         [HttpPost("")]
-        public async Task<IActionResult> CreateUser(UserRequestDto userRequestDto)
+        public async Task<IActionResult> CreateUser([FromBody] UserRequestDto userRequestDto)
         {
             var result = await _userService.CreateUser(userRequestDto);
 

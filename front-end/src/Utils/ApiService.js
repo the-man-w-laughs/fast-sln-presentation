@@ -2,90 +2,198 @@ import axios from "axios";
 import {
   getAccessToken,
   getRefreshToken,
-  setRefreshToken,
   setAccessToken,
+  setRefreshToken,
 } from "./LocalStorage";
 import Mutex from "./Mutex";
 
 const BASE_URL = "http://localhost:5137";
+const api = axios.create({
+  baseURL: BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+// Centralized token management
+function getAuthHeaders(token = null) {
+  if (!token) {
+    token = getAccessToken();
+  }
+  return {
+    Authorization: `Bearer ${token}`,
+  };
+}
+
+// Reused error handling function
+function handleError(error, errorMessage) {
+  console.error(`${errorMessage}:`, error);
+  throw error;
+}
+
+async function createUser(userData, token = null) {
+  try {
+    const response = await api.post("/users", userData, {
+      headers: {
+        ...getAuthHeaders(token),
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error, "Error creating user");
+  }
+}
 
 async function getUserDataByToken(token = null) {
   try {
-    if (token == null) token = getAccessToken();
-    const response = await axios.get(`${BASE_URL}/users/token`, {
+    const response = await api.get("/users/token", {
       headers: {
+        ...getAuthHeaders(token),
         Accept: "application/json",
-        Authorization: `Bearer ${token}`,
       },
     });
-
     return response.data;
   } catch (error) {
-    throw error;
+    handleError(error, "Error fetching user data by token");
+  }
+}
+
+async function getUserDataById(id, token = null) {
+  try {
+    const response = await api.get(`/users/${id}`, {
+      headers: {
+        ...getAuthHeaders(token),
+        Accept: "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error, "Error fetching user data by ID");
+  }
+}
+
+async function deleteUser(userId, token = null) {
+  try {
+    const response = await api.delete(`/users/${userId}`, {
+      headers: getAuthHeaders(token),
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error, "Error deleting user");
   }
 }
 
 async function fetchPlans() {
   try {
-    const response = await axios.get(`${BASE_URL}/plans`);
+    const response = await api.get("/plans");
     return response.data;
   } catch (error) {
-    console.error("Ошибка при загрузке планов:", error);
+    handleError(error, "Error fetching plans");
   }
 }
 
 async function login(email, password) {
-  const requestBody = {
-    email: email,
-    password: password,
-  };
   try {
-    const response = await axios.post(`${BASE_URL}/login`, requestBody, {
+    const requestBody = {
+      email,
+      password,
+    };
+    const response = await api.post("/login", requestBody);
+    return response.data;
+  } catch (error) {
+    handleError(error, "Error during login");
+  }
+}
+
+async function fetchActiveSubscriptionByToken(token = null) {
+  try {
+    const response = await api.get("/subscriptions/active/token", {
+      headers: getAuthHeaders(token),
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error, "Error fetching active subscription by token");
+  }
+}
+
+async function fetchActiveSubscriptionById(id, token = null) {
+  try {
+    const response = await api.get(`/subscriptions/active/${id}`, {
+      headers: getAuthHeaders(token),
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error, "Error fetching active subscription by ID");
+  }
+}
+
+async function createPlan(planData, token = null) {
+  try {
+    const response = await api.post("/plans", planData, {
       headers: {
+        ...getAuthHeaders(token),
         "Content-Type": "application/json",
       },
     });
-
-    // Return the response data
     return response.data;
   } catch (error) {
-    // Handle errors
-    throw new Error(
-      `Error during login: ${error.response?.data?.message || error.message}`
-    );
+    handleError(error, "Error creating plan");
   }
 }
 
-async function fetchActiveSubscriptionByToken(token) {
+async function deletePlan(planId, token = null) {
   try {
-    if (token == null) token = getAccessToken();
-    const response = await axios.get(`${BASE_URL}/subscriptions/active/token`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const response = await api.delete(`/plans/${planId}`, {
+      headers: getAuthHeaders(token),
     });
     return response.data;
   } catch (error) {
-    console.error(
-      "Ошибка при получении активной подписки пользователя:",
-      error
-    );
-    throw error;
+    handleError(error, "Error deleting plan");
   }
 }
 
-async function fetchUserSubscriptionsByToken(token) {
+async function fetchAllUsersInfo(token = null) {
   try {
-    if (token == null) token = getAccessToken();
-    const response = await axios.get(`${BASE_URL}/subscriptions/token`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    const response = await api.get("/users", {
+      headers: getAuthHeaders(token),
     });
     return response.data;
   } catch (error) {
-    console.error("Ошибка при получении подписок пользователя:", error);
-    throw error;
+    handleError(error, "Error fetching all users' info");
+  }
+}
+
+async function fetchUserSubscriptionsByToken(token = null) {
+  try {
+    const response = await api.get("/subscriptions/token", {
+      headers: getAuthHeaders(token),
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error, "Error fetching user's subscriptions by token");
+  }
+}
+
+async function fetchUserSubscriptionsById(id, token = null) {
+  try {
+    const response = await api.get(`/subscriptions/${id}`, {
+      headers: getAuthHeaders(token),
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error, "Error fetching user's subscriptions by ID");
+  }
+}
+
+async function deleteUserSubscriptionById(id, token = null) {
+  try {
+    const response = await api.delete(`/subscriptions/${id}`, {
+      headers: getAuthHeaders(token),
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error, "Error deleting user's subscription by ID");
   }
 }
 
@@ -95,125 +203,69 @@ async function generateClassDiagramByGithub(
   repoName,
   token = null
 ) {
-  if (token == null) token = getAccessToken();
-
-  const requestBody = {
-    pat: pat,
-    owner: author,
-    repoName: repoName,
-  };
-  const url = `${BASE_URL}/class-diagram/github`;
-
   try {
-    const response = await axios.post(url, requestBody, {
+    const requestBody = {
+      pat,
+      owner: author,
+      repoName,
+    };
+    const response = await api.post("/class-diagram/github", requestBody, {
       headers: {
+        ...getAuthHeaders(token),
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
     });
-
-    if (response.status === 200) {
-      return response.data; // Return JSON data
-    } else {
-      throw new Error(`HTTP error: ${response.status}`);
-    }
+    return response.data;
   } catch (error) {
-    console.error("Ошибка при генерации диаграммы классов:", error);
-    throw error;
+    handleError(error, "Error generating class diagram by GitHub");
   }
 }
 
 async function generateClassDiagramByFile(file, token = null) {
-  if (token == null) token = getAccessToken();
-
-  const requestBody = new FormData();
-  requestBody.append("file", file);
-  const url = `${BASE_URL}/class-diagram/zip-file`;
-
   try {
-    const response = await axios.post(url, requestBody, {
+    const requestBody = new FormData();
+    requestBody.append("file", file);
+    const response = await api.post("/class-diagram/zip-file", requestBody, {
       headers: {
+        ...getAuthHeaders(token),
         "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
       },
     });
-
-    if (response.status === 200) {
-      return response.data; // Return JSON data
-    } else {
-      throw new Error(`HTTP error: ${response.status}`);
-    }
+    return response.data;
   } catch (error) {
-    console.error("Ошибка при генерации диаграммы классов:", error);
-    throw error;
+    handleError(error, "Error generating class diagram by file");
   }
 }
 
 async function generateFlowChartByCode(code, token = null) {
-  if (token == null) token = getAccessToken();
-
-  const requestBody = JSON.stringify(code);
-  const url = `${BASE_URL}/flowchart`;
-
   try {
-    const response = await axios.post(url, requestBody, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+    const requestBody = JSON.stringify(code);
+    const response = await api.post("/flowchart", requestBody, {
+      headers: getAuthHeaders(token),
     });
-
-    if (response.status === 200) {
-      return response.data; // Return JSON data
-    } else {
-      throw new Error(`HTTP error: ${response.status}`);
-    }
+    return response.data;
   } catch (error) {
-    console.error("Ошибка при генерации блок-схемы:", error);
-    throw error;
+    handleError(error, "Error generating flow chart by code");
   }
 }
 
 async function refreshToken() {
   try {
-    // Получите текущие токены доступа и обновления из вашего хранилища
-    const accessToken = getAccessToken();
-    const refreshToken = getRefreshToken();
-
-    // Подготовьте тело запроса
     const requestBody = {
-      accessToken: accessToken,
-      refreshToken: refreshToken,
+      accessToken: getAccessToken(),
+      refreshToken: getRefreshToken(),
     };
-
-    // Отправьте запрос к маршруту `/refresh-token`
-    const response = await axios.post(
-      `${BASE_URL}/refresh-token`,
-      requestBody,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    // Если запрос прошел успешно, обновите токены в хранилище
+    const response = await api.post("/refresh-token", requestBody);
     if (response.status === 200) {
-      const newAccessToken = response.data.accessToken;
-      const newRefreshToken = response.data.refreshToken;
-
-      // Сохраните новые токены
-      setAccessToken(newAccessToken);
-      setRefreshToken(newRefreshToken);
-
-      // Верните новые токены, если нужно использовать их в дальнейшем
-      return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+      const { accessToken, refreshToken } = response.data;
+      setAccessToken(accessToken);
+      setRefreshToken(refreshToken);
+      return { accessToken, refreshToken };
     } else {
       throw new Error(`HTTP error: ${response.status}`);
     }
   } catch (error) {
-    console.error("Ошибка при обновлении токена:", error);
-    throw error;
+    handleError(error, "Error refreshing token");
   }
 }
 
@@ -222,28 +274,23 @@ const mutex = new Mutex();
 async function makeAuthenticatedRequest(requestFunction, ...args) {
   const release = await mutex.lock();
   try {
-    // Execute the request function with the given arguments
     const response = await requestFunction(...args);
     return response;
   } catch (error) {
     if (error.response && error.response.status === 401) {
-      console.log("Токен истёк, попытка обновить...");
+      console.log("Token expired, attempting refresh...");
       try {
-        // Try refreshing the token
         const tokens = await refreshToken();
-        const newAccessToken = tokens.accessToken;
-
-        // Retry the request with the new access token
         const updatedArgs = args.map((arg) =>
-          arg === null ? newAccessToken : arg
+          arg === null ? tokens.accessToken : arg
         );
         const response = await requestFunction(...updatedArgs);
         return response;
       } catch (refreshError) {
-        throw refreshError;
+        handleError(refreshError, "Error while refreshing token");
       }
     } else {
-      console.error("Ошибка при запросе:", error);
+      handleError(error, "Error during request");
     }
   } finally {
     release();
@@ -253,12 +300,21 @@ async function makeAuthenticatedRequest(requestFunction, ...args) {
 export {
   makeAuthenticatedRequest,
   getUserDataByToken,
+  getUserDataById,
   fetchPlans,
   login,
   fetchActiveSubscriptionByToken,
+  fetchActiveSubscriptionById,
+  createPlan,
+  deletePlan,
+  fetchAllUsersInfo,
   fetchUserSubscriptionsByToken,
+  fetchUserSubscriptionsById,
+  deleteUserSubscriptionById,
   generateClassDiagramByGithub,
   generateClassDiagramByFile,
   generateFlowChartByCode,
   refreshToken,
+  deleteUser,
+  createUser,
 };

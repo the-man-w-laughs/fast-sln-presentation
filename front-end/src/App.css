@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #121F3B;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -59,7 +59,7 @@
   /* Основной цвет */
   --secondary-color: #2ecc71;
   /* Второстепенный цвет */  
-  --text-color: #333;
+  --text-color: #121F3B;
   /* Цвет текста */
   --accent-color: #e74c3c;
   /* Акцентный цвет */
@@ -120,4 +120,12 @@
   /* Увеличение размера шрифта */
   font-weight: bold;
   /* Делает текст жирным */
+}
+
+footer {
+  margin-top: 50px;
+  background-color: #121F3B; /* Цвет фона футера */
+  color: white; /* Цвет текста в футере */
+  padding: 1rem; /* Отступы внутри футера */
+  text-align: center; /* Центрируем текст внутри футера */
 }

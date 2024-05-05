@@ -33,7 +33,7 @@ namespace FastSlnPresentation.Server.Controllers
         /// </summary>
         [Authorize(Roles = Roles.Admin)]
         [HttpPost]
-        public async Task<IActionResult> CreatePlan(PlanRequestDto planRequestDto)
+        public async Task<IActionResult> CreatePlan([FromBody] PlanRequestDto planRequestDto)
         {
             var createdPlan = await _planService.CreatePlan(planRequestDto);
             return Ok(createdPlan);

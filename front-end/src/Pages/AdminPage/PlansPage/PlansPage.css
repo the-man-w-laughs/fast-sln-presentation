@@ -1,0 +1,11 @@
+.plan-item {
+    width: 600px;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+.create-plan-form {
+    width: 400px;
+    /* Задайте желаемую ширину */
+    margin: 0 auto;
+    /* Центрируйте форму */
+}

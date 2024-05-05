@@ -1,0 +1,37 @@
+.user-item {
+    max-width: 600px;    
+    margin: 0 auto;      
+    margin-top: 10px;     
+}
+
+.btn-primary {
+    background-color: #6696c9;
+    /* Темный цвет фона */
+    color: white;
+    /* Цвет текста */
+    border-color: #6696c9;
+    /* Цвет границы */
+}
+
+/* Настройки для hover */
+.btn-primary:hover {
+    background-color: #496ab0;
+    /* Темнее при наведении */
+    border-color: #496ab0;
+}
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-info-row strong {
+    font-weight: bold;
+    margin-right: 5px;
+}

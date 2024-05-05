@@ -67,6 +67,16 @@ namespace FastSlnPresentation.BLL.Services.DBServices
                 );
             }
 
+            if (planRequestDto.Price == 0)
+            {
+                throw new ArgumentException("Цена плана не может быть нулевой.");
+            }
+
+            if (planRequestDto.Duration == 0)
+            {
+                throw new ArgumentException("Длительность плана не может быть нулевой.");
+            }
+
             var plan = _mapper.Map<Plan>(planRequestDto);
             _context.Plans.Add(plan);
             await _context.SaveChangesAsync();

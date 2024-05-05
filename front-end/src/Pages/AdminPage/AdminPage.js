@@ -6,18 +6,12 @@ import {
   faClipboardList,
   faRubleSign,
 } from "@fortawesome/free-solid-svg-icons";
+import UsersPage from "./UsersPage/UsersPage";
+import PlansPage from "./PlansPage/PlansPage";
 import { makeAuthenticatedRequest } from "../../Utils/ApiService";
 import "./AdminPage.css";
 
-function Users() {
-  return <div>Здесь будут пользователи</div>;
-}
-
-function Plans() {
-  return <div>Здесь будут планы</div>;
-}
-
-function AdminPage() {
+function AdminPage({ handleLogout }) {
   // Создаем состояние для отслеживания выбранной подстраницы
   const [selectedPage, setSelectedPage] = useState("users");
 
@@ -48,8 +42,12 @@ function AdminPage() {
 
         {/* Основное содержимое */}
         <Col md={10} className="p-3">
-          {selectedPage === "users" && <Users />}
-          {selectedPage === "plans" && <Plans />}
+          {selectedPage === "users" && (
+            <UsersPage handleLogout={handleLogout} />
+          )}
+          {selectedPage === "plans" && (
+            <PlansPage handleLogout={handleLogout} />
+          )}
         </Col>
       </Row>
     </Container>

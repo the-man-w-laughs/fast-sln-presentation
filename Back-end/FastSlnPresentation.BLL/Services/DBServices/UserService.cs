@@ -82,6 +82,13 @@ namespace FastSlnPresentation.BLL.Services.DBServices
                 throw new NotFoundException($"Пользователь с id {id} не найден.");
             }
 
+            if (user.Id == 1)
+            {
+                throw new InvalidOperationException(
+                    $"Невозможно удалить пользователя с id {user.Id}."
+                );
+            }
+
             bool hasActiveSubscriptions = user.Subscriptions.Any(
                 subscription =>
                     subscription.StartDate.Date <= DateTime.UtcNow.Date

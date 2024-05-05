@@ -103,7 +103,10 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/class-diagram-page" element={<ClassDiagramPage />} />
         <Route path="/flowchart-page" element={<FlowchartPage />} />
-        <Route path="/admin" element={<AdminPage />} />
+        <Route
+          path="/admin"
+          element={<AdminPage handleLogout={handleLogout} />}
+        />
         <Route
           path="/login"
           element={<LoginPage setUserInfo={setUserInfo} />}
@@ -112,8 +115,21 @@ function App() {
           path="/profile"
           element={<ProfilePage handleLogout={handleLogout} />}
         />
+        <Route
+          path="/profile/:id"
+          element={<ProfilePage handleLogout={handleLogout} />}
+        />
         <Route path="*" element={<DefaultPage />} />
       </Routes>
+      <footer
+        style={{
+          backgroundColor: "#121F3B",
+          color: "white",
+          padding: "1rem",
+        }}
+      >
+        <p style={{ textAlign: "center" }}>© 2024 fast-sln-presentation</p>
+      </footer>
     </Router>
   );
 }

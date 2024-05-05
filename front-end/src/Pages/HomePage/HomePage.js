@@ -109,15 +109,6 @@ const HomePage = () => {
           </section>
         </main>
       </div>
-      <footer
-        style={{
-          backgroundColor: "#121F3B",
-          color: "white",
-          padding: "1rem",
-        }}
-      >
-        <p style={{ textAlign: "center" }}>© 2024 fast-sln-presentation</p>
-      </footer>
     </>
   );
 };
