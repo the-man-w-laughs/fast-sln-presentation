@@ -15,6 +15,7 @@ import {
 import {
   generateClassDiagramByFile,
   generateClassDiagramByGithub,
+  makeAuthenticatedRequest,
 } from "../../Utils/ApiService";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import "./ClassDiagramPage.css"; // Import CSS file
@@ -42,9 +43,17 @@ const ClassDiagramPage = () => {
 
       // Вызываем соответствующую функцию на основе inputType
       if (inputType === "pat_author_repo") {
-        response = await generateClassDiagramByGithub(pat, author, repoName);
+        response = await makeAuthenticatedRequest(
+          generateClassDiagramByGithub,
+          pat,
+          author,
+          repoName
+        );
       } else if (inputType === "file") {
-        response = await generateClassDiagramByFile(file);
+        response = await makeAuthenticatedRequest(
+          generateClassDiagramByFile,
+          file
+        );
       } else {
         throw new Error("Invalid inputType provided.");
       }

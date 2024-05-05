@@ -5,6 +5,7 @@ import {
   getAccessToken,
   setUserInfo,
   getUserInfo,
+  setRefreshToken,
 } from "../../Utils/LocalStorage";
 import { useNavigate } from "react-router-dom";
 
@@ -28,9 +29,10 @@ function LoginPage({ setUserInfo }) {
       const data = await login(email, password);
 
       // Сохраняем access token в локальном хранилище
-      setAccessToken(data.access_token);
+      setAccessToken(data.accessToken);
+      setRefreshToken(data.refreshToken);
       setUserInfo(data.user);
-      console.log("Вход выполнен успешно! Токен доступа:", data.access_token);
+      console.log("Вход выполнен успешно! Токен доступа:", data.accessToken);
       navigate("/profile");
     } catch (error) {
       setError("Произошла ошибка во время процесса входа. Попробуйте еще раз.");

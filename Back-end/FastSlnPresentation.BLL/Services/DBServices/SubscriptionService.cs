@@ -82,36 +82,15 @@ namespace FastSlnPresentation.BLL.Services.DBServices
                 throw new NotFoundException($"Пользователь с id {userId} не найден.");
             }
 
-            Subscription oldestActiveSubscription = null;
-            var currentTime = DateTime.UtcNow.ToLocalTime();
-
-            foreach (var subscription in _context.Subscriptions)
-            {
-                if (
-                    subscription.UserId == userId
-                    && subscription.StartDate <= currentTime
-                    && subscription.EndDate >= currentTime
+            var oldestActiveSubscription = await _context.Subscriptions
+                .Where(
+                    s =>
+                        s.UserId == userId
+                        && s.StartDate <= DateTime.UtcNow.ToLocalTime()
+                        && s.EndDate >= DateTime.UtcNow.ToLocalTime()
                 )
-                {
-                    if (
-                        oldestActiveSubscription == null
-                        || subscription.StartDate < oldestActiveSubscription.StartDate
-                    )
-                    {
-                        oldestActiveSubscription = subscription;
-                    }
-                }
-            }
-
-            // var oldestActiveSubscription = await _context.Subscriptions
-            //     .Where(
-            //         s =>
-            //             s.UserId == userId
-            //             && s.StartDate <= DateTime.UtcNow.ToLocalTime()
-            //             && s.EndDate >= DateTime.UtcNow.ToLocalTime()
-            //     )
-            //     .OrderBy(s => s.StartDate)
-            //     .FirstOrDefaultAsync();
+                .OrderBy(s => s.StartDate)
+                .FirstOrDefaultAsync();
 
             if (oldestActiveSubscription == null)
             {

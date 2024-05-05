@@ -68,6 +68,27 @@ namespace FastSlnPresentation.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "refresh_tokens",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    token = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    user_id = table.Column<int>(type: "integer", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_refresh_tokens", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_refresh_tokens_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "user_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "subscriptions",
                 columns: table => new
                 {
@@ -108,7 +129,12 @@ namespace FastSlnPresentation.Server.Migrations
             migrationBuilder.InsertData(
                 table: "users",
                 columns: new[] { "user_id", "created_at", "email", "name", "passwork_hash", "role_id", "salt" },
-                values: new object[] { 1, new DateTime(2024, 5, 4, 0, 32, 8, 467, DateTimeKind.Local).AddTicks(5620), "admin@the.best", "Admin", "HLRRUBIYlZHPUSjuVrxsABJf0qNPlx1QrY2NAiQe3R4=", 1, "uaEEG8z/IIORewBrwWE13A==" });
+                values: new object[] { 1, new DateTime(2024, 5, 5, 15, 1, 45, 758, DateTimeKind.Local).AddTicks(4778), "admin@the.best", "Admin", "EDT5TDjkGQCnNkIDe9swaz/8vcnLCDtOh9iWKgkhX0o=", 1, "h1mePoXseh1tUryFXSiI6w==" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_refresh_tokens_user_id",
+                table: "refresh_tokens",
+                column: "user_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_subscriptions_plan_id",
@@ -135,6 +161,9 @@ namespace FastSlnPresentation.Server.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "refresh_tokens");
+
             migrationBuilder.DropTable(
                 name: "subscriptions");
 

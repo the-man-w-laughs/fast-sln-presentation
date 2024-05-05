@@ -16,5 +16,8 @@ namespace FastSlnPresentation.DAL.Models
         // Связь с подписками
         public virtual ICollection<Subscription> Subscriptions { get; set; } =
             new List<Subscription>();
+
+        public virtual ICollection<RefreshToken> RefreshTokens { get; set; } =
+            new List<RefreshToken>();
     }
 }

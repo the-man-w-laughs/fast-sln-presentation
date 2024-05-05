@@ -13,12 +13,13 @@ namespace FastSlnPresentation.DAL.DBContext
         public DbSet<Subscription> Subscriptions { get; set; }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public FastSlnPresentationDbContext(DbContextOptions<FastSlnPresentationDbContext> options)
             : base(options)
         {
             // Database.EnsureDeleted();
-            Database.EnsureCreated();
+            // Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

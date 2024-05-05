@@ -4,6 +4,7 @@ import {
   fetchUserSubscriptionsByToken,
   getUserDataByToken,
   fetchPlans,
+  makeAuthenticatedRequest,
 } from "../../Utils/ApiService";
 import { useNavigate } from "react-router-dom";
 import { getRoleStr } from "../../Utils/Roles";
@@ -36,15 +37,19 @@ function ProfilePage({ handleLogout }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userData = await getUserDataByToken();
+        const userData = await makeAuthenticatedRequest(getUserDataByToken);
         setUser(userData);
 
         // Получить активную подписку пользователя
-        const activeSub = await fetchActiveSubscriptionByToken();
+        const activeSub = await makeAuthenticatedRequest(
+          fetchActiveSubscriptionByToken
+        );
         setActiveSubscription(activeSub);
 
         // Получить все подписки пользователя
-        const userSubs = await fetchUserSubscriptionsByToken();
+        const userSubs = await makeAuthenticatedRequest(
+          fetchUserSubscriptionsByToken
+        );
         setSubscriptions(userSubs);
 
         // Получить список планов
@@ -52,6 +57,7 @@ function ProfilePage({ handleLogout }) {
         setPlans(planList);
       } catch (error) {
         console.error("Ошибка при загрузке данных:", error);
+        onLogout();
       } finally {
         setLoading(false);
       }
@@ -84,7 +90,12 @@ function ProfilePage({ handleLogout }) {
       <div className="row justify-content-center">
         <div className="col-md-8">
           <div className="card profile-card">
-            <div className="card-header text-center">
+            <div
+              className="card-header text-center"
+              style={{
+                backgroundColor: "#121F3B",
+              }}
+            >
               <h4 className="profile-header">Профиль</h4>
             </div>
             <div className="card-body">
@@ -104,7 +115,7 @@ function ProfilePage({ handleLogout }) {
                 <strong>
                   <FontAwesomeIcon icon={faClock} /> Дата создания:
                 </strong>{" "}
-                {new Date(user.createdAt).toLocaleString(locale)}
+                {new Date(user.createdAt).toLocaleDateString(locale)}
               </p>
               <p className="profile-info">
                 <strong>
@@ -141,7 +152,7 @@ function ProfilePage({ handleLogout }) {
                   </ul>
                 </div>
               ) : (
-                <div className="alert alert-warning" role="alert">
+                <div className="alert alert-danger" role="alert">
                   <FontAwesomeIcon icon={faExclamationTriangle} /> У
                   пользователя нет активных подписок.
                 </div>
@@ -181,7 +192,7 @@ function ProfilePage({ handleLogout }) {
                     </ul>
                   </div>
                 ) : (
-                  <div className="alert alert-info" role="alert">
+                  <div className="alert alert-danger" role="alert">
                     <FontAwesomeIcon icon={faList} /> У пользователя нет
                     подписок.
                   </div>

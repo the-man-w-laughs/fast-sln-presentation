@@ -17,6 +17,7 @@ namespace FastSlnPresentation.Server.Extensions
             services.AddTransient<UserService>();
             services.AddTransient<SubscriptionService>();
             services.AddTransient<PlanService>();
+            services.AddTransient<RefreshTokenService>();
 
             return services;
         }

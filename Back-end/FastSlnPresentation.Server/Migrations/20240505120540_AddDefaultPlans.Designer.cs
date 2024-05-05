@@ -3,6 +3,7 @@ using System;
 using FastSlnPresentation.DAL.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FastSlnPresentation.Server.Migrations
 {
     [DbContext(typeof(FastSlnPresentationDbContext))]
-    partial class FastSlnPresentationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240505120540_AddDefaultPlans")]
+    partial class AddDefaultPlans
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,7 +88,7 @@ namespace FastSlnPresentation.Server.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
                     b.Property<string>("Token")
@@ -229,12 +232,12 @@ namespace FastSlnPresentation.Server.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 5, 5, 17, 29, 29, 669, DateTimeKind.Local).AddTicks(184),
+                            CreatedAt = new DateTime(2024, 5, 5, 15, 5, 40, 491, DateTimeKind.Local).AddTicks(7300),
                             Email = "admin@the.best",
                             Name = "Admin",
-                            PasswordHash = "0+dhVcuwP29tJJ9Ja0MtBCQt5B791zvO1MKvi9Y+/kY=",
+                            PasswordHash = "1T7PcRihvH9uunaxv4YQS3675nKrgiytQGe0Q1tJpFA=",
                             RoleId = 1,
-                            Salt = "mYk/m7klzRm9DitqP7SWrA=="
+                            Salt = "SWihKZsAo+0rGKe2j0gSXw=="
                         });
                 });
 

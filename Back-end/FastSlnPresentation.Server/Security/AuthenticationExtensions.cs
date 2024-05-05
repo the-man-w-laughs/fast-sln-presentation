@@ -32,6 +32,7 @@ namespace FastSlnPresentation.Server.Security
                         ValidAudience = AuthOptions.AUDIENCE,
                         // Валидация времени существования токена
                         ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero,
                         // Установка ключа безопасности
                         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                         // Валидация ключа безопасности

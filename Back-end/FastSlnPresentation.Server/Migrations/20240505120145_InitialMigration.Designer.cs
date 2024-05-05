@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FastSlnPresentation.Server.Migrations
 {
     [DbContext(typeof(FastSlnPresentationDbContext))]
-    [Migration("20240503213208_InitialMigration")]
+    [Migration("20240505120145_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -58,6 +58,36 @@ namespace FastSlnPresentation.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("plans", (string)null);
+                });
+
+            modelBuilder.Entity("FastSlnPresentation.DAL.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("token");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("refresh_tokens", (string)null);
                 });
 
             modelBuilder.Entity("FastSlnPresentation.DAL.Models.Role", b =>
@@ -184,13 +214,24 @@ namespace FastSlnPresentation.Server.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2024, 5, 4, 0, 32, 8, 467, DateTimeKind.Local).AddTicks(5620),
+                            CreatedAt = new DateTime(2024, 5, 5, 15, 1, 45, 758, DateTimeKind.Local).AddTicks(4778),
                             Email = "admin@the.best",
                             Name = "Admin",
-                            PasswordHash = "HLRRUBIYlZHPUSjuVrxsABJf0qNPlx1QrY2NAiQe3R4=",
+                            PasswordHash = "EDT5TDjkGQCnNkIDe9swaz/8vcnLCDtOh9iWKgkhX0o=",
                             RoleId = 1,
-                            Salt = "uaEEG8z/IIORewBrwWE13A=="
+                            Salt = "h1mePoXseh1tUryFXSiI6w=="
                         });
+                });
+
+            modelBuilder.Entity("FastSlnPresentation.DAL.Models.RefreshToken", b =>
+                {
+                    b.HasOne("FastSlnPresentation.DAL.Models.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FastSlnPresentation.DAL.Models.Subscription", b =>
@@ -238,6 +279,8 @@ namespace FastSlnPresentation.Server.Migrations
 
             modelBuilder.Entity("FastSlnPresentation.DAL.Models.User", b =>
                 {
+                    b.Navigation("RefreshTokens");
+
                     b.Navigation("Subscriptions");
                 });
 #pragma warning restore 612, 618

@@ -24,7 +24,10 @@ import {
 
 import { Roles } from "./Utils/Roles";
 import { getAccessToken, getUserInfo } from "./Utils/LocalStorage";
-import { getUserDataByToken } from "./Utils/ApiService";
+import {
+  getUserDataByToken,
+  makeAuthenticatedRequest,
+} from "./Utils/ApiService";
 import { useEffect, useState } from "react";
 import "./App.css";
 import ProfilePage from "./Pages/ProfilePage/ProfilePage";
@@ -41,10 +44,10 @@ function App() {
   useEffect(() => {
     async function fetchUserData() {
       try {
-        const data = await getUserDataByToken();
+        const data = await makeAuthenticatedRequest(getUserDataByToken);
         setUserInfo(data);
       } catch {
-        setUserInfo(null);
+        handleLogout();
       }
     }
     fetchUserData();

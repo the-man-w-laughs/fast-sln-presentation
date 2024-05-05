@@ -7,7 +7,10 @@ import {
   faFileCode,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { generateFlowChartByCode } from "../../Utils/ApiService";
+import {
+  generateFlowChartByCode,
+  makeAuthenticatedRequest,
+} from "../../Utils/ApiService";
 
 import FlowchartLayout from "../../components/HardComponents/Layout/FlowchartLayout";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -34,7 +37,10 @@ const FlowchartPage = () => {
     setLoading(true);
 
     try {
-      const response = await generateFlowChartByCode(code);
+      const response = await makeAuthenticatedRequest(
+        generateFlowChartByCode,
+        code
+      );
 
       const { initialNodes, initialEdges } = response;
       setInitialNodes(initialNodes);
