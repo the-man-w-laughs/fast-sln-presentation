@@ -14,9 +14,17 @@ const Plans = () => {
 
   useEffect(() => {
     async function loadPlans() {
-      const plansData = await fetchPlans();
-      if (plansData) {
-        setPlans(plansData);
+      try {
+        const plansData = await fetchPlans();
+
+        if (plansData) {
+          setPlans(plansData);
+        } else {
+          console.warn("No plans data found.");
+        }
+      } catch (error) {
+        console.error("Error fetching plans data:", error);
+      } finally {
       }
     }
 

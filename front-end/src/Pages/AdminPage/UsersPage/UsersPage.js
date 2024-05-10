@@ -257,6 +257,12 @@ function UsersPage({ handleLogout }) {
               <div className="profile-info">
                 <div className="profile-info-row">
                   <strong>
+                    <FontAwesomeIcon icon={faIdCard} /> ID:
+                  </strong>
+                  <span>{user.id}</span>
+                </div>
+                <div className="profile-info-row">
+                  <strong>
                     <FontAwesomeIcon icon={faUser} /> Имя:
                   </strong>
                   <span>{user.name}</span>

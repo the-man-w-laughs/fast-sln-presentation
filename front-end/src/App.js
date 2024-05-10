@@ -55,10 +55,13 @@ function App() {
 
   return (
     <Router>
-      <Navbar bg="light" expand="lg">
+      <Navbar bg="light" expand="lg" style={{ padding: "0px" }}>
         <Navbar.Brand href="/home" className="custom-brand header">
-          <FontAwesomeIcon icon={faRocket} className="me-2" />
-          fast-sln-presentation
+          <img
+            src="/CSharpGraph.svg"
+            alt="Rocket Icon"
+            style={{ height: "60px" }} // Adjust size as needed
+          />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -77,7 +80,7 @@ function App() {
             )}
           </Nav>
           <Nav className="ms-auto">
-            {userInfo && userInfo.RoleId === Roles.ADMIN && (
+            {userInfo && userInfo.roleId === Roles.ADMINISTRATOR && (
               <Nav.Link href="/admin" className="margin-right-5">
                 <FontAwesomeIcon icon={faWrench} className="me-2" />
                 Администратор

@@ -11,6 +11,7 @@ import {
   fetchUserSubscriptionsById,
   deleteUserSubscriptionById,
   deleteUser,
+  createSubscription,
 } from "../../Utils/ApiService";
 import { useNavigate } from "react-router-dom";
 import { getRoleStr } from "../../Utils/Roles";
@@ -24,13 +25,15 @@ import {
   faList,
   faExclamationTriangle,
   faCalendarAlt,
-  faInfoCircle,
   faTags,
   faTrashAlt,
+  faPlusCircle,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
+import { Button, Modal, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./ProfilePage.css"; // Подключите файл стилей для страницы профиля
+import "./ProfilePage.css";
 
 const locale = "ru-RU";
 
@@ -40,7 +43,15 @@ function ProfilePage({ handleLogout }) {
   const [loading, setLoading] = useState(true);
   const [activeSubscription, setActiveSubscription] = useState(null);
   const [subscriptions, setSubscriptions] = useState([]);
-  const [plans, setPlans] = useState([]); // Состояние для хранения списка планов
+  const [plans, setPlans] = useState([]);
+
+  // State for modal and form data
+  const [showModal, setShowModal] = useState(false);
+  const [newSubscription, setNewSubscription] = useState({
+    planId: "",
+    startDate: "",
+  });
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -90,10 +101,55 @@ function ProfilePage({ handleLogout }) {
     fetchData();
   }, [id]);
 
-  // Функция для получения названия плана по его ID
-  const getPlanNameById = (planId) => {
-    const plan = plans.find((p) => p.id === planId);
-    return plan ? plan.name : "Название плана не найдено";
+  // Function to handle form input changes
+  const handleFormChange = (event) => {
+    const { name, value } = event.target;
+    setNewSubscription({
+      ...newSubscription,
+      [name]: value,
+    });
+  };
+
+  // Function to handle form submission
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const createdSubscription = await makeAuthenticatedRequest(
+        createSubscription,
+        {
+          userId: user.id,
+          planId: newSubscription.planId,
+          startDate: new Date(newSubscription.startDate),
+        }
+      );
+
+      // Update state with new subscription
+      setSubscriptions((prevSubscriptions) => [
+        ...prevSubscriptions,
+        createdSubscription,
+      ]);
+
+      // Close modal and reset form
+      setShowModal(false);
+      setNewSubscription({ planId: "", startDate: "" });
+      const activeSub = await makeAuthenticatedRequest(
+        fetchActiveSubscriptionById,
+        id
+      ).catch(() => {});
+      setActiveSubscription(activeSub);
+
+      Swal.fire({
+        icon: "success",
+        title: "Подписка успешно создана!",
+      });
+    } catch (error) {
+      console.error("Ошибка при создании подписки:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Ошибка",
+        text: "Не удалось создать подписку. Пожалуйста, попробуйте позже.",
+      });
+    }
   };
 
   const onLogout = async () => {
@@ -106,7 +162,6 @@ function ProfilePage({ handleLogout }) {
       cancelButtonText: "Отмена",
     });
 
-    // Если пользователь подтвердил выход, вызываем функцию handleLogout и переходим на домашнюю страницу
     if (result.isConfirmed) {
       handleLogout();
       navigate("/home");
@@ -139,7 +194,7 @@ function ProfilePage({ handleLogout }) {
         const activeSub = await makeAuthenticatedRequest(
           fetchActiveSubscriptionById,
           id
-        );
+        ).catch(() => {});
         setActiveSubscription(activeSub);
 
         Swal.fire("Удалено!", "Подписка была успешно удалена.", "success");
@@ -170,7 +225,7 @@ function ProfilePage({ handleLogout }) {
 
         if (deletedUser) {
           Swal.fire("Удалено!", "Пользователь был успешно удален.", "success");
-          navigate("/admin"); // Перенаправить на домашнюю страницу после удаления
+          navigate("/admin");
         } else {
           throw new Error("Ошибка при удалении пользователя!");
         }
@@ -185,6 +240,68 @@ function ProfilePage({ handleLogout }) {
     }
   };
 
+  // Function to get the plan name by its ID
+  const getPlanNameById = (planId) => {
+    const plan = plans.find((p) => p.id === planId);
+    return plan ? plan.name : "Название плана не найдено";
+  };
+
+  // Modal for creating a new subscription
+  const renderModal = (
+    <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+      <Modal.Header closeButton>
+        <Modal.Title className="w-100 text-center">
+          Создать подписку
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleFormSubmit}>
+          <Form.Group controlId="planId">
+            <label>
+              <FontAwesomeIcon icon={faList} style={{ marginRight: "5px" }} />
+              Выберите план:
+            </label>
+            <Form.Control
+              as="select"
+              name="planId"
+              value={newSubscription.planId}
+              onChange={handleFormChange}
+              required
+            >
+              <option value="">Выберите план...</option>
+              {plans.map((plan) => (
+                <option key={plan.id} value={plan.id}>
+                  {plan.name}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+          <Form.Group controlId="startDate">
+            <label>
+              <FontAwesomeIcon
+                icon={faCalendarAlt}
+                style={{ marginRight: "5px" }}
+              />
+              Дата начала:
+            </label>
+            <Form.Control
+              type="date"
+              name="startDate"
+              value={newSubscription.startDate}
+              onChange={handleFormChange}
+              required
+            />
+          </Form.Group>
+          <div className="form-group text-center" style={{ marginTop: "15px" }}>
+            <Button variant="primary" type="submit">
+              Создать подписку
+            </Button>
+          </div>
+        </Form>
+      </Modal.Body>
+    </Modal>
+  );
+
   if (loading) {
     return <p>Загрузка данных...</p>;
   }
@@ -195,6 +312,8 @@ function ProfilePage({ handleLogout }) {
 
   return (
     <div className="container profile-container">
+      {renderModal}
+
       <div className="row justify-content-center">
         <div className="col-md-8">
           <div className="card profile-card">
@@ -205,9 +324,17 @@ function ProfilePage({ handleLogout }) {
               <h4 className="profile-header">Профиль</h4>
             </div>
             <div className="card-body">
+              {user.id !== null && (
+                <p>
+                  <strong>
+                    <FontAwesomeIcon icon={faIdCard} /> ID:
+                  </strong>{" "}
+                  {user.id}
+                </p>
+              )}
               <p>
                 <strong>
-                  <FontAwesomeIcon icon={faUser} /> Имя:{" "}
+                  <FontAwesomeIcon icon={faUser} /> Имя:
                 </strong>{" "}
                 {user.name}
               </p>
@@ -265,7 +392,23 @@ function ProfilePage({ handleLogout }) {
               )}
               <hr />
               <div className="all-subscriptions mt-4">
-                <h5 className="profile-subtitle text-center">Все подписки</h5>
+                <div className="text-center">
+                  <h5 className="profile-subtitle text-center">Все подписки</h5>
+                  {id != null && (
+                    <Button
+                      variant="primary"
+                      onClick={() => setShowModal(true)}
+                      style={{ marginBottom: "10px" }}
+                    >
+                      <FontAwesomeIcon
+                        icon={faPlusCircle}
+                        style={{ marginRight: "8px" }}
+                      />
+                      Создать
+                    </Button>
+                  )}
+                </div>
+
                 {subscriptions && subscriptions.length > 0 ? (
                   <div style={{ maxHeight: "300px", overflowY: "scroll" }}>
                     <ul className="list-group list-group-flush">

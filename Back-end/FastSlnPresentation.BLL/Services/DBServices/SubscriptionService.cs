@@ -43,7 +43,8 @@ namespace FastSlnPresentation.BLL.Services.DBServices
             }
 
             var subscription = _mapper.Map<Subscription>(subscriptionRequestDto);
-            subscription.EndDate = subscription.StartDate.AddDays(plan.Duration);
+            subscription.StartDate = subscriptionRequestDto.StartDate.ToLocalTime();
+            subscription.EndDate = subscription.StartDate.AddDays(plan.Duration).ToLocalTime();
             subscription.CreatedAt = DateTime.UtcNow.ToLocalTime();
 
             _context.Subscriptions.Add(subscription);
@@ -82,15 +83,33 @@ namespace FastSlnPresentation.BLL.Services.DBServices
                 throw new NotFoundException($"Пользователь с id {userId} не найден.");
             }
 
-            var oldestActiveSubscription = await _context.Subscriptions
-                .Where(
-                    s =>
-                        s.UserId == userId
-                        && s.StartDate <= DateTime.UtcNow.ToLocalTime()
-                        && s.EndDate >= DateTime.UtcNow.ToLocalTime()
+            var oldestActiveSubscription = default(Subscription);
+            var subscriptions = await _context.Subscriptions
+                .Where(s => s.UserId == userId)
+                .ToListAsync();
+
+            DateTime currentDate = DateTime.UtcNow.ToLocalTime().Date;
+            foreach (var subscription in subscriptions)
+            {
+                if (
+                    subscription.StartDate.Date <= currentDate
+                    && subscription.EndDate.Date >= currentDate
                 )
-                .OrderBy(s => s.StartDate)
-                .FirstOrDefaultAsync();
+                {
+                    if (oldestActiveSubscription == null)
+                    {
+                        oldestActiveSubscription = subscription;
+                    }
+                    else
+                    {
+                        // Update the oldestActiveSubscription if the current subscription is older
+                        if (subscription.StartDate < oldestActiveSubscription.StartDate)
+                        {
+                            oldestActiveSubscription = subscription;
+                        }
+                    }
+                }
+            }
 
             if (oldestActiveSubscription == null)
             {

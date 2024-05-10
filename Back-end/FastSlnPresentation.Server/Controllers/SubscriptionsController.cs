@@ -29,7 +29,7 @@ namespace FastSlnPresentation.Server.Controllers
         [Authorize(Roles = Roles.Admin)]
         [HttpPost("")]
         public async Task<IActionResult> CreateSubscription(
-            SubscriptionRequestDto subscriptionRequestDto
+            [FromBody] SubscriptionRequestDto subscriptionRequestDto
         )
         {
             var activeSubscription = await _subscriptionService.CreateSubscription(

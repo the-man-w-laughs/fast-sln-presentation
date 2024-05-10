@@ -164,6 +164,20 @@ async function fetchAllUsersInfo(token = null) {
   }
 }
 
+async function createSubscription(subscriptionData, token = null) {
+  try {
+    const response = await api.post("/subscriptions", subscriptionData, {
+      headers: {
+        ...getAuthHeaders(token),
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error, "Error creating plan");
+  }
+}
+
 async function fetchUserSubscriptionsByToken(token = null) {
   try {
     const response = await api.get("/subscriptions/token", {
@@ -317,4 +331,5 @@ export {
   refreshToken,
   deleteUser,
   createUser,
+  createSubscription,
 };
