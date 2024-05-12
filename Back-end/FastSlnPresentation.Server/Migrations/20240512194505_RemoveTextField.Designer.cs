@@ -3,6 +3,7 @@ using System;
 using FastSlnPresentation.DAL.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FastSlnPresentation.Server.Migrations
 {
     [DbContext(typeof(FastSlnPresentationDbContext))]
-    partial class FastSlnPresentationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240512194505_RemoveTextField")]
+    partial class RemoveTextField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

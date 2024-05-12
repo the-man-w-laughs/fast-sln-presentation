@@ -14,9 +14,13 @@ namespace FastSlnPresentation.DAL.ModelsConfiguration
 
             entity.Property(e => e.Id).HasColumnName("plan_id");
             entity.Property(e => e.Name).HasMaxLength(100).HasColumnName("name");
-            entity.Property(e => e.Price).HasColumnType("decimal(18,2)").HasColumnName("price");
+            entity.Property(e => e.Price).HasColumnType("decimal(10,2)").HasColumnName("price");
             entity.Property(e => e.Duration).HasColumnName("duration");
-            entity.Property(e => e.Description).HasColumnName("description").IsRequired(false);
+            entity
+                .Property(e => e.Description)
+                .HasColumnName("description")
+                .HasMaxLength(1024)
+                .IsRequired(false);
         }
     }
 }
