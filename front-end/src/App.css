@@ -127,5 +127,6 @@ footer {
   background-color: #121F3B; /* Цвет фона футера */
   color: white; /* Цвет текста в футере */
   padding: 1rem; /* Отступы внутри футера */
-  text-align: center; /* Центрируем текст внутри футера */
+  text-align: center; /* Центрируем текст внутри футера */  
 }
+

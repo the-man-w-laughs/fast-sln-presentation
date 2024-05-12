@@ -15,10 +15,7 @@ namespace FastSlnPresentation.Server.Extensions
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 option.IncludeXmlComments(xmlPath);
 
-                option.SwaggerDoc(
-                    "v1",
-                    new OpenApiInfo { Title = "fast-sln-presentation API", Version = "v1" }
-                );
+                option.SwaggerDoc("v1", new OpenApiInfo { Title = "C#Graph API", Version = "v1" });
                 option.AddSecurityDefinition(
                     "Bearer",
                     new OpenApiSecurityScheme

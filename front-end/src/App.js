@@ -54,86 +54,91 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <Navbar bg="light" expand="lg" style={{ padding: "0px" }}>
-        <Navbar.Brand href="/home" className="custom-brand header">
-          <img
-            src="/CSharpGraph.svg"
-            alt="Rocket Icon"
-            style={{ height: "60px" }} // Adjust size as needed
+    <body
+      style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
+    >
+      <Router>
+        <Navbar bg="light" expand="lg" style={{ padding: "0px" }}>
+          <Navbar.Brand href="/home" className="custom-brand header">
+            <img
+              src="/CSharpGraph.svg"
+              alt="Rocket Icon"
+              style={{ height: "60px" }} // Adjust size as needed
+            />
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+              {userInfo && (
+                <>
+                  <Nav.Link href="/class-diagram-page">
+                    <FontAwesomeIcon icon={faProjectDiagram} className="me-2" />
+                    Диаграмма классов
+                  </Nav.Link>
+                  <Nav.Link href="/flowchart-page">
+                    <FontAwesomeIcon icon={faSitemap} className="me-2" />
+                    Блок-схема
+                  </Nav.Link>
+                </>
+              )}
+            </Nav>
+            <Nav className="ms-auto">
+              {userInfo && userInfo.roleId === Roles.ADMINISTRATOR && (
+                <Nav.Link href="/admin" className="margin-right-5">
+                  <FontAwesomeIcon icon={faWrench} className="me-2" />
+                  Администратор
+                </Nav.Link>
+              )}
+              {userInfo && (
+                <Nav.Link href="/profile" className="margin-right-5">
+                  <FontAwesomeIcon icon={faUser} className="me-2" />
+                  {userInfo.name}
+                </Nav.Link>
+              )}
+              {userInfo == null && (
+                <Nav.Link href="/login" className="margin-right-5">
+                  <FontAwesomeIcon icon={faSignInAlt} className="me-2" />
+                  Войти
+                </Nav.Link>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/class-diagram-page" element={<ClassDiagramPage />} />
+          <Route path="/flowchart-page" element={<FlowchartPage />} />
+          <Route
+            path="/admin"
+            element={<AdminPage handleLogout={handleLogout} />}
           />
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-            {userInfo && (
-              <>
-                <Nav.Link href="/class-diagram-page">
-                  <FontAwesomeIcon icon={faProjectDiagram} className="me-2" />
-                  Диаграмма классов
-                </Nav.Link>
-                <Nav.Link href="/flowchart-page">
-                  <FontAwesomeIcon icon={faSitemap} className="me-2" />
-                  Блок-схема
-                </Nav.Link>
-              </>
-            )}
-          </Nav>
-          <Nav className="ms-auto">
-            {userInfo && userInfo.roleId === Roles.ADMINISTRATOR && (
-              <Nav.Link href="/admin" className="margin-right-5">
-                <FontAwesomeIcon icon={faWrench} className="me-2" />
-                Администратор
-              </Nav.Link>
-            )}
-            {userInfo && (
-              <Nav.Link href="/profile" className="margin-right-5">
-                <FontAwesomeIcon icon={faUser} className="me-2" />
-                {userInfo.name}
-              </Nav.Link>
-            )}
-            {userInfo == null && (
-              <Nav.Link href="/login" className="margin-right-5">
-                <FontAwesomeIcon icon={faSignInAlt} className="me-2" />
-                Войти
-              </Nav.Link>
-            )}
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/class-diagram-page" element={<ClassDiagramPage />} />
-        <Route path="/flowchart-page" element={<FlowchartPage />} />
-        <Route
-          path="/admin"
-          element={<AdminPage handleLogout={handleLogout} />}
-        />
-        <Route
-          path="/login"
-          element={<LoginPage setUserInfo={setUserInfo} />}
-        />
-        <Route
-          path="/profile"
-          element={<ProfilePage handleLogout={handleLogout} />}
-        />
-        <Route
-          path="/profile/:id"
-          element={<ProfilePage handleLogout={handleLogout} />}
-        />
-        <Route path="*" element={<DefaultPage />} />
-      </Routes>
-      <footer
-        style={{
-          backgroundColor: "#121F3B",
-          color: "white",
-          padding: "1rem",
-        }}
-      >
-        <p style={{ textAlign: "center" }}>© 2024 fast-sln-presentation</p>
-      </footer>
-    </Router>
+          <Route
+            path="/login"
+            element={<LoginPage setUserInfo={setUserInfo} />}
+          />
+          <Route
+            path="/profile"
+            element={<ProfilePage handleLogout={handleLogout} />}
+          />
+          <Route
+            path="/profile/:id"
+            element={<ProfilePage handleLogout={handleLogout} />}
+          />
+          <Route path="*" element={<DefaultPage />} />
+        </Routes>
+        <footer
+          style={{
+            backgroundColor: "#121F3B",
+            color: "white",
+            padding: "1rem",
+            marginTop: "auto",
+          }}
+        >
+          <p style={{ textAlign: "center" }}>© 2024 CSharpGraph</p>
+        </footer>
+      </Router>
+    </body>
   );
 }
 
