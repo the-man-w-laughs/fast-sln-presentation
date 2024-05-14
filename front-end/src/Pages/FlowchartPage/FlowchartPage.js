@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Swal from "sweetalert2";
 import {
@@ -17,6 +17,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./FlowchartPage.css";
 
 const FlowchartPage = () => {
+  const childRef = useRef();
+  const [refresh, doRefresh] = useState(0);
   const [code, setCode] = useState("");
   const [initialNodes, setInitialNodes] = useState([]);
   const [initialEdges, setInitialEdges] = useState([]);
@@ -45,6 +47,7 @@ const FlowchartPage = () => {
       const { initialNodes, initialEdges } = response;
       setInitialNodes(initialNodes);
       setInitialEdges(initialEdges);
+      doRefresh((prev) => prev + 1);
       console.log("Successfully updated initial nodes and edges");
     } catch (error) {
       console.error("Error submitting code:", error);
@@ -146,6 +149,8 @@ const FlowchartPage = () => {
         </form>
         <div className="col-md-8">
           <FlowchartLayout
+            refresh={refresh}
+            ref={childRef}
             initialNodes={initialNodes}
             initialEdges={initialEdges}
           />

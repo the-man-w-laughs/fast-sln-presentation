@@ -30,8 +30,9 @@ import InheritanceEdge from "../Edges/InheritanceEdge.js";
 import AggregationEdge from "../Edges/AggregationEdge.js";
 import CompositonEdge from "../Edges/CompositonEdge.js";
 import AssociationEdge from "../Edges/AssociationEdge.js";
+import DownloadButton from "../DownloadButton.js";
 
-const minZoom = 0.1;
+const minZoom = 0.01;
 const maxZoom = 1000;
 
 const elk = new ELK();
@@ -87,6 +88,7 @@ const minimapStyle = {
 function LayoutFlow({ initialNodes, initialEdges }) {
   const { fitView } = useReactFlow();
 
+  const [updateGraph, setupdateGraph] = useState(0);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
@@ -108,7 +110,17 @@ function LayoutFlow({ initialNodes, initialEdges }) {
     }));
     setNodes(nodesWithPosition);
     setEdges(initialEdges);
+    setTimeout(() => setupdateGraph((value) => value + 1), 250);
   }, [initialNodes, initialEdges]);
+
+  const autoLayout = useCallback(() => {
+    onLayout();
+    setTimeout(() => fitView(), 750);
+  }, [onLayout, fitView]);
+
+  useEffect(() => {
+    setTimeout(() => autoLayout(), 250);
+  }, [updateGraph]);
 
   return (
     <>
@@ -129,10 +141,11 @@ function LayoutFlow({ initialNodes, initialEdges }) {
           className="position-absolute bottom-0 start-0"
           style={{ paddingLeft: "2rem" }}
         >
-          <button className="btn btn-primary" onClick={() => onLayout()}>
+          <button className="btn btn-primary me-2" onClick={() => autoLayout()}>
             <FontAwesomeIcon icon={faCompressArrowsAlt} className="me-2" />
             Группировать
           </button>
+          <DownloadButton></DownloadButton>
         </Panel>
         <MiniMap style={minimapStyle} zoomable pannable />
         <Controls />

@@ -1,5 +1,10 @@
 import ELK from "elkjs/lib/elk.bundled.js";
-import React, { useCallback, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useImperativeHandle,
+} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCompressArrowsAlt } from "@fortawesome/free-solid-svg-icons";
 import ReactFlow, {
@@ -23,6 +28,7 @@ import "./overview.css";
 
 import Markers from "../Markers/Markers.js";
 import ArrowEdge from "../Edges/ArrowEdge.js";
+import DownloadButton from "../DownloadButton.js";
 
 const nodeTypes = {
   blockNode: BlockNode,
@@ -75,9 +81,10 @@ const getLayoutedElements = async (nodes, edges, options = {}) => {
   }
 };
 
-function LayoutFlow({ initialNodes, initialEdges }) {
+function LayoutFlow({ initialNodes, initialEdges, ref, refresh }) {
   const { fitView } = useReactFlow();
 
+  const [updateGraph, setupdateGraph] = useState(0);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
@@ -90,20 +97,35 @@ function LayoutFlow({ initialNodes, initialEdges }) {
     );
   }, [nodes, edges]);
 
+  const autoLayout = useCallback(() => {
+    onLayout();
+    setTimeout(() => fitView(), 500);
+  }, [onLayout, fitView]);
+
+  useEffect(() => {
+    //onLayout();
+  }, [refresh]);
+
   useEffect(() => {
     var nodesWithPosition = initialNodes.map((node) => ({
       ...node,
       position: { x: 0, y: 0 },
     }));
+
     setNodes(nodesWithPosition);
     setEdges(initialEdges);
+
+    setTimeout(() => setupdateGraph((value) => value + 1), 250);
   }, [initialNodes, initialEdges]);
+
+  useEffect(() => {
+    setTimeout(() => autoLayout(), 250);
+  }, [updateGraph]);
 
   const onConnect = useCallback((params) => console.log("onConnect"), []);
 
   return (
     <>
-      <Markers></Markers>
       <ReactFlow
         minZoom={minZoom}
         maxZoom={maxZoom}
@@ -116,14 +138,16 @@ function LayoutFlow({ initialNodes, initialEdges }) {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
       >
+        <Markers></Markers>
         <Panel
           className="position-absolute bottom-0 start-0"
           style={{ paddingLeft: "2rem" }}
         >
-          <button className="btn btn-primary" onClick={() => onLayout()}>
+          <button className="btn btn-primary me-2" onClick={() => autoLayout()}>
             <FontAwesomeIcon icon={faCompressArrowsAlt} className="me-2" />
             Группировать
           </button>
+          <DownloadButton />
         </Panel>
         <MiniMap style={minimapStyle} zoomable pannable />
         <Controls />
@@ -132,11 +156,16 @@ function LayoutFlow({ initialNodes, initialEdges }) {
   );
 }
 
-const FlowchartLayout = ({ initialNodes, initialEdges }) => {
+const FlowchartLayout = ({ initialNodes, initialEdges, childRef, refresh }) => {
   return (
     <ReactFlowProvider>
       <div className="flowchart-layout">
-        <LayoutFlow initialEdges={initialEdges} initialNodes={initialNodes} />
+        <LayoutFlow
+          initialEdges={initialEdges}
+          initialNodes={initialNodes}
+          refresh={refresh}
+          ref={childRef}
+        />
       </div>
     </ReactFlowProvider>
   );

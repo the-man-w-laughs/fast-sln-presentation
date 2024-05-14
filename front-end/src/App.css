@@ -130,3 +130,7 @@ footer {
   text-align: center; /* Центрируем текст внутри футера */  
 }
 
+.custom-navbar {
+  border-bottom: 1px solid #ccc;
+  /* Цвет и стиль границы можно настроить по вашему усмотрению */
+}

@@ -58,7 +58,12 @@ function App() {
       style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
     >
       <Router>
-        <Navbar bg="light" expand="lg" style={{ padding: "0px" }}>
+        <Navbar
+          bg="light"
+          expand="lg"
+          style={{ padding: "0px" }}
+          className="custom-navbar"
+        >
           <Navbar.Brand href="/home" className="custom-brand header">
             <img
               src="/CSharpGraph.svg"

@@ -60,7 +60,7 @@ public class ClassAnalysisService : IClassAnalysisService
 
         var nonExistingSourcesAndTargets = nonExistingSources.Concat(nonExistingTargets).ToList();
 
-        string filePath = "/home/nazar/Documents/zalupa0-1.txt";
+        string filePath = "/home/nazar/Documents/nonExistingSourcesAndTargets.txt";
 
         // Write the strings to the file
         File.WriteAllLines(filePath, nonExistingSourcesAndTargets);
