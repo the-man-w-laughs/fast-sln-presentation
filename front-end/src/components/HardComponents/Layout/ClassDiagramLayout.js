@@ -1,6 +1,6 @@
-import ELK from "elkjs/lib/elk.bundled.js";
-import React, { useCallback, useEffect, useState } from "react";
-import ReactFlow, {
+import ELK from "elkjs/lib/elk.bundled.js"; // Подключение библиотеки ELK для автоматического размещения элементов на диаграмме
+import React, { useCallback, useEffect, useState } from "react"; // Подключение React и необходимых хуков
+import ReactFlow, { // Подключение ReactFlow и его компонентов
   ReactFlowProvider,
   Panel,
   useNodesState,
@@ -10,13 +10,14 @@ import ReactFlow, {
   Controls,
 } from "reactflow";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCompressArrowsAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Подключение FontAwesome для использования иконок
+import { faCompressArrowsAlt } from "@fortawesome/free-solid-svg-icons"; // Иконка для кнопки сжатия диаграммы
 
-import "reactflow/dist/style.css";
-import "../Nodes/ClassDiagram/ClassDiagramNodes.css";
-import "./overview.css";
+import "reactflow/dist/style.css"; // Стили для ReactFlow
+import "../Nodes/ClassDiagram/ClassDiagramNodes.css"; // Стили для узлов диаграммы классов
+import "./overview.css"; // Стили для обзора
 
+// Подключение компонентов для узлов диаграммы классов
 import ClassNode from "../Nodes/ClassDiagram/ClassNode/ClassNode.js";
 import EnumNode from "../Nodes/ClassDiagram/EnumNode/EnumNode.js";
 import InterfaceNode from "../Nodes/ClassDiagram/InterfaceNode/InterfaceNode.js";
@@ -24,24 +25,26 @@ import StructNode from "../Nodes/ClassDiagram/StructNode/StructNode.js";
 import RecordNode from "../Nodes/ClassDiagram/RecordNode/RecordNode.js";
 import DelegateNode from "../Nodes/ClassDiagram/DelegateNode/DelegateNode.js";
 
+// Подключение компонентов для рёбер диаграммы классов
 import ImplementationEdge from "../Edges/ImplementationEdge.js";
-import Markers from "../Markers/Markers.js";
+import Markers from "../Markers/Markers.js"; // Компоненты для маркеров рёбер
 import InheritanceEdge from "../Edges/InheritanceEdge.js";
 import AggregationEdge from "../Edges/AggregationEdge.js";
 import CompositonEdge from "../Edges/CompositonEdge.js";
 import AssociationEdge from "../Edges/AssociationEdge.js";
 
-const minZoom = 0.1;
-const maxZoom = 1000;
+const minZoom = 0.1; // Минимальное увеличение
+const maxZoom = 1000; // Максимальное увеличение
 
-const elk = new ELK();
+const elk = new ELK(); // Создание экземпляра ELK для автоматического размещения элементов на диаграмме
 
 const elkOptions = {
-  "elk.algorithm": "org.eclipse.elk.force",
-  "org.eclipse.elk.disco.componentCompaction.componentLayoutAlgorithm": "box",
-  // "elk.direction": "DOWN",
+  "elk.algorithm": "org.eclipse.elk.force", // Алгоритм размещения элементов
+  "org.eclipse.elk.disco.componentCompaction.componentLayoutAlgorithm": "box", // Алгоритм компактной компоновки
+  // "elk.direction": "DOWN", // Направление размещения
 };
 
+// Функция для получения размещенных элементов на диаграмме
 const getLayoutedElements = (nodes, edges, options = {}) => {
   const graph = {
     id: "root",
@@ -57,12 +60,12 @@ const getLayoutedElements = (nodes, edges, options = {}) => {
         ...node,
         position: { x: node.x, y: node.y },
       })),
-
       edges: layoutedGraph.edges,
     }))
     .catch(console.error);
 };
 
+// Типы узлов на диаграмме
 const nodeTypes = {
   classNode: ClassNode,
   interfaceNode: InterfaceNode,
@@ -72,6 +75,7 @@ const nodeTypes = {
   delegateNode: DelegateNode,
 };
 
+// Типы рёбер на диаграмме
 const edgeTypes = {
   implementation: ImplementationEdge,
   inheritance: InheritanceEdge,
@@ -80,10 +84,12 @@ const edgeTypes = {
   association: AssociationEdge,
 };
 
+// Стили для мини-карты
 const minimapStyle = {
   height: 120,
 };
 
+// Компонент для размещения элементов на диаграмме
 function LayoutFlow({ initialNodes, initialEdges }) {
   const { fitView } = useReactFlow();
 
@@ -92,6 +98,7 @@ function LayoutFlow({ initialNodes, initialEdges }) {
 
   const onConnect = useCallback((params) => console.log("onConnect"), []);
 
+  // Функция для размещения элементов на диаграмме
   const onLayout = useCallback(() => {
     getLayoutedElements(nodes, edges, elkOptions).then(
       ({ nodes: layoutedNodes, edges: layoutedEdges }) => {
@@ -101,6 +108,7 @@ function LayoutFlow({ initialNodes, initialEdges }) {
     );
   }, [nodes, edges]);
 
+  // Инициализация узлов и рёбер при загрузке
   useEffect(() => {
     var nodesWithPosition = initialNodes.map((node) => ({
       ...node,
@@ -141,6 +149,7 @@ function LayoutFlow({ initialNodes, initialEdges }) {
   );
 }
 
+// Компонент для отображения диаграммы классов
 const ClassDiagramLayout = ({ initialNodes, initialEdges }) => {
   return (
     <ReactFlowProvider>

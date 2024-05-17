@@ -1,10 +1,10 @@
 using AutoMapper;
 using FastSlnPresentation.BLL.DTOs;
 using FastSlnPresentation.BLL.Exceptions;
-using FastSlnPresentation.BLL.Services.HardServices.Static;
 using FastSlnPresentation.DAL.DBContext;
 using FastSlnPresentation.DAL.Models;
 using Microsoft.EntityFrameworkCore;
+using Shared.Services.Static;
 
 namespace FastSlnPresentation.BLL.Services.DBServices
 {
