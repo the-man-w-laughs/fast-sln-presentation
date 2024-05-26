@@ -11,6 +11,10 @@ import {
   faFolderOpen,
   faSpinner,
   faPlay,
+  faLink,
+  faLinkSlash,
+  faExternalLink,
+  faExternalLinkAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   generateClassDiagramByFile,
@@ -21,10 +25,9 @@ import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import "./ClassDiagramPage.css"; // Import CSS file
 
 const ClassDiagramPage = () => {
-  const [inputType, setInputType] = useState("pat_author_repo");
+  const [inputType, setInputType] = useState("github_url");
   const [pat, setPat] = useState("");
-  const [author, setAuthor] = useState("");
-  const [repoName, setRepoName] = useState("");
+  const [repoUrl, setRepoUrl] = useState("");
   const [file, setFile] = useState(null);
   const [initialNodes, setInitialNodes] = useState([]);
   const [initialEdges, setInitialEdges] = useState([]);
@@ -42,7 +45,16 @@ const ClassDiagramPage = () => {
       let response;
 
       // Вызываем соответствующую функцию на основе inputType
-      if (inputType === "pat_author_repo") {
+      if (inputType === "github_url") {
+        const urlPattern = /https:\/\/github.com\/([^/]+)\/([^/]+)/;
+        const match = repoUrl.match(urlPattern);
+
+        if (!match) {
+          throw new Error("Ссылка на Github репозиторий в неверном формате.");
+        }
+
+        const [, author, repoName] = match;
+
         response = await makeAuthenticatedRequest(
           generateClassDiagramByGithub,
           pat,
@@ -92,11 +104,11 @@ const ClassDiagramPage = () => {
               value={inputType}
               onChange={handleInputChange}
             >
-              <option value="pat_author_repo">Github репозиторий</option>
+              <option value="github_url">Ссылка на GitHub репозиторий</option>
               <option value="file">Загрузить архив</option>
             </select>
           </div>
-          {inputType === "pat_author_repo" && (
+          {inputType === "github_url" && (
             <>
               <div className="form-group">
                 <label htmlFor="patInput">
@@ -113,30 +125,16 @@ const ClassDiagramPage = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="authorInput">
-                  <FontAwesomeIcon icon={faUser} className="me-2" />
-                  Автор:
+                <label htmlFor="repoUrlInput">
+                  <FontAwesomeIcon icon={faLink} className="me-2" />
+                  Ссылка на GitHub репозиторий:
                 </label>
                 <input
                   type="text"
                   className="form-control"
-                  id="authorInput"
-                  value={author}
-                  onChange={(e) => setAuthor(e.target.value)}
-                  required // обязательное поле
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="repoNameInput">
-                  <FontAwesomeIcon icon={faFolderOpen} className="me-2" />
-                  Название репозитория:
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="repoNameInput"
-                  value={repoName}
-                  onChange={(e) => setRepoName(e.target.value)}
+                  id="repoUrlInput"
+                  value={repoUrl}
+                  onChange={(e) => setRepoUrl(e.target.value)}
                   required // обязательное поле
                 />
               </div>

@@ -10,18 +10,22 @@ function EnumNode({ id, data }) {
         <CircleWithLetter letter="E" />
         <div className="title">{data.name}</div>
       </div>
-      <Divider />
-      <div className="values">
-        <table>
-          <tbody>
-            {data.members.map((member, index) => (
-              <tr key={index}>
-                <td>{member},</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {data.showContent && (
+        <>
+          <Divider />
+          <div className="values">
+            <table>
+              <tbody>
+                {data.members.map((member, index) => (
+                  <tr key={index}>
+                    <td>{member},</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
     </div>
   );
 }

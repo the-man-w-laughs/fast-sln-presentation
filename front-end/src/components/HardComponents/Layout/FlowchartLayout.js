@@ -51,11 +51,11 @@ const minimapStyle = {
 const elk = new ELK();
 const elkOptions = {
   "elk.algorithm": "org.eclipse.elk.layered",
-  "elk.direction": "DOWN",
-  "org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers": 40,
-  "org.eclipse.elk.layered.spacing.edgeNodeBetweenLayers": 40,
-  "org.eclipse.elk.direction": "DOWN",
-  "org.eclipse.elk.layered.nodePlacement.strategy": "LINEAR_SEGMENTS",
+  "elk.layered.spacing.nodeNodeBetweenLayers": "30", // Increase spacing between layers
+  "elk.spacing.nodeNode": "30", // Increase spacing between nodes
+  "elk.layered.layering.strategy": "LONGEST_PATH", // Use the longest path layering strategy
+  "elk.direction": "DOWN", // Layout direction
+  "elk.edgeRouting": "POLYLINE",
 };
 
 const getLayoutedElements = async (nodes, edges, options = {}) => {

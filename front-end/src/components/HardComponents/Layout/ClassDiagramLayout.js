@@ -11,7 +11,12 @@ import ReactFlow, {
 } from "reactflow";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCompressArrowsAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCompressArrowsAlt,
+  faCheckSquare,
+  faSquare,
+  faCog,
+} from "@fortawesome/free-solid-svg-icons";
 
 import "reactflow/dist/style.css";
 import "../Nodes/ClassDiagram/ClassDiagramNodes.css";
@@ -31,17 +36,12 @@ import AggregationEdge from "../Edges/AggregationEdge.js";
 import CompositonEdge from "../Edges/CompositonEdge.js";
 import AssociationEdge from "../Edges/AssociationEdge.js";
 import DownloadButton from "../DownloadButton.js";
+import GroupingSettingsModal from "./GroupSettingsModal.js";
 
 const minZoom = 0.01;
 const maxZoom = 1000;
 
 const elk = new ELK();
-
-const elkOptions = {
-  "elk.algorithm": "org.eclipse.elk.force",
-  "org.eclipse.elk.disco.componentCompaction.componentLayoutAlgorithm": "box",
-  // "elk.direction": "DOWN",
-};
 
 const getLayoutedElements = (nodes, edges, options = {}) => {
   const graph = {
@@ -86,11 +86,40 @@ const minimapStyle = {
 };
 
 function LayoutFlow({ initialNodes, initialEdges }) {
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [elkOptions, setElkOptions] = useState({
+    "elk.algorithm": "org.eclipse.elk.force",
+    "elk.direction": "DOWN",
+    "org.eclipse.elk.spacing.nodeNode": "100",
+  });
+
+  const handleApplySettings = (settings) => {
+    setElkOptions((prevOptions) => ({
+      ...prevOptions,
+      ...settings,
+    }));
+  };
+
   const { fitView } = useReactFlow();
 
   const [updateGraph, setupdateGraph] = useState(0);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
+  const [showContent, setShowContent] = useState(true);
+
+  const toggleContentVisibility = () => {
+    setShowContent((previousValue) => !previousValue);
+    setNodes(
+      nodes.map((node) => ({
+        ...node,
+        data: {
+          ...node.data,
+          showContent: !showContent,
+        },
+      }))
+    );
+  };
 
   const onConnect = useCallback((params) => console.log("onConnect"), []);
 
@@ -101,12 +130,16 @@ function LayoutFlow({ initialNodes, initialEdges }) {
         setEdges(layoutedEdges);
       }
     );
-  }, [nodes, edges]);
+  }, [nodes, edges, elkOptions]);
 
   useEffect(() => {
     var nodesWithPosition = initialNodes.map((node) => ({
       ...node,
       position: { x: 0, y: 0 },
+      data: {
+        ...node.data,
+        showContent: showContent,
+      },
     }));
     setNodes(nodesWithPosition);
     setEdges(initialEdges);
@@ -144,6 +177,31 @@ function LayoutFlow({ initialNodes, initialEdges }) {
           <button className="btn btn-primary me-2" onClick={() => autoLayout()}>
             <FontAwesomeIcon icon={faCompressArrowsAlt} className="me-2" />
             Группировать
+          </button>
+          <button
+            className="btn btn-primary me-2"
+            onClick={() => setShowSettingsModal(true)}
+          >
+            <FontAwesomeIcon icon={faCog} className="me-2" />
+            Настройка группировки
+          </button>
+          <GroupingSettingsModal
+            show={showSettingsModal}
+            onHide={() => {
+              setShowSettingsModal(false);
+            }}
+            applySettings={handleApplySettings}
+            defaultSettings={elkOptions}
+          />
+          <button
+            className="btn btn-primary me-2"
+            onClick={toggleContentVisibility}
+          >
+            <FontAwesomeIcon
+              icon={showContent ? faCheckSquare : faSquare}
+              className="me-2"
+            />
+            {"Показать содержимое"}
           </button>
           <DownloadButton></DownloadButton>
         </Panel>

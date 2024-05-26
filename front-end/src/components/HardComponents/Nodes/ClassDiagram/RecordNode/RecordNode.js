@@ -13,30 +13,35 @@ function RecordNode({ id, data }) {
         <div className="title">{data.name}</div>
       </div>
       {data.genericInfo?.length > 0 && <GenericInfo info={data.genericInfo} />}
-      <Divider></Divider>
-      <div className="members">
-        <table>
-          <tbody>
-            {data.members.map((member, index) => (
-              <tr key={index}>
-                <td>{member};</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <Divider></Divider>
-      <div className="methods">
-        <table>
-          <tbody>
-            {data.methods.map((method, index) => (
-              <tr key={index}>
-                <td>{method};</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+
+      {data.showContent && (
+        <>
+          <Divider></Divider>
+          <div className="members">
+            <table>
+              <tbody>
+                {data.members.map((member, index) => (
+                  <tr key={index}>
+                    <td>{member};</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Divider></Divider>
+          <div className="methods">
+            <table>
+              <tbody>
+                {data.methods.map((method, index) => (
+                  <tr key={index}>
+                    <td>{method};</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
       <Handle type="target" />
       <Handle type="source" />
     </div>

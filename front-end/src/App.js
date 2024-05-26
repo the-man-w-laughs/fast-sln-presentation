@@ -1,36 +1,33 @@
-import logo from "./logo.svg";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import FlowchartPage from "./Pages/FlowchartPage/FlowchartPage";
-import DefaultPage from "./Pages/DefultPage/DefaultPage";
+import DefaultPage from "./Pages/DefaultPage/DefaultPage";
 import ClassDiagramPage from "./Pages/ClassDiagramPage/ClassDiagramPage";
 import HomePage from "./Pages/HomePage/HomePage";
 import LoginPage from "./Pages/LoginPage/LoginPage";
 import AdminPage from "./Pages/AdminPage/AdminPage";
+import ProfilePage from "./Pages/ProfilePage/ProfilePage";
 import { Navbar, Nav } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faUser,
-  faSignOutAlt,
   faSignInAlt,
-  faRocket,
-  faSitemap,
   faProjectDiagram,
-  faUserTie,
-  faShieldAlt,
-  faUsersCog,
-  faTasks,
+  faSitemap,
   faWrench,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Roles } from "./Utils/Roles";
-import { getAccessToken, getUserInfo } from "./Utils/LocalStorage";
 import {
   getUserDataByToken,
   makeAuthenticatedRequest,
 } from "./Utils/ApiService";
 import { useEffect, useState } from "react";
 import "./App.css";
-import ProfilePage from "./Pages/ProfilePage/ProfilePage";
 
 function App() {
   const [userInfo, setUserInfo] = useState(null);
@@ -40,7 +37,6 @@ function App() {
     localStorage.clear();
   };
 
-  // Используем useEffect для загрузки данных пользователя по токену
   useEffect(() => {
     async function fetchUserData() {
       try {
@@ -53,11 +49,15 @@ function App() {
     fetchUserData();
   }, []);
 
-  return (
-    <body
-      style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
-    >
-      <Router>
+  const hideFooterRoutes = ["/class-diagram-page", "/flowchart-page"];
+
+  const Layout = ({ children }) => {
+    const location = useLocation();
+
+    return (
+      <div
+        style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
+      >
         <Navbar
           bg="light"
           expand="lg"
@@ -68,7 +68,7 @@ function App() {
             <img
               src="/CSharpGraph.svg"
               alt="Rocket Icon"
-              style={{ height: "60px" }} // Adjust size as needed
+              style={{ height: "60px" }}
             />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -109,6 +109,26 @@ function App() {
             </Nav>
           </Navbar.Collapse>
         </Navbar>
+        <div style={{ flex: 1 }}>{children}</div>
+        {!hideFooterRoutes.includes(location.pathname) && (
+          <footer
+            style={{
+              backgroundColor: "#121F3B",
+              color: "white",
+              padding: "1rem",
+              marginTop: "auto",
+            }}
+          >
+            <p style={{ textAlign: "center" }}>© 2024 CSharpGraph</p>
+          </footer>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <Router>
+      <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/home" element={<HomePage />} />
@@ -132,18 +152,8 @@ function App() {
           />
           <Route path="*" element={<DefaultPage />} />
         </Routes>
-        <footer
-          style={{
-            backgroundColor: "#121F3B",
-            color: "white",
-            padding: "1rem",
-            marginTop: "auto",
-          }}
-        >
-          <p style={{ textAlign: "center" }}>© 2024 CSharpGraph</p>
-        </footer>
-      </Router>
-    </body>
+      </Layout>
+    </Router>
   );
 }
 

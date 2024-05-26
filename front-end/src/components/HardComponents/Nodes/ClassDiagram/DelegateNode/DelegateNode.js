@@ -13,20 +13,25 @@ function DelegateNode({ id, data }) {
         <div className="title">{data.name}</div>
       </div>
       {data.genericInfo?.length > 0 && <GenericInfo info={data.genericInfo} />}
-      <Divider></Divider>
-      <div className="return-type">{data.returnType}</div>
-      <Divider></Divider>
-      <div className="parameters">
-        <table>
-          <tbody>
-            {data.parameters.map((parameter, index) => (
-              <tr key={index}>
-                <td>{parameter}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+
+      {data.showContent && (
+        <>
+          <Divider></Divider>
+          <div className="return-type">{data.returnType}</div>
+          <Divider></Divider>
+          <div className="parameters">
+            <table>
+              <tbody>
+                {data.parameters.map((parameter, index) => (
+                  <tr key={index}>
+                    <td>{parameter}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      )}
       <Handle type="target" />
       <Handle type="source" />
     </div>
