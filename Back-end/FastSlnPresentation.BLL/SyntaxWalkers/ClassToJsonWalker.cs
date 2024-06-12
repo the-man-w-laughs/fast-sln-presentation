@@ -589,7 +589,7 @@ namespace FastSlnPresentation.BLL.SyntaxWalkers
         private void CreateEdge(string typeFullName, string edgeType)
         {
             var id = _idSerivice.GetNextId();
-            var edge = new JsonEdge(id, typeFullName, _currentTypeFullName!, edgeType);
+            var edge = new JsonEdge(id, _currentTypeFullName!, typeFullName, edgeType);
             _resultEdges.Add(edge);
         }
 
