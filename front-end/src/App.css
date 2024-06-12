@@ -99,10 +99,10 @@
   border-color: var(--accent-color);
 }
 
-.btn-danger:hover {
+/* .btn-danger:hover {
   background-color: darken(var(--accent-color), 10%);
   border-color: darken(var(--accent-color), 10%);
-}
+} */
 
 /* Уведомления */
 .alert-warning {

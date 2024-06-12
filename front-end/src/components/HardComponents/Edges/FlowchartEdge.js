@@ -77,17 +77,18 @@ function FlowchartEdge({
         {...props}
       />
       <EdgeLabelRenderer>
-        <div
-          style={{
-            position: "absolute",
-            transform: `transЗlate(-50%, -100%) translate(${labelX}px,${labelY}px)`,
-            pointerEvents: "all",
-          }}
-        >
-          {labelData.map((label, index) => (
-            <div key={index}>{label}</div>
-          ))}
-        </div>
+        {labelData.map((label, index) => (
+          <div
+            key={index}
+            style={{
+              position: "absolute",
+              transform: `translate(-50%, -100%) translate(${labelX}px, ${labelY}px)`,
+              pointerEvents: "all",
+            }}
+          >
+            {label}
+          </div>
+        ))}
       </EdgeLabelRenderer>
     </>
   );
