@@ -91,6 +91,8 @@ function LayoutFlow({ initialNodes, initialEdges }) {
     "elk.algorithm": "org.eclipse.elk.force",
     "elk.direction": "DOWN",
     "org.eclipse.elk.spacing.nodeNode": "100",
+    "org.eclipse.elk.layered.spacing.edgeNodeBetweenLayers": "50",
+    "org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers": "50",
   });
 
   const handleApplySettings = (settings) => {

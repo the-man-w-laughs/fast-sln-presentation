@@ -2,6 +2,7 @@ import React from "react";
 import CircleWithLetter from "../Utils/CircleWithLetter/CircleWithLetter";
 import "./EnumNode.css";
 import Divider from "../Utils/Divider/Divider";
+import { Handle } from "reactflow";
 
 function EnumNode({ id, data }) {
   return (
@@ -26,6 +27,8 @@ function EnumNode({ id, data }) {
           </div>
         </>
       )}
+      <Handle type="target" />
+      <Handle type="source" />
     </div>
   );
 }
