@@ -1,6 +1,6 @@
-version: '3.4'
+version: '3.9' # более новая версия, 3.4 устарела
 
-services:  
+services:
   postgres:
     container_name: postgres
     image: postgres:latest
@@ -17,37 +17,42 @@ services:
 
   frontend:
     container_name: react-client
-    image: reactfrontend
     build:
-      context: front-end
-      dockerfile: ./Dockerfile
+      context: ./front-end
+      dockerfile: Dockerfile
+    image: reactfrontend
     volumes:
-       - ./front-end:/front-end:delegated
-       - ./front-end/node_modules:/front-end/node_modules
+      - ./front-end:/front-end:delegated
+      # используем отдельный volume для node_modules
+      - frontend_node_modules:/front-end/node_modules
     environment:
       NODE_ENV: development
-       - CHOKIDAR_USEPOLLING=true
+      CHOKIDAR_USEPOLLING: "true"
     ports:
-      - 3000:3000  
+      - "3000:3000"
     depends_on:
-      - backend 
-    restart: always   
+      - backend
+    restart: always
 
   backend:
     container_name: aspnet-webapi
     depends_on:
-      - postgres      
-    image: aspnet-webapi
+      - postgres
     build:
       context: .
       dockerfile: Back-end/FastSlnPresentation.Server/Dockerfile
       args:
-        - configuration=Debug
+        configuration: Debug
+    image: aspnet-webapi
     ports:
-      - 5137:5137      
+      - "5137:5137"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
+      ASPNETCORE_ENVIRONMENT: Docker
     volumes:
       - ~/.vsdbg:/remote_debugger:rw
       - ./keys/signing_key.pfx:/app/signing_key.pfx
     restart: always
+
+# создаем отдельный volume для node_modules
+volumes:
+  frontend_node_modules:

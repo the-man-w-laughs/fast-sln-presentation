@@ -54,16 +54,15 @@ public class ClassAnalysisService : IClassAnalysisService
             .Where(edge => nodeIds.Contains(edge.Source) && nodeIds.Contains(edge.Target))
             .ToList();
 
-        var nonExistingSources = edges.Select(edge => edge.Source).Except(nodeIds).ToList();
 
-        var nonExistingTargets = edges.Select(edge => edge.Target).Except(nodeIds).ToList();
+        // for debug purposes
 
-        var nonExistingSourcesAndTargets = nonExistingSources.Concat(nonExistingTargets).ToList();
-
-        string filePath = "/home/nazar/Documents/nonExistingSourcesAndTargets.txt";
-
+        //var nonExistingSources = edges.Select(edge => edge.Source).Except(nodeIds).ToList();
+        //var nonExistingTargets = edges.Select(edge => edge.Target).Except(nodeIds).ToList();
+        //var nonExistingSourcesAndTargets = nonExistingSources.Concat(nonExistingTargets).ToList();
+        //string filePath = "/home/nazar/Documents/nonExistingSourcesAndTargets.txt";
         // Write the strings to the file
-        File.WriteAllLines(filePath, nonExistingSourcesAndTargets);
+        //File.WriteAllLines(filePath, nonExistingSourcesAndTargets);
 
         return new JsonGraph(nodes.Cast<object>().ToList(), existingEdges.Cast<object>().ToList());
     }

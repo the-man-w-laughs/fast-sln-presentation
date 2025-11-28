@@ -1,20 +1,16 @@
-# Use an official Node runtime as a parent image
 FROM node:lts-alpine
 
-# Set the working directory in the container
 WORKDIR /front-end
 
-# Copy package.json and package-lock.json to the working directory
+# Копируем файлы зависимостей
 COPY package*.json ./
 
-# Install app dependencies
-RUN npm install -g npm@latest
+# Устанавливаем зависимости проекта
+RUN npm install
 
-# Copy the rest of the application code to the working directory
+# Копируем весь проект
 COPY . .
 
-# Expose port 3000
 EXPOSE 3000
 
-# Run the application
 CMD ["npm", "start"]
